@@ -243,11 +243,11 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
       flex-direction: column;
     }
     .header-banner {
-      background: #2B2A28;
+      background: linear-gradient(135deg, #0f2942 0%, #1e3a8a 100%);
       color: #ffffff;
       text-align: center;
       padding: 20px 20px 16px;
-      border-bottom: 4px solid #008DD2;
+      border-bottom: 4px solid #009fe3;
     }
     .logo-container {
       max-width: 220px;
@@ -554,11 +554,14 @@ export async function downloadTrainingStandeePNG(training: TrainingStandeeData):
   ctx.strokeRect(10, 10, 880, 1260);
 
   // Header Banner
-  ctx.fillStyle = "#2B2A28";
+  const grad = ctx.createLinearGradient(0, 15, 900, 155);
+  grad.addColorStop(0, "#0F2942");
+  grad.addColorStop(1, "#1E3A8A");
+  ctx.fillStyle = grad;
   ctx.fillRect(15, 15, 870, 145);
 
-  // Uttam Blue accent strip below header
-  ctx.fillStyle = "#008DD2";
+  // Electric Blue accent strip below header
+  ctx.fillStyle = "#009FE3";
   ctx.fillRect(15, 160, 870, 8);
 
   // Load and draw official logo

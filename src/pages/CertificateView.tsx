@@ -263,13 +263,13 @@ export const CertificateView: React.FC = () => {
 
                   {/* Center: Official Uttam Quality Stamp */}
                   <div className="flex flex-col items-center justify-center">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-[#008DD2] p-0.5 flex items-center justify-center shadow-xs bg-white dark:bg-[#2B2A28]">
-                      <div className="w-full h-full rounded-full border border-dashed border-[#59B5E2] flex flex-col items-center justify-center text-center p-1">
-                        <Zap className="w-3.5 h-3.5 text-[#008DD2] fill-[#008DD2]" />
-                        <span className="text-[7.5px] font-black text-[#008DD2] dark:text-[#59B5E2] leading-none mt-0.5">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-sky-500 p-0.5 flex items-center justify-center shadow-xs bg-white dark:bg-slate-900">
+                      <div className="w-full h-full rounded-full border border-dashed border-sky-400 flex flex-col items-center justify-center text-center p-1">
+                        <Zap className="w-3.5 h-3.5 text-sky-500 fill-sky-500" />
+                        <span className="text-[7.5px] font-black text-sky-600 dark:text-sky-400 leading-none mt-0.5">
                           UTTAM
                         </span>
-                        <span className="text-[5.5px] font-bold text-[#757573] dark:text-[#D5D4D4] leading-none">
+                        <span className="text-[5.5px] font-bold text-slate-600 dark:text-slate-300 leading-none">
                           QUALITY SEAL
                         </span>
                       </div>

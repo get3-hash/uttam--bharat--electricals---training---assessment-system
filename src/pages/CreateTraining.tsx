@@ -408,17 +408,17 @@ export const CreateTraining: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] dark:bg-[#1E1D1C] text-[#2B2A28] dark:text-[#EAEAEA] p-4 sm:p-6 lg:p-8 space-y-8 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8 space-y-8 transition-colors">
       {/* Top Banner */}
-      <div className="bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-md">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[#006393] dark:text-[#59B5E2] bg-[#E6F4FA] dark:bg-[#403F3E] px-2.5 py-1 rounded-md border border-[#CCE8F6] dark:border-[#52514E]">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-200 dark:border-amber-500/20">
             Step 3 & 4
           </span>
-          <h1 className="text-2xl font-bold text-[#2B2A28] dark:text-white mt-1">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
             Create Training & AI Question Extraction
           </h1>
-          <p className="text-xs text-[#757573] dark:text-[#D5D4D4]">
+          <p className="text-xs text-slate-600 dark:text-slate-400">
             Uttam (Bharat) Electricals Pvt. Ltd. • Automated Question Parser & QR Code Generator
           </p>
         </div>
@@ -427,13 +427,13 @@ export const CreateTraining: React.FC = () => {
       <form onSubmit={handleSaveTraining} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Form Details */}
         <div className="lg:col-span-2 space-y-6">
-          <GlassCard className="p-6 space-y-5">
-            <h3 className="text-base font-bold text-[#2B2A28] dark:text-white flex items-center gap-2 pb-3 border-b border-[#EAEAEA] dark:border-[#403F3E]">
-              <BookOpen className="w-5 h-5 text-[#008DD2]" /> Training Session Details
+          <GlassCard dark className="p-6 space-y-5">
+            <h3 className="text-base font-bold text-white flex items-center gap-2 pb-3 border-b border-slate-800">
+              <BookOpen className="w-5 h-5 text-blue-400" /> Training Session Details
             </h3>
 
             <div>
-              <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Training Session Name / Topic *
               </label>
               <input
@@ -442,27 +442,27 @@ export const CreateTraining: React.FC = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Transformer Winding Insulation & Oil Breakdown Voltage"
-                className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white placeholder-[#757573] focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1 flex items-center justify-between">
+              <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center justify-between">
                 <span>Session Folder / Category Name</span>
-                <span className="text-[10px] text-[#008DD2] dark:text-[#59B5E2] font-semibold">📁 Groups sessions into folders</span>
+                <span className="text-[10px] text-amber-400 font-normal">📁 Groups sessions into folders</span>
               </label>
               <input
                 type="text"
                 value={folderName}
                 onChange={(e) => setFolderName(e.target.value)}
                 placeholder="e.g. Safety Sessions 2026, Quality Testing Folder, Batch #1"
-                className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white placeholder-[#757573] focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-amber-500/50 focus:outline-none"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Department *
                 </label>
                 <input
@@ -471,12 +471,12 @@ export const CreateTraining: React.FC = () => {
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   placeholder="Enter department name manually (e.g. Testing & Quality, Winding, Assembly)..."
-                  className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white placeholder-[#757573] focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Trainer Name *
                 </label>
                 <input
@@ -485,14 +485,14 @@ export const CreateTraining: React.FC = () => {
                   value={trainerName}
                   onChange={(e) => setTrainerName(e.target.value)}
                   placeholder="Enter trainer name (e.g. Er. Rajesh Kumar / Quality Head)"
-                  className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white placeholder-[#757573] focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Training Date *
                 </label>
                 <input
@@ -500,12 +500,12 @@ export const CreateTraining: React.FC = () => {
                   required
                   value={trainingDate}
                   onChange={(e) => setTrainingDate(e.target.value)}
-                  className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Passing Percentage (%)
                 </label>
                 <input
@@ -514,12 +514,12 @@ export const CreateTraining: React.FC = () => {
                   max="100"
                   value={passingPercentage}
                   onChange={(e) => setPassingPercentage(Number(e.target.value))}
-                  className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Time Limit (Minutes)
                 </label>
                 <input
@@ -528,33 +528,33 @@ export const CreateTraining: React.FC = () => {
                   max="60"
                   value={timeLimitMinutes}
                   onChange={(e) => setTimeLimitMinutes(Number(e.target.value))}
-                  className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl px-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Description / Objectives
               </label>
               <textarea
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl p-3 text-sm text-[#2B2A28] dark:text-white placeholder-[#757573] focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 focus:outline-none transition-all font-medium"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-blue-500 focus:outline-none"
               />
             </div>
           </GlassCard>
 
           {/* Multi-Format Question Extraction Engine */}
-          <GlassCard className="p-6 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#EAEAEA] dark:border-[#403F3E] gap-2">
+          <GlassCard dark className="p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
               <div>
-                <h3 className="text-base font-bold text-[#2B2A28] dark:text-white flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#008DD2]" /> Multi-Format Question & MCQ Engine
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-amber-400" /> Multi-Format Question & MCQ Engine
                 </h3>
-                <p className="text-[11px] text-[#757573] dark:text-[#D5D4D4] mt-0.5">
-                  Generates complete MCQs with 4 options & answer keys
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  Powered by Gemini 3.8 Flash • Generates complete MCQs with 4 options & answer keys
                 </p>
               </div>
               <div className="flex items-center gap-2">

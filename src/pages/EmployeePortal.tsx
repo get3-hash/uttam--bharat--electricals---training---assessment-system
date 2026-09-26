@@ -189,46 +189,42 @@ export const EmployeePortal: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] dark:bg-[#1E1D1C] text-[#2B2A28] dark:text-[#EAEAEA] flex flex-col justify-between transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between transition-colors">
       <HeaderBranding subtitle="Employee Training Registration Portal (No Login Required)" />
 
       <main className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-6">
-        <GlassCard className="p-6 sm:p-8 border border-[#D5D4D4] dark:border-[#403F3E] space-y-6 shadow-sm">
-          {/* Uttam Branded Active Training Session Card (Section 10 Reference Redesign) */}
-          <div className="bg-white dark:bg-[#2B2A28] p-6 rounded-2xl border border-[#D5D4D4] dark:border-[#403F3E] shadow-xs space-y-3">
+        <GlassCard className="p-6 sm:p-8 border border-slate-200 dark:border-slate-800 space-y-6 shadow-xl">
+          {/* Training Pre-Filled Details Banner */}
+          <div className="bg-gradient-to-r from-blue-900/60 to-slate-900 p-5 rounded-xl border border-blue-800/50 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="px-3 py-1 rounded-md text-[11px] font-bold bg-[#008DD2] text-white uppercase tracking-wider shadow-xs">
-                ACTIVE TRAINING SESSION
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-bold bg-amber-400 text-slate-950 uppercase">
+                Active Training Session
               </span>
-              <span className="text-xs text-[#008DD2] dark:text-[#59B5E2] font-bold">
-                Date: {training.trainingDate}
-              </span>
+              <span className="text-xs text-blue-300 font-medium">Date: {training.trainingDate}</span>
             </div>
-            <h2 className="text-2xl font-black text-[#2B2A28] dark:text-white tracking-tight">
-              {training.title}
-            </h2>
-            <div className="flex flex-wrap items-center gap-6 text-xs pt-2 border-t border-[#EAEAEA] dark:border-[#403F3E]">
-              <span className="text-[#757573] dark:text-[#B5B4B4]">
-                Department: <strong className="text-[#2B2A28] dark:text-white font-bold">{training.department}</strong>
+            <h2 className="text-lg font-extrabold text-white">{training.title}</h2>
+            <div className="flex flex-wrap gap-4 text-xs text-slate-300 pt-1">
+              <span>
+                Department: <strong className="text-white">{training.department}</strong>
               </span>
-              <span className="text-[#757573] dark:text-[#B5B4B4]">
-                Trainer: <strong className="text-[#008DD2] dark:text-[#59B5E2] font-bold">{training.trainerName}</strong>
+              <span>
+                Trainer: <strong className="text-amber-300">{training.trainerName}</strong>
               </span>
             </div>
           </div>
 
           {/* Continuous Background Music Banner */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-[#E6F4FA] dark:bg-[#403F3E] rounded-xl border border-[#59B5E2]/40 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-gradient-to-r from-amber-500/15 via-blue-500/10 to-indigo-500/15 rounded-xl border border-amber-500/30 text-xs">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#008DD2]/10 text-[#008DD2] dark:text-[#59B5E2] flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 shadow-xs">
                 <Music className={`w-4 h-4 ${!soundMuted ? "animate-pulse" : "opacity-60"}`} />
               </div>
               <div>
-                <span className="font-bold text-[#006393] dark:text-[#59B5E2] flex items-center gap-1.5 text-xs">
+                <span className="font-bold text-amber-400 flex items-center gap-1.5 text-xs">
                   Continuous Focus Background Music
-                  {!soundMuted && <span className="inline-block w-2 h-2 rounded-full bg-[#008DD2] animate-ping" />}
+                  {!soundMuted && <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping" />}
                 </span>
-                <span className="text-[#757573] dark:text-[#B5B4B4] text-[11px] block">
+                <span className="text-slate-400 text-[11px] block">
                   Plays continuous background audio starting now through all feedback & quiz pages until submission.
                 </span>
               </div>
@@ -238,7 +234,7 @@ export const EmployeePortal: React.FC = () => {
               <button
                 type="button"
                 onClick={handleBoostVolume}
-                className="p-1.5 px-2.5 rounded-lg bg-[#CCE8F6] hover:bg-[#59B5E2]/30 text-[#006393] dark:text-[#E6F4FA] border border-[#59B5E2] flex items-center gap-1 font-bold text-[11px] transition-colors cursor-pointer"
+                className="p-1.5 px-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 flex items-center gap-1 font-bold text-[11px] transition-colors cursor-pointer"
                 title="Boost Volume Level"
               >
                 <Volume2 className="w-3.5 h-3.5" />
@@ -247,24 +243,24 @@ export const EmployeePortal: React.FC = () => {
               <button
                 type="button"
                 onClick={handleToggleSound}
-                className="p-1.5 px-2.5 rounded-lg bg-white dark:bg-[#2B2A28] hover:bg-[#EAEAEA] text-[#2B2A28] dark:text-[#EAEAEA] border border-[#D5D4D4] dark:border-[#52514E] flex items-center gap-1 font-semibold text-[11px] transition-colors cursor-pointer"
+                className="p-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1 font-semibold text-[11px] transition-colors cursor-pointer"
                 title="Mute / Unmute Continuous Sound"
               >
                 {soundMuted ? (
-                  <VolumeX className="w-3.5 h-3.5 text-[#757573]" />
+                  <VolumeX className="w-3.5 h-3.5 text-rose-400" />
                 ) : (
-                  <Volume2 className="w-3.5 h-3.5 text-[#008DD2]" />
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
                 )}
                 <span>{soundMuted ? "Sound Muted" : "Music Playing"}</span>
               </button>
             </div>
           </div>
 
-          <div className="border-b border-[#D5D4D4] dark:border-[#403F3E] pb-2">
-            <h3 className="text-base font-bold text-[#2B2A28] dark:text-white flex items-center gap-2">
-              <User className="w-5 h-5 text-[#008DD2]" /> Employee Registration Details
+          <div className="border-b border-slate-200 dark:border-slate-800 pb-2">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <User className="w-5 h-5 text-blue-600 dark:text-blue-400" /> Employee Registration Details
             </h3>
-            <p className="text-xs text-[#757573] dark:text-[#B5B4B4]">
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               Enter your official employee details to begin the feedback & assessment module.
             </p>
           </div>
@@ -285,35 +281,35 @@ export const EmployeePortal: React.FC = () => {
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#D5D4D4] mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Full Employee Name *
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
+                  <User className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="text"
                     required
                     value={employeeName}
                     onChange={(e) => setEmployeeName(e.target.value)}
                     placeholder="Enter full name (e.g. Satyapal Yadav)"
-                    className="w-full bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 placeholder-[#757573]"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder:text-slate-600"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#D5D4D4] mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Employee Code / ID *
                 </label>
                 <div className="relative">
-                  <Hash className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
+                  <Hash className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="text"
                     required
                     value={employeeCode}
                     onChange={(e) => setEmployeeCode(e.target.value)}
                     placeholder="Enter employee code (e.g. UB-6971)"
-                    className="w-full bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 placeholder-[#757573]"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder:text-slate-600"
                   />
                 </div>
               </div>
@@ -321,11 +317,11 @@ export const EmployeePortal: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#D5D4D4] mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Department *
                 </label>
                 <div className="relative">
-                  <Building2 className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
+                  <Building2 className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="text"
                     required
@@ -333,7 +329,7 @@ export const EmployeePortal: React.FC = () => {
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="Enter department name (e.g. Testing & QA)"
-                    className="w-full bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 placeholder-[#757573]"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder:text-slate-600"
                   />
                   <datalist id="departments-datalist">
                     {DEPARTMENTS.map((dept) => (
@@ -344,18 +340,18 @@ export const EmployeePortal: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#D5D4D4] mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Designation *
                 </label>
                 <div className="relative">
-                  <Briefcase className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
+                  <Briefcase className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="text"
                     required
                     value={designation}
                     onChange={(e) => setDesignation(e.target.value)}
                     placeholder="Enter designation (e.g. Senior Quality Engineer)"
-                    className="w-full bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 placeholder-[#757573]"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder:text-slate-600"
                   />
                 </div>
               </div>
@@ -363,33 +359,33 @@ export const EmployeePortal: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#D5D4D4] mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Official Email
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
+                  <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="e.g. satyapal@uttambharat.com (optional)"
-                    className="w-full bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 placeholder-[#757573]"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder:text-slate-600"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#D5D4D4] mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Phone Number
                 </label>
                 <div className="relative">
-                  <Phone className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
+                  <Phone className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="e.g. 9876543210 (optional)"
-                    className="w-full bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-9 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 placeholder-[#757573]"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder:text-slate-600"
                   />
                 </div>
               </div>
@@ -399,7 +395,7 @@ export const EmployeePortal: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 px-4 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white font-extrabold text-sm rounded-xl shadow-md shadow-[#008DD2]/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-amber-500 hover:from-blue-500 hover:to-amber-400 text-slate-950 font-extrabold text-sm rounded-xl shadow-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50"
               >
                 {submitting ? "Registering..." : "Continue to Section A: Feedback Form"}
                 <ArrowRight className="w-4 h-4" />

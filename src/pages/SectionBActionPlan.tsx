@@ -300,17 +300,17 @@ export const SectionBActionPlan: React.FC = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full sm:w-auto flex-1 py-3.5 px-6 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white font-extrabold text-sm rounded-xl shadow-md shadow-[#008DD2]/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              className="w-full sm:w-auto flex-1 py-3.5 px-6 bg-gradient-to-r from-emerald-500 via-emerald-600 to-amber-500 hover:from-emerald-400 hover:to-amber-400 text-slate-950 font-extrabold text-sm rounded-xl shadow-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer active:scale-[0.99]"
             >
               {submitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
                   <span>Saving Section B...</span>
                 </>
               ) : (
                 <>
                   <span>Save Section B & Proceed to Section C: Assessment Test</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
+                  <ArrowRight className="w-4 h-4 text-slate-950" />
                 </>
               )}
             </button>

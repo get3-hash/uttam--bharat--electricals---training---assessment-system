@@ -236,18 +236,18 @@ export const AdminDashboard: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] dark:bg-[#1E1D1C] text-[#2B2A28] dark:text-[#EAEAEA] p-4 sm:p-6 lg:p-8 space-y-8 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8 space-y-8 transition-colors">
       {/* Top Banner */}
-      <div className="bg-white dark:bg-[#2B2A28] rounded-2xl p-6 border border-[#D5D4D4] dark:border-[#403F3E] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-80 h-80 bg-[#008DD2]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-80 h-80 bg-blue-500/5 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
         <div>
-          <p className="text-[10px] text-[#008DD2] dark:text-[#59B5E2] font-bold uppercase tracking-wider mb-1">
+          <p className="text-[10px] text-blue-600 dark:text-blue-400 font-bold uppercase tracking-tighter mb-1">
             Uttam (Bharat) Electricals Pvt. Ltd.
           </p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#2B2A28] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white italic tracking-tight">
             Assessment Management Dashboard
           </h1>
-          <p className="text-xs text-[#757573] dark:text-[#D5D4D4] mt-1 max-w-2xl">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
             Real-time management overview of employee technical trainings, digitized feedback evaluations, interactive virtual analytics, and pass rate metrics.
           </p>
         </div>
@@ -255,23 +255,23 @@ export const AdminDashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             to="/admin/create-training"
-            className="bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs flex items-center gap-2 transition-all cursor-pointer"
+            className="bg-blue-600 text-white px-4 py-2.5 rounded-lg font-bold text-xs shadow-lg shadow-blue-600/30 hover:bg-blue-500 flex items-center gap-2 transition-all"
           >
             <PlusCircle className="w-4 h-4" />
             + Create Training
           </Link>
           <Link
             to="/admin/reports"
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] border border-[#59B5E2] flex items-center gap-2 transition-all shadow-xs cursor-pointer"
+            className="px-4 py-2.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-2 transition-all"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Export Reports
           </Link>
           <a
             href="#admin-management"
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#EAEAEA] hover:bg-[#D5D4D4] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#2B2A28] dark:text-[#EAEAEA] border border-[#D5D4D4] dark:border-[#52514E] flex items-center gap-2 transition-all cursor-pointer"
+            className="px-4 py-2.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 flex items-center gap-2 transition-all cursor-pointer"
           >
-            <ShieldCheck className="w-4 h-4 text-[#008DD2] dark:text-[#59B5E2]" />
+            <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             Admin Management
           </a>
         </div>
@@ -280,35 +280,35 @@ export const AdminDashboard: React.FC = () => {
       {/* Metric Cards Grid - 4 Columns with Perfect Height Alignment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
         {/* Employees */}
-        <GlassCard className="p-5 border-l-4 border-l-[#008DD2] flex flex-col justify-between h-full">
+        <GlassCard className="p-5 border-l-4 border-l-blue-600 flex flex-col justify-between h-full">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#757573] dark:text-[#D5D4D4] uppercase tracking-wider">Employees</span>
-              <div className="p-1.5 rounded-lg bg-[#E6F4FA] dark:bg-[#403F3E] text-[#008DD2] dark:text-[#59B5E2]">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Employees</span>
+              <div className="p-1.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">
                 <Users className="w-4 h-4" />
               </div>
             </div>
             <div className="flex items-end justify-between mt-1">
-              <span className="text-3xl font-bold text-[#2B2A28] dark:text-white">{totalEmployees}</span>
-              <span className="text-[#006393] dark:text-[#59B5E2] text-xs font-bold bg-[#E6F4FA] dark:bg-[#403F3E] px-2 py-0.5 rounded border border-[#CCE8F6] dark:border-[#52514E]">+4.5%</span>
+              <span className="text-3xl font-bold text-slate-900 dark:text-white">{totalEmployees}</span>
+              <span className="text-emerald-700 dark:text-emerald-400 text-xs font-medium bg-emerald-100 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-500/20">+4.5%</span>
             </div>
-            <p className="text-[10px] text-[#757573] dark:text-[#B5B4B4] mt-1">Unique registered personnel</p>
+            <p className="text-[10px] text-slate-500 mt-1">Unique registered personnel</p>
           </div>
 
           {/* Middle Content: Recent Registered Staff */}
-          <div className="mt-3 pt-3 border-t border-[#EAEAEA] dark:border-[#403F3E] space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-extrabold text-[#403F3E] dark:text-[#EAEAEA]">
+          <div className="mt-3 pt-3 border-t border-slate-200/70 dark:border-slate-800/70 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-extrabold text-slate-700 dark:text-slate-300">
               <span className="flex items-center gap-1.5 uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-[#008DD2] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                 Recent Registered Staff
               </span>
-              <span className="text-[10px] text-[#008DD2] dark:text-[#59B5E2] font-bold">
+              <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">
                 {registrations.length} Total
               </span>
             </div>
 
             {/* List of 3 Recent Employees */}
-            <div className="space-y-1.5 bg-[#F0F4F8] dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl p-2.5 shadow-2xs">
+            <div className="space-y-1.5 bg-slate-50/80 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 shadow-2xs">
               {recentRegisteredEmployees.length > 0 ? (
                 recentRegisteredEmployees.map((emp, i) => {
                   const initials = (emp.employeeName || "E")
@@ -320,86 +320,86 @@ export const AdminDashboard: React.FC = () => {
                   return (
                     <div key={emp.id || i} className="flex items-center justify-between gap-2 text-[11px]">
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-lg bg-[#008DD2] text-white font-black text-[9px] flex items-center justify-center shrink-0 shadow-xs">
+                        <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-black text-[9px] flex items-center justify-center shrink-0 shadow-xs">
                           {initials}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-[#2B2A28] dark:text-white truncate max-w-[95px] leading-tight">
+                          <p className="font-bold text-slate-900 dark:text-white truncate max-w-[95px] leading-tight">
                             {emp.employeeName}
                           </p>
-                          <p className="text-[9px] text-[#757573] dark:text-[#B5B4B4] truncate">
+                          <p className="text-[9px] text-slate-500 truncate">
                             {emp.employeeCode ? `#${emp.employeeCode}` : emp.designation || "Staff"}
                           </p>
                         </div>
                       </div>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#E6F4FA] dark:bg-[#403F3E] text-[#006393] dark:text-[#59B5E2] border border-[#CCE8F6] dark:border-[#52514E] shrink-0">
+                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-100/70 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 shrink-0">
                         {emp.department || "Production"}
                       </span>
                     </div>
                   );
                 })
               ) : (
-                <div className="text-[11px] text-[#757573] py-2 text-center">
+                <div className="text-[11px] text-slate-400 py-2 text-center">
                   Roster ready for new registrations
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-between text-[9.5px] text-[#757573] dark:text-[#D5D4D4] pt-0.5">
+            <div className="flex items-center justify-between text-[9.5px] text-slate-500 dark:text-slate-400 pt-0.5">
               <span>Roster Coverage</span>
-              <span className="font-bold text-[#403F3E] dark:text-[#EAEAEA]">
+              <span className="font-bold text-slate-700 dark:text-slate-300">
                 100% Digital Verified
               </span>
             </div>
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-[#EAEAEA] dark:border-[#403F3E] flex items-center justify-between text-[10px] text-[#757573] dark:text-[#D5D4D4]">
+          <div className="mt-3 pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
             <span>Database Roster</span>
-            <span className="text-[#008DD2] dark:text-[#59B5E2] font-semibold">{registrations.length} Total Registrations</span>
+            <span className="text-blue-600 dark:text-blue-400 font-semibold">{registrations.length} Total Registrations</span>
           </div>
         </GlassCard>
 
         {/* Active Modules */}
-        <GlassCard className="p-5 border-l-4 border-l-[#0078B2] flex flex-col justify-between h-full">
+        <GlassCard className="p-5 border-l-4 border-l-amber-500 flex flex-col justify-between h-full">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#757573] dark:text-[#D5D4D4] uppercase tracking-wider">Active Modules</span>
-              <div className="p-1.5 rounded-lg bg-[#E6F4FA] dark:bg-[#403F3E] text-[#0078B2] dark:text-[#59B5E2]">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Active Modules</span>
+              <div className="p-1.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">
                 <BookOpen className="w-4 h-4" />
               </div>
             </div>
             <div className="flex items-end justify-between mt-1">
-              <span className="text-3xl font-bold text-[#2B2A28] dark:text-white">{totalTrainings}</span>
-              <span className="text-[#006393] dark:text-[#59B5E2] text-xs font-bold bg-[#E6F4FA] dark:bg-[#403F3E] px-2 py-0.5 rounded border border-[#CCE8F6] dark:border-[#52514E]">Active</span>
+              <span className="text-3xl font-bold text-slate-900 dark:text-white">{totalTrainings}</span>
+              <span className="text-amber-700 dark:text-amber-400 text-xs font-medium bg-amber-100 dark:bg-amber-500/10 px-2 py-0.5 rounded border border-amber-300 dark:border-amber-500/20">Active</span>
             </div>
-            <p className="text-[10px] text-[#757573] dark:text-[#B5B4B4] mt-1">Live curriculum programs</p>
+            <p className="text-[10px] text-slate-500 mt-1">Live curriculum programs</p>
           </div>
 
           {/* Middle Content: Live Curriculum Status */}
-          <div className="mt-3 pt-3 border-t border-[#EAEAEA] dark:border-[#403F3E] space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-extrabold text-[#403F3E] dark:text-[#EAEAEA]">
+          <div className="mt-3 pt-3 border-t border-slate-200/70 dark:border-slate-800/70 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-extrabold text-slate-700 dark:text-slate-300">
               <span className="flex items-center gap-1.5 uppercase tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-[#0078B2] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                 Live Curriculum Modules
               </span>
-              <span className="text-[10px] text-[#0078B2] dark:text-[#59B5E2] font-bold">
+              <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold">
                 {trainings.length} Ready
               </span>
             </div>
 
             {/* List of active trainings */}
-            <div className="space-y-1.5 bg-[#F0F4F8] dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl p-2.5 shadow-2xs">
+            <div className="space-y-1.5 bg-slate-50/80 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 shadow-2xs">
               {trainings.slice(0, 2).map((t, i) => (
                 <div key={t.id || i} className="space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="font-bold text-[#2B2A28] dark:text-white truncate max-w-[130px]" title={t.title}>
+                    <span className="font-bold text-slate-900 dark:text-white truncate max-w-[130px]" title={t.title}>
                       {t.title}
                     </span>
-                    <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-[#E6F4FA] dark:bg-[#403F3E] text-[#006393] dark:text-[#59B5E2] border border-[#CCE8F6] dark:border-[#52514E]">
+                    <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/60">
                       {t.questions?.length || 10} Qs
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-[9px] text-[#757573] dark:text-[#B5B4B4]">
+                  <div className="flex items-center justify-between text-[9px] text-slate-500 dark:text-slate-400">
                     <span>Trainer: {t.trainerName || "Expert"}</span>
                     <span>Pass: {t.passingPercentage || 70}%</span>
                   </div>
@@ -407,40 +407,40 @@ export const AdminDashboard: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex items-center justify-between text-[9.5px] text-[#757573] dark:text-[#D5D4D4] pt-0.5">
+            <div className="flex items-center justify-between text-[9.5px] text-slate-500 dark:text-slate-400 pt-0.5">
               <span>Proctored Assessments</span>
-              <span className="font-bold text-[#008DD2] dark:text-[#59B5E2] flex items-center gap-1">
+              <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                 <CheckCircle2 className="w-2.5 h-2.5" /> Auto-Certificates Active
               </span>
             </div>
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-[#EAEAEA] dark:border-[#403F3E] flex items-center justify-between text-[10px] text-[#757573] dark:text-[#D5D4D4]">
+          <div className="mt-3 pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
             <span>Live Programs</span>
-            <span className="text-[#0078B2] dark:text-[#59B5E2] font-semibold">{trainings.length} Active Sessions</span>
+            <span className="text-amber-600 dark:text-amber-400 font-semibold">{trainings.length} Active Sessions</span>
           </div>
         </GlassCard>
 
         {/* Feedbacks with Live Virtual Graph */}
-        <GlassCard className="p-5 border-l-4 border-l-[#008DD2] flex flex-col justify-between h-full">
+        <GlassCard className="p-5 border-l-4 border-l-emerald-500 flex flex-col justify-between h-full">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#757573] dark:text-[#D5D4D4] uppercase tracking-wider">Feedbacks</span>
-              <div className="p-1.5 rounded-lg bg-[#E6F4FA] dark:bg-[#403F3E] text-[#008DD2] dark:text-[#59B5E2]">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Feedbacks</span>
+              <div className="p-1.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <FileSpreadsheet className="w-4 h-4" />
               </div>
             </div>
             <div className="flex items-end justify-between mt-1">
-              <span className="text-3xl font-bold text-[#2B2A28] dark:text-white">{totalFeedbacks}</span>
-              <span className="text-[#006393] dark:text-[#59B5E2] text-[10px] font-bold bg-[#E6F4FA] dark:bg-[#403F3E] px-2 py-0.5 rounded border border-[#CCE8F6] dark:border-[#52514E]">
+              <span className="text-3xl font-bold text-slate-900 dark:text-white">{totalFeedbacks}</span>
+              <span className="text-emerald-700 dark:text-emerald-400 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-500/20">
                 {avgFeedbackRating} ★ Overall Avg
               </span>
             </div>
-            <p className="text-[10px] text-[#757573] dark:text-[#B5B4B4] mt-1">Total evaluations submitted</p>
+            <p className="text-[10px] text-slate-500 mt-1">Total evaluations submitted</p>
           </div>
 
           {/* Real-time Virtual Graph for 4 Recent Feedbacks */}
-          <div className="mt-3 pt-3 border-t border-[#EAEAEA] dark:border-[#403F3E]">
+          <div className="mt-3 pt-3 border-t border-slate-200/70 dark:border-slate-800/70">
             <RealTimeVirtualGraph
               type="feedback"
               data={feedbackDataPoints}
@@ -450,34 +450,34 @@ export const AdminDashboard: React.FC = () => {
             />
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-[#EAEAEA] dark:border-[#403F3E] flex items-center justify-between text-[10px] text-[#757573] dark:text-[#D5D4D4]">
+          <div className="mt-3 pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
             <span>Evaluations</span>
-            <span className="text-[#008DD2] dark:text-[#59B5E2] font-semibold">{feedbacks.length} Total Feedbacks</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{feedbacks.length} Total Feedbacks</span>
           </div>
         </GlassCard>
 
         {/* Pass Rate with Live Virtual Graph */}
-        <GlassCard className="p-5 border-l-4 border-l-[#006393] flex flex-col justify-between h-full">
+        <GlassCard className="p-5 border-l-4 border-l-blue-500 flex flex-col justify-between h-full">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-[#757573] dark:text-[#D5D4D4] uppercase tracking-wider">Pass Rate</span>
-              <div className="p-1.5 rounded-lg bg-[#E6F4FA] dark:bg-[#403F3E] text-[#006393] dark:text-[#59B5E2]">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Pass Rate</span>
+              <div className="p-1.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">
                 <Award className="w-4 h-4" />
               </div>
             </div>
             <div className="flex items-end justify-between mt-1">
-              <span className="text-3xl font-bold text-[#2B2A28] dark:text-white">
+              <span className="text-3xl font-bold text-slate-900 dark:text-white">
                 {passPercentage}<span className="text-lg">%</span>
               </span>
               <span
                 className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
                   passPercentage >= 75
-                    ? "text-[#006393] dark:text-[#59B5E2] bg-[#E6F4FA] dark:bg-[#403F3E] border-[#CCE8F6] dark:border-[#52514E]"
+                    ? "text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 border-emerald-300 dark:border-emerald-500/20"
                     : passPercentage >= 50
-                    ? "text-[#008DD2] dark:text-[#59B5E2] bg-[#E6F4FA] dark:bg-[#403F3E] border-[#CCE8F6] dark:border-[#52514E]"
+                    ? "text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border-blue-300 dark:border-blue-500/20"
                     : attempts.length === 0
-                    ? "text-[#757573] dark:text-[#B5B4B4] bg-[#EAEAEA] dark:bg-[#403F3E] border-[#D5D4D4] dark:border-[#52514E]"
-                    : "text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800"
+                    ? "text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                    : "text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/20"
                 }`}
               >
                 {passPercentage >= 75
@@ -489,13 +489,13 @@ export const AdminDashboard: React.FC = () => {
                   : "Needs Attention"}
               </span>
             </div>
-            <p className="text-[10px] text-[#008DD2] dark:text-[#59B5E2] mt-1 font-semibold flex items-center gap-1">
+            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 font-medium flex items-center gap-1">
               <TrendingUp className="w-3 h-3" /> {passedAttempts} / {attempts.length} Total Passed
             </p>
           </div>
 
           {/* Real-time Virtual Graph for 4 Recent Quiz Candidates */}
-          <div className="mt-3 pt-3 border-t border-[#EAEAEA] dark:border-[#403F3E]">
+          <div className="mt-3 pt-3 border-t border-slate-200/70 dark:border-slate-800/70">
             <RealTimeVirtualGraph
               type="passRate"
               data={passRateDataPoints}
@@ -507,9 +507,9 @@ export const AdminDashboard: React.FC = () => {
             />
           </div>
 
-          <div className="mt-3 pt-2.5 border-t border-[#EAEAEA] dark:border-[#403F3E] flex items-center justify-between text-[10px] text-[#757573] dark:text-[#D5D4D4]">
+          <div className="mt-3 pt-2.5 border-t border-slate-200/70 dark:border-slate-800/70 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
             <span>Assessments</span>
-            <span className="text-[#006393] dark:text-[#59B5E2] font-semibold">{attempts.length} Total Attempts</span>
+            <span className="text-blue-600 dark:text-blue-400 font-semibold">{attempts.length} Total Attempts</span>
           </div>
         </GlassCard>
       </div>
@@ -519,37 +519,37 @@ export const AdminDashboard: React.FC = () => {
         {/* Left Column: Recent Trainings & QR Codes */}
         <div className="lg:col-span-2 space-y-6">
           <GlassCard className="p-6">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#EAEAEA] dark:border-[#403F3E]">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
               <div>
-                <h3 className="text-base font-bold text-[#2B2A28] dark:text-white flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-[#008DD2]" /> Recent Training Programs & QR Codes
+                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-blue-500" /> Recent Training Programs & QR Codes
                 </h3>
-                <p className="text-xs text-[#757573] dark:text-[#D5D4D4] mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Scan or click QR code to test employee registration flow
                 </p>
               </div>
               <Link
                 to="/admin/trainings"
-                className="text-xs text-[#008DD2] dark:text-[#59B5E2] hover:underline font-semibold flex items-center gap-1"
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center gap-1"
               >
                 View All <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
             {loading ? (
-              <div className="p-8 text-center text-xs text-[#757573] animate-pulse">
+              <div className="p-8 text-center text-xs text-slate-500 animate-pulse">
                 Loading trainings...
               </div>
             ) : trainings.length === 0 ? (
-              <div className="p-8 text-center bg-[#F0F4F8] dark:bg-[#1E1D1C] rounded-xl border border-[#D5D4D4] dark:border-[#403F3E]">
-                <BookOpen className="w-10 h-10 text-[#757573] mx-auto mb-2" />
-                <p className="text-sm font-bold text-[#2B2A28] dark:text-white">No Trainings Created Yet</p>
-                <p className="text-xs text-[#757573] mt-1 mb-4">
+              <div className="p-8 text-center bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800">
+                <BookOpen className="w-10 h-10 text-slate-400 dark:text-slate-600 mx-auto mb-2" />
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-300">No Trainings Created Yet</p>
+                <p className="text-xs text-slate-500 mt-1 mb-4">
                   Create your first transformer training session with AI PDF question parser.
                 </p>
                 <Link
                   to="/admin/create-training"
-                  className="px-4 py-2 bg-[#008DD2] hover:bg-[#0078B2] text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold inline-flex items-center gap-1.5 shadow-md"
                 >
                   <PlusCircle className="w-4 h-4" /> Create Training
                 </Link>
@@ -559,23 +559,23 @@ export const AdminDashboard: React.FC = () => {
                 {trainings.slice(0, 5).map((t) => (
                   <div
                     key={t.id}
-                    className="p-4 bg-[#F0F4F8] dark:bg-[#1E1D1C] rounded-xl border border-[#D5D4D4] dark:border-[#403F3E] hover:border-[#008DD2] dark:hover:border-[#008DD2] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs"
+                    className="p-4 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-slate-700 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E6F4FA] dark:bg-[#403F3E] text-[#006393] dark:text-[#59B5E2] border border-[#CCE8F6] dark:border-[#52514E]">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30">
                           {t.department}
                         </span>
-                        <span className="text-xs text-[#757573] dark:text-[#D5D4D4]">{t.trainingDate}</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{t.trainingDate}</span>
                       </div>
-                      <h4 className="font-bold text-[#2B2A28] dark:text-white text-sm">{t.title}</h4>
-                      <p className="text-xs text-[#757573] dark:text-[#D5D4D4]">
-                        Trainer: <strong className="text-[#2B2A28] dark:text-[#EAEAEA]">{t.trainerName}</strong> • {t.questions?.length || 0} Questions
+                      <h4 className="font-bold text-slate-900 dark:text-white text-sm">{t.title}</h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                        Trainer: <strong className="text-slate-800 dark:text-slate-200">{t.trainerName}</strong> • {t.questions?.length || 0} Questions
                       </p>
                     </div>
 
                     <div className="flex items-center gap-3 shrink-0">
-                      <div className="flex items-center gap-2 bg-white dark:bg-[#2B2A28] p-2 rounded-xl border border-[#D5D4D4] dark:border-[#403F3E] shadow-2xs">
+                      <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-800 shadow-xs">
                         <TrainingQRCode
                           trainingId={t.id}
                           initialUrl={t.qrCodeDataUrl}
@@ -583,11 +583,11 @@ export const AdminDashboard: React.FC = () => {
                           className="w-12 h-12 rounded bg-white p-0.5"
                         />
                         <div className="text-[11px]">
-                          <p className="font-bold text-[#2B2A28] dark:text-[#EAEAEA]">QR Code</p>
+                          <p className="font-bold text-slate-800 dark:text-slate-300">QR Code</p>
                           <Link
                             to={`/employee/register/${t.id}`}
                             target="_blank"
-                            className="text-[#008DD2] dark:text-[#59B5E2] hover:underline text-[10px] flex items-center gap-1 mt-0.5 font-semibold"
+                            className="text-amber-600 dark:text-amber-400 hover:underline text-[10px] flex items-center gap-1 mt-0.5 font-semibold"
                           >
                             Scan / Open <QrCode className="w-3 h-3" />
                           </Link>
@@ -597,14 +597,14 @@ export const AdminDashboard: React.FC = () => {
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => navigate(`/admin/trainings`)}
-                          className="px-3 py-2 rounded-xl bg-white hover:bg-[#EAEAEA] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#2B2A28] dark:text-[#EAEAEA] text-xs font-semibold border border-[#D5D4D4] dark:border-[#52514E] transition-all shadow-2xs cursor-pointer"
+                          className="px-3 py-2 rounded-lg bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-transparent transition-all shadow-xs"
                         >
                           Details
                         </button>
                         <button
                           onClick={() => setDeleteTarget({ id: t.id, title: t.title })}
                           title="Delete Session"
-                          className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 text-xs font-semibold transition-all cursor-pointer"
+                          className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 text-xs font-semibold transition-all"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -618,23 +618,23 @@ export const AdminDashboard: React.FC = () => {
 
           {/* Recent Quiz Submissions Log */}
           <GlassCard className="p-6">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#EAEAEA] dark:border-[#403F3E]">
-              <h3 className="text-base font-bold text-[#2B2A28] dark:text-white flex items-center gap-2">
-                <Award className="w-5 h-5 text-[#008DD2]" /> Recent Employee Assessments
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Award className="w-5 h-5 text-amber-500" /> Recent Employee Assessments
               </h3>
-              <Link to="/admin/reports" className="text-xs text-[#008DD2] dark:text-[#59B5E2] hover:underline font-semibold">
+              <Link to="/admin/reports" className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold">
                 View Full Log
               </Link>
             </div>
 
             {attempts.length === 0 ? (
-              <p className="text-xs text-[#757573] text-center py-6">
+              <p className="text-xs text-slate-500 text-center py-6">
                 No assessments taken yet. Employee responses will appear here live.
               </p>
             ) : (
-              <div className="overflow-x-auto rounded-xl border border-[#D5D4D4] dark:border-[#403F3E]">
+              <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#2B2A28] text-white font-bold uppercase text-[10px] tracking-wider border-b-2 border-[#008DD2]">
+                  <thead className="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-400 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                     <tr>
                       <th className="p-3">Employee</th>
                       <th className="p-3">Dept</th>
@@ -645,7 +645,7 @@ export const AdminDashboard: React.FC = () => {
                       <th className="p-3 text-right">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#EAEAEA] dark:divide-[#403F3E] bg-white dark:bg-[#2B2A28]">
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
                     {attempts.slice(0, 10).map((att) => {
                       const matchedReg = registrations.find(
                         (r) => r.id === att.registrationId || (att.employeeCode && r.employeeCode === att.employeeCode)
@@ -659,39 +659,39 @@ export const AdminDashboard: React.FC = () => {
                         .toUpperCase();
 
                       return (
-                        <tr key={att.id} className="hover:bg-[#E6F4FA]/50 dark:hover:bg-[#403F3E]/50 transition-colors">
-                          <td className="p-3 font-semibold text-[#2B2A28] dark:text-white">
+                        <tr key={att.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all">
+                          <td className="p-3 font-semibold text-slate-900 dark:text-white">
                             <div className="flex items-center gap-2.5">
-                              <div className="w-7 h-7 rounded-lg bg-[#008DD2] text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
+                              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
                                 {initials}
                               </div>
                               <div>
-                                <span className="font-bold text-[#2B2A28] dark:text-white block leading-tight">
+                                <span className="font-bold text-slate-900 dark:text-white block leading-tight">
                                   {displayName}
                                 </span>
-                                <span className="block text-[10px] font-mono text-[#757573] dark:text-[#D5D4D4]">
+                                <span className="block text-[10px] font-mono text-slate-500 dark:text-slate-400">
                                   {att.employeeCode || matchedReg?.employeeCode || "ID: N/A"}
                                 </span>
                               </div>
                             </div>
                           </td>
-                        <td className="p-3 text-[#403F3E] dark:text-[#D5D4D4]">{att.department}</td>
-                        <td className="p-3 font-bold text-[#2B2A28] dark:text-[#EAEAEA]">
+                        <td className="p-3 text-slate-700 dark:text-slate-300">{att.department}</td>
+                        <td className="p-3 font-bold text-slate-900 dark:text-slate-200">
                           {att.score} / {att.totalQuestions}
                         </td>
-                        <td className="p-3 font-bold text-[#008DD2] dark:text-[#59B5E2]">{att.percentage}%</td>
+                        <td className="p-3 font-bold text-amber-600 dark:text-amber-300">{att.percentage}%</td>
                         <td className="p-3">
                           {att.passed ? (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E6F4FA] dark:bg-[#403F3E] text-[#006393] dark:text-[#59B5E2] border border-[#CCE8F6] dark:border-[#52514E] flex items-center gap-1 w-fit">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 flex items-center gap-1 w-fit">
                               <CheckCircle2 className="w-3 h-3" /> PASSED
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 flex items-center gap-1 w-fit">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30 flex items-center gap-1 w-fit">
                               <XCircle className="w-3 h-3" /> FAILED
                             </span>
                           )}
                         </td>
-                        <td className="p-3 text-[#757573] dark:text-[#D5D4D4] text-[11px] whitespace-nowrap">
+                        <td className="p-3 text-slate-500 dark:text-slate-400 text-[11px] whitespace-nowrap">
                           {new Date(att.submittedAt).toLocaleDateString()}
                         </td>
                         <td className="p-3 text-right">
@@ -705,7 +705,7 @@ export const AdminDashboard: React.FC = () => {
                               })
                             }
                             title="Delete Assessment Record"
-                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 text-xs transition-all inline-flex items-center justify-center hover:scale-110 active:scale-95 shadow-xs cursor-pointer"
+                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 text-xs transition-all inline-flex items-center justify-center hover:scale-110 active:scale-95 shadow-xs"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -723,12 +723,12 @@ export const AdminDashboard: React.FC = () => {
         {/* Right Column: Department Performance & Quick Actions */}
         <div className="space-y-6">
           <GlassCard className="p-6">
-            <h3 className="text-base font-bold text-[#2B2A28] dark:text-white mb-4 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[#008DD2]" /> Department Performance
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-purple-500" /> Department Performance
             </h3>
 
             {Object.keys(deptMap).length === 0 ? (
-              <p className="text-xs text-[#757573] text-center py-4">
+              <p className="text-xs text-slate-500 text-center py-4">
                 No department registrations logged yet.
               </p>
             ) : (
@@ -739,18 +739,18 @@ export const AdminDashboard: React.FC = () => {
                       ? Math.round((data.totalPassed / data.totalReg) * 100)
                       : 0;
                   return (
-                    <div key={dept} className="p-3.5 bg-[#F0F4F8] dark:bg-[#1E1D1C] rounded-xl border border-[#D5D4D4] dark:border-[#403F3E] shadow-xs">
-                      <div className="flex items-center justify-between text-xs font-bold text-[#2B2A28] dark:text-[#EAEAEA] mb-1.5">
+                    <div key={dept} className="p-3.5 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-900 dark:text-slate-200 mb-1.5">
                         <span>{dept}</span>
-                        <span className="text-[#008DD2] dark:text-[#59B5E2]">{passRate}% Pass</span>
+                        <span className="text-amber-600 dark:text-amber-400">{passRate}% Pass</span>
                       </div>
-                      <div className="w-full bg-[#EAEAEA] dark:bg-[#403F3E] h-2 rounded-full overflow-hidden mb-1 border border-[#D5D4D4] dark:border-[#52514E]">
+                      <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-1 border border-slate-300 dark:border-slate-700">
                         <div
-                          className="bg-[#008DD2] h-full transition-all duration-500"
+                          className="bg-gradient-to-r from-blue-500 to-amber-400 h-full transition-all duration-500"
                           style={{ width: `${Math.min(passRate, 100)}%` }}
                         />
                       </div>
-                      <div className="flex justify-between text-[10px] text-[#757573] dark:text-[#D5D4D4]">
+                      <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400">
                         <span>{data.totalReg} Registered</span>
                         <span>{data.totalPassed} Passed</span>
                       </div>
@@ -763,48 +763,48 @@ export const AdminDashboard: React.FC = () => {
 
           {/* Quick System Actions */}
           <GlassCard className="p-6 space-y-3">
-            <h3 className="text-sm font-bold text-[#2B2A28] dark:text-white flex items-center gap-2 mb-2">
-              <Zap className="w-4 h-4 text-[#008DD2]" /> Management Actions
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
+              <Zap className="w-4 h-4 text-amber-500" /> Management Actions
             </h3>
 
             <Link
               to="/admin/create-training"
-              className="w-full p-3 bg-[#E6F4FA] hover:bg-[#CCE8F6] border border-[#59B5E2]/40 rounded-xl text-xs font-bold text-[#006393] flex items-center justify-between transition-all"
+              className="w-full p-3 bg-blue-50 dark:bg-blue-600/20 hover:bg-blue-100 dark:hover:bg-blue-600/30 border border-blue-200 dark:border-blue-500/30 rounded-xl text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center justify-between transition-all"
             >
               <span className="flex items-center gap-2">
-                <PlusCircle className="w-4 h-4 text-[#008DD2]" /> Create New Training
+                <PlusCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Create New Training
               </span>
-              <ArrowRight className="w-4 h-4 text-[#008DD2]" />
+              <ArrowRight className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </Link>
 
             <Link
               to="/admin/reports"
-              className="w-full p-3 bg-[#F0F4F8] hover:bg-[#EAEAEA] dark:bg-[#1E1D1C] dark:hover:bg-[#403F3E] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl text-xs font-bold text-[#2B2A28] dark:text-[#EAEAEA] flex items-center justify-between transition-all"
+              className="w-full p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between transition-all"
             >
               <span className="flex items-center gap-2">
-                <FileSpreadsheet className="w-4 h-4 text-[#008DD2]" /> Google Sheets & Reports Hub
+                <FileSpreadsheet className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Google Sheets & Reports Hub
               </span>
-              <ArrowRight className="w-4 h-4 text-[#757573]" />
+              <ArrowRight className="w-4 h-4 text-slate-400" />
             </Link>
 
             <Link
               to="/admin/analytics"
-              className="w-full p-3 bg-[#F0F4F8] hover:bg-[#EAEAEA] dark:bg-[#1E1D1C] dark:hover:bg-[#403F3E] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl text-xs font-bold text-[#2B2A28] dark:text-[#EAEAEA] flex items-center justify-between transition-all"
+              className="w-full p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between transition-all"
             >
               <span className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-[#008DD2]" /> Visual Charts & Analytics
+                <TrendingUp className="w-4 h-4 text-purple-600 dark:text-purple-400" /> Visual Charts & Analytics
               </span>
-              <ArrowRight className="w-4 h-4 text-[#757573]" />
+              <ArrowRight className="w-4 h-4 text-slate-400" />
             </Link>
 
             <a
               href="#admin-management"
-              className="w-full p-3 bg-[#E6F4FA] hover:bg-[#CCE8F6] border border-[#59B5E2]/40 rounded-xl text-xs font-bold text-[#006393] flex items-center justify-between transition-all"
+              className="w-full p-3 bg-blue-50/70 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 border border-blue-200 dark:border-blue-700/50 rounded-xl text-xs font-bold text-blue-900 dark:text-blue-200 flex items-center justify-between transition-all"
             >
               <span className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#008DD2]" /> Admin Accounts & Access Control
+                <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Admin Accounts & Access Control
               </span>
-              <ArrowRight className="w-4 h-4 text-[#008DD2]" />
+              <ArrowRight className="w-4 h-4 text-blue-500" />
             </a>
           </GlassCard>
         </div>
@@ -817,16 +817,16 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Delete Session Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 bg-[#2B2A28]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-2xl max-w-md w-full p-6 text-center shadow-2xl space-y-4">
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl space-y-4">
             <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-500 flex items-center justify-center mx-auto">
               <Trash2 className="w-6 h-6" />
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-[#2B2A28] dark:text-white">Delete Training Program?</h3>
-              <p className="text-xs text-[#757573] dark:text-[#D5D4D4] mt-1">
-                Are you sure you want to permanently delete <strong className="text-[#2B2A28] dark:text-white">"{deleteTarget.title}"</strong>?
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Delete Training Program?</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                Are you sure you want to permanently delete <strong className="text-slate-900 dark:text-white">"{deleteTarget.title}"</strong>?
               </p>
             </div>
 
@@ -835,7 +835,7 @@ export const AdminDashboard: React.FC = () => {
                 type="button"
                 disabled={deleting}
                 onClick={() => setDeleteTarget(null)}
-                className="flex-1 py-2.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#2B2A28] dark:text-[#EAEAEA] font-semibold text-xs rounded-xl cursor-pointer"
+                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl"
               >
                 Cancel
               </button>
@@ -843,7 +843,7 @@ export const AdminDashboard: React.FC = () => {
                 type="button"
                 disabled={deleting}
                 onClick={confirmDeleteSession}
-                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 disabled:opacity-50"
               >
                 {deleting ? (
                   <>
@@ -862,21 +862,21 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Delete Assessment Attempt Modal */}
       {deleteAttemptTarget && (
-        <div className="fixed inset-0 bg-[#2B2A28]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#2B2A28] border border-[#D5D4D4] dark:border-[#403F3E] rounded-2xl max-w-md w-full p-6 text-center shadow-2xl space-y-4">
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl space-y-4">
             <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-500 flex items-center justify-center mx-auto">
               <Trash2 className="w-6 h-6" />
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-[#2B2A28] dark:text-white">Delete Assessment Record?</h3>
-              <p className="text-xs text-[#757573] dark:text-[#D5D4D4] mt-1">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Delete Assessment Record?</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Are you sure you want to delete the assessment attempt for{" "}
-                <strong className="text-[#2B2A28] dark:text-white">{deleteAttemptTarget.name}</strong>{" "}
+                <strong className="text-slate-900 dark:text-white">{deleteAttemptTarget.name}</strong>{" "}
                 ({deleteAttemptTarget.code}) with score{" "}
                 <span className="font-semibold text-rose-600 dark:text-rose-400">{deleteAttemptTarget.score}</span>?
               </p>
-              <p className="text-[11px] text-[#757573] dark:text-[#D5D4D4] mt-2 bg-[#F0F4F8] dark:bg-[#1E1D1C] p-2.5 rounded-xl border border-[#D5D4D4] dark:border-[#403F3E] text-left">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 bg-slate-50 dark:bg-slate-950/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-left">
                 • This record will be permanently deleted from Firestore.<br />
                 • Dashboard pass rates and department metrics will update automatically.<br />
                 • The employee can retake the test if needed.
@@ -888,7 +888,7 @@ export const AdminDashboard: React.FC = () => {
                 type="button"
                 disabled={deletingAttempt}
                 onClick={() => setDeleteAttemptTarget(null)}
-                className="flex-1 py-2.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#2B2A28] dark:text-[#EAEAEA] font-semibold text-xs rounded-xl cursor-pointer"
+                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl"
               >
                 Cancel
               </button>
@@ -896,7 +896,7 @@ export const AdminDashboard: React.FC = () => {
                 type="button"
                 disabled={deletingAttempt}
                 onClick={confirmDeleteAttempt}
-                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 disabled:opacity-50"
               >
                 {deletingAttempt ? (
                   <>

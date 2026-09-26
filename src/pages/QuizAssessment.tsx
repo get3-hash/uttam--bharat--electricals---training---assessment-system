@@ -389,58 +389,58 @@ export const QuizAssessment: React.FC = () => {
 
       {!quizStarted ? (
         /* ========================================================= */
-        /* PRE-QUIZ RULES SCREEN (UTTAM BRAND HARMONIZED)             */
+        /* PRE-QUIZ RULES SCREEN (IMAGE 2 MATCHING + UNANSWERED STAT) */
         /* ========================================================= */
         <main className="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6 lg:p-8 my-6">
-          <GlassCard className="p-6 sm:p-8 space-y-6 border border-[#D5D4D4] dark:border-[#403F3E] shadow-xl relative overflow-hidden bg-white dark:bg-[#2B2A28]">
-            {/* Ambient subtle glow */}
-            <div className="absolute -top-24 -right-24 w-80 h-80 bg-gradient-to-br from-[#008DD2]/10 via-[#59B5E2]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+          <GlassCard className="p-6 sm:p-8 space-y-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative overflow-hidden">
+            {/* Ambient colorful glow */}
+            <div className="absolute -top-24 -right-24 w-80 h-80 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="text-center space-y-2 relative">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#006393] to-[#008DD2] text-white mx-auto flex items-center justify-center shadow-md shadow-[#008DD2]/20">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-white mx-auto flex items-center justify-center shadow-lg shadow-amber-500/25">
                 <Award className="w-8 h-8" />
               </div>
-              <h2 className="text-2xl font-black text-[#2B2A28] dark:text-white">Section C: Assessment Test</h2>
-              <p className="text-xs text-[#757573] dark:text-[#D5D4D4] font-medium">
-                Uttam (Bharat) Electricals Pvt. Ltd. • <span className="text-[#008DD2] dark:text-[#59B5E2] font-bold">{training.title}</span>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white">Section C: Assessment Test</h2>
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                Uttam (Bharat) Electricals Pvt. Ltd. • <span className="text-blue-600 dark:text-blue-400 font-bold">{training.title}</span>
               </p>
             </div>
 
-            {/* Brand Stat Metric Cards */}
+            {/* Colorful Stat Metric Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-              <div className="p-3.5 rounded-2xl bg-[#E6F4FA] dark:bg-[#403F3E] border border-[#CCE8F6] dark:border-[#52514E] shadow-2xs">
-                <span className="text-xs text-[#006393] dark:text-[#59B5E2] font-bold block">Total Questions</span>
-                <span className="text-2xl font-black text-[#2B2A28] dark:text-white mt-0.5 block">{questions.length}</span>
+              <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 shadow-2xs">
+                <span className="text-xs text-blue-700 dark:text-blue-300 font-bold block">Total Questions</span>
+                <span className="text-2xl font-black text-blue-950 dark:text-white mt-0.5 block">{questions.length}</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800/60 shadow-2xs">
-                <span className="text-xs text-rose-800 dark:text-rose-300 font-bold block">Unanswered</span>
-                <span className="text-2xl font-black text-rose-700 dark:text-rose-400 mt-0.5 block">{questions.length}</span>
+              <div className="p-3.5 rounded-2xl bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 shadow-2xs">
+                <span className="text-xs text-rose-700 dark:text-rose-300 font-bold block">Unanswered</span>
+                <span className="text-2xl font-black text-rose-600 dark:text-rose-400 mt-0.5 block">{questions.length}</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-white dark:bg-[#403F3E] border border-[#D5D4D4] dark:border-[#52514E] shadow-2xs">
-                <span className="text-xs text-[#403F3E] dark:text-[#D5D4D4] font-bold block">Time Limit</span>
-                <span className="text-2xl font-black text-[#2B2A28] dark:text-white mt-0.5 block">
+              <div className="p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 shadow-2xs">
+                <span className="text-xs text-amber-700 dark:text-amber-300 font-bold block">Time Limit</span>
+                <span className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 block">
                   {training.timeLimitMinutes || 15} Mins
                 </span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#E6F4FA] dark:bg-[#403F3E] border border-[#59B5E2]/40 shadow-2xs">
-                <span className="text-xs text-[#006393] dark:text-[#59B5E2] font-bold block">Passing Mark</span>
-                <span className="text-2xl font-black text-[#008DD2] dark:text-[#59B5E2] mt-0.5 block">
+              <div className="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 shadow-2xs">
+                <span className="text-xs text-emerald-700 dark:text-emerald-300 font-bold block">Passing Mark</span>
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5 block">
                   {training.passingPercentage || 70}%
                 </span>
               </div>
             </div>
 
             {/* Sound Notice & Audio Feature */}
-            <div className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-[#E6F4FA] dark:bg-[#403F3E] rounded-2xl border border-[#CCE8F6] dark:border-[#52514E] text-xs text-[#2B2A28] dark:text-[#EAEAEA]">
+            <div className="flex flex-wrap items-center justify-between gap-2 p-3.5 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent dark:bg-slate-900/90 rounded-2xl border border-amber-400/40 text-xs text-slate-800 dark:text-slate-200">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#008DD2] dark:text-[#59B5E2] shrink-0" />
+                <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
                 <span className="font-semibold">Background Focus Music & Sound FX enabled for clear test experience.</span>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleBoostVolume}
-                  className="px-2.5 py-1.5 rounded-xl bg-[#CCE8F6] dark:bg-[#2B2A28] text-[#006393] dark:text-[#59B5E2] border border-[#59B5E2]/40 flex items-center gap-1 font-bold text-[11px] transition-colors cursor-pointer shadow-2xs"
+                  className="px-2.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-800 dark:text-amber-300 border border-amber-500/40 flex items-center gap-1 font-bold text-[11px] transition-colors cursor-pointer shadow-2xs"
                   title="Boost Volume Level"
                 >
                   <Volume2 className="w-3.5 h-3.5" />
@@ -449,38 +449,38 @@ export const QuizAssessment: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleToggleSound}
-                  className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-[#2B2A28] hover:bg-[#EAEAEA] text-[#2B2A28] dark:text-[#EAEAEA] border border-[#D5D4D4] dark:border-[#52514E] flex items-center gap-1 font-bold text-[11px] transition-colors cursor-pointer shadow-2xs"
+                  className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 flex items-center gap-1 font-bold text-[11px] transition-colors cursor-pointer shadow-2xs"
                   title="Toggle Sound & Music"
                 >
-                  {soundMuted ? <VolumeX className="w-3.5 h-3.5 text-[#757573]" /> : <Volume2 className="w-3.5 h-3.5 text-[#008DD2] animate-pulse" />}
+                  {soundMuted ? <VolumeX className="w-3.5 h-3.5 text-rose-500" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />}
                   <span>{soundMuted ? "Audio Muted" : "Audio On"}</span>
                 </button>
               </div>
             </div>
 
-            <div className="bg-rose-50/80 dark:bg-rose-950/20 p-5 rounded-2xl border border-rose-300 dark:border-rose-500/30 space-y-3 shadow-2xs">
-              <h3 className="text-xs font-black text-rose-800 dark:text-rose-400 flex items-center gap-2 uppercase tracking-wide">
+            <div className="bg-rose-50/80 dark:bg-rose-950/20 p-5 rounded-2xl border border-rose-200 dark:border-rose-500/30 space-y-3 shadow-2xs">
+              <h3 className="text-xs font-black text-rose-700 dark:text-rose-400 flex items-center gap-2 uppercase tracking-wide">
                 <ShieldAlert className="w-4 h-4 text-rose-600 dark:text-rose-400" /> Proctored Assessment Rules
               </h3>
-              <ul className="text-xs text-[#403F3E] dark:text-[#D5D4D4] space-y-2 list-disc pl-5 font-medium">
+              <ul className="text-xs text-slate-700 dark:text-slate-300 space-y-2 list-disc pl-5 font-medium">
                 <li>
-                  <strong className="text-[#2B2A28] dark:text-white font-bold">Fullscreen Enforcement:</strong> Switching tabs or minimizing the window will trigger anti-cheating alerts logged on your official score report.
+                  <strong className="text-slate-900 dark:text-white font-bold">Fullscreen Enforcement:</strong> Switching tabs or minimizing the window will trigger anti-cheating alerts logged on your official score report.
                 </li>
                 <li>
-                  <strong className="text-[#2B2A28] dark:text-white font-bold">Copy / Paste & Right Click Disabled:</strong> Copying text or searching outside sources is prohibited.
+                  <strong className="text-slate-900 dark:text-white font-bold">Copy / Paste & Right Click Disabled:</strong> Copying text or searching outside sources is prohibited.
                 </li>
                 <li>
-                  <strong className="text-[#2B2A28] dark:text-white font-bold">Auto Submit:</strong> When the timer expires, your answers will automatically submit.
+                  <strong className="text-slate-900 dark:text-white font-bold">Auto Submit:</strong> When the timer expires, your answers will automatically submit.
                 </li>
                 <li>
-                  <strong className="text-[#2B2A28] dark:text-white font-bold">Passing Score:</strong> Score {training.passingPercentage || 70}% or higher to receive your official Certificate of Completion PDF instantly.
+                  <strong className="text-slate-900 dark:text-white font-bold">Passing Score:</strong> Score {training.passingPercentage || 70}% or higher to receive your official Certificate of Completion PDF instantly.
                 </li>
               </ul>
             </div>
 
             <button
               onClick={handleStartQuiz}
-              className="w-full py-4 px-6 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white font-black text-sm rounded-2xl shadow-lg shadow-[#008DD2]/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-sm rounded-2xl shadow-xl shadow-blue-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-[0.99]"
             >
               <Zap className="w-5 h-5 fill-white text-white" /> Start Timed Assessment Now
             </button>
@@ -592,16 +592,16 @@ export const QuizAssessment: React.FC = () => {
           )}
 
           {/* Question Palette / Navigator Grid */}
-          <div className="bg-white dark:bg-[#2B2A28] border border-slate-200 dark:border-[#403F3E] rounded-2xl p-4 shadow-sm space-y-3">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-900 dark:text-[#F8FAFC] flex items-center gap-1.5">
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <span>Question Navigator ({currentIndex + 1}/{totalCount})</span>
               </span>
               {unansweredCount > 0 && (
                 <button
                   type="button"
                   onClick={handleJumpToNextUnanswered}
-                  className="text-[11px] font-bold text-[#006B9C] dark:text-[#66C5EF] hover:underline flex items-center gap-1 cursor-pointer"
+                  className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   Jump to next unanswered ({unansweredCount}) <ArrowRight className="w-3 h-3" />
                 </button>
@@ -621,19 +621,19 @@ export const QuizAssessment: React.FC = () => {
                     onClick={() => handleJumpToQuestion(idx)}
                     className={`w-9 h-9 rounded-xl text-xs font-black flex items-center justify-center transition-all cursor-pointer relative ${
                       isCurrent
-                        ? "bg-[#008DD2] hover:bg-[#0078B2] text-white ring-2 ring-[#59B5E2] shadow-md scale-105"
+                        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white ring-2 ring-blue-400 shadow-md scale-105"
                         : isAnswered
-                        ? "bg-[#0078B2] hover:bg-[#006393] text-white shadow-xs"
+                        ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-xs"
                         : isLastQuestion
-                        ? "bg-[#E6F4FA] hover:bg-[#CCE8F6] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#006393] dark:text-[#59B5E2] border-2 border-[#008DD2] font-black shadow-xs"
-                        : "bg-white hover:bg-[#EAEAEA] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#2B2A28] dark:text-white border border-[#D5D4D4] dark:border-[#52514E] shadow-2xs"
+                        ? "bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/60 dark:hover:bg-amber-900/80 text-amber-900 dark:text-amber-200 border-2 border-amber-400 dark:border-amber-600 font-black shadow-xs"
+                        : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
                     }`}
                     title={isLastQuestion ? `Question ${idx + 1} (Final Question)` : `Question ${idx + 1}`}
                   >
                     {idx + 1}
                     {isAnswered && !isCurrent && (
-                      <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-white dark:bg-[#2B2A28] rounded-full flex items-center justify-center shadow-xs">
-                        <Check className="w-2.5 h-2.5 text-[#008DD2] stroke-[3]" />
+                      <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center shadow-xs">
+                        <Check className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400 stroke-[3]" />
                       </span>
                     )}
                   </button>
@@ -642,36 +642,36 @@ export const QuizAssessment: React.FC = () => {
             </div>
           </div>
 
-          {/* Vibrant Multi-stop Progress Bar (Uttam Blue Gradient) */}
-          <div className="w-full bg-[#EAEAEA] dark:bg-[#403F3E] h-2.5 rounded-full overflow-hidden border border-[#D5D4D4] dark:border-[#52514E] shadow-2xs">
+          {/* Vibrant Multi-stop Progress Bar */}
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-300 dark:border-slate-700 shadow-2xs">
             <div
-              className="bg-gradient-to-r from-[#006393] via-[#008DD2] to-[#59B5E2] h-full transition-all duration-300 rounded-full"
+              className="bg-gradient-to-r from-blue-500 via-indigo-500 via-purple-500 to-emerald-400 h-full transition-all duration-300 rounded-full"
               style={{ width: `${((currentIndex + 1) / totalCount) * 100}%` }}
             />
           </div>
 
           {/* Question View Card with Gamified Options */}
-          <GlassCard className="p-6 sm:p-8 space-y-6 border border-[#D5D4D4] dark:border-[#403F3E] shadow-sm relative overflow-hidden bg-white dark:bg-[#2B2A28]">
+          <GlassCard className="p-6 sm:p-8 space-y-6 border border-slate-200 dark:border-slate-800 shadow-xl relative overflow-hidden">
             {/* Ambient subtle decorative background glow */}
-            <div className="absolute -top-16 -right-16 w-64 h-64 bg-gradient-to-br from-[#008DD2]/10 via-[#59B5E2]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-16 -right-16 w-64 h-64 bg-gradient-to-br from-blue-500/10 via-indigo-500/10 to-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="flex items-start gap-4">
               <span
-                className={`w-12 h-12 rounded-2xl text-white font-black text-lg flex items-center justify-center shrink-0 shadow-md ${
+                className={`w-12 h-12 rounded-2xl text-white font-black text-lg flex items-center justify-center shrink-0 shadow-lg ${
                   currentIndex + 1 === totalCount
-                    ? "bg-gradient-to-br from-[#006393] via-[#008DD2] to-[#59B5E2] shadow-[#008DD2]/25 ring-2 ring-[#008DD2]"
-                    : "bg-[#008DD2] shadow-[#008DD2]/20"
+                    ? "bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500 shadow-purple-500/30 ring-2 ring-amber-400/70"
+                    : "bg-gradient-to-br from-blue-600 to-indigo-600 shadow-blue-500/25"
                 }`}
               >
                 {currentIndex + 1}
               </span>
               <div className="space-y-2 flex-1">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <span className="text-[11px] font-extrabold text-[#008DD2] dark:text-[#59B5E2] uppercase tracking-widest flex items-center gap-1.5">
+                  <span className="text-[11px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-widest flex items-center gap-1.5">
                     Question {currentIndex + 1} of {totalCount}
                   </span>
                   {currentIndex + 1 === totalCount && (
-                    <span className="px-3 py-1 rounded-full text-xs font-black bg-[#008DD2] text-white shadow-xs flex items-center gap-1 animate-pulse">
+                    <span className="px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-amber-500 via-pink-500 to-purple-500 text-white shadow-xs flex items-center gap-1 animate-pulse">
                       <Sparkles className="w-3.5 h-3.5" /> Final Question • अंतिम प्रश्न #{totalCount}
                     </span>
                   )}
@@ -679,22 +679,41 @@ export const QuizAssessment: React.FC = () => {
                 <div
                   className={`p-4 rounded-2xl border transition-all ${
                     currentIndex + 1 === totalCount
-                      ? "bg-[#E6F4FA] dark:bg-[#403F3E] border-[#008DD2] shadow-xs"
-                      : "bg-[#F0F4F8] dark:bg-[#1E1D1C] border-[#D5D4D4] dark:border-[#403F3E]"
+                      ? "bg-gradient-to-r from-purple-50/90 via-pink-50/60 to-amber-50/70 dark:from-purple-950/40 dark:via-pink-950/30 dark:to-slate-900 border-purple-300 dark:border-purple-600/50 shadow-xs"
+                      : "bg-slate-50/90 dark:bg-slate-900/70 border-slate-200 dark:border-slate-800"
                   }`}
                 >
-                  <h3 className="text-base sm:text-lg font-black text-[#2B2A28] dark:text-white leading-relaxed">
+                  <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-relaxed">
                     {currentQ.questionText}
                   </h3>
                 </div>
               </div>
             </div>
 
-            {/* Options List with High Contrast Brand Options */}
+            {/* Options List with Vibrant Option Badges */}
             <div className="grid grid-cols-1 gap-3 pt-2">
               {currentQ.options?.map((optText, optIdx) => {
                 const isSelected = userAnswers[currentIndex] === optIdx;
                 const letter = String.fromCharCode(65 + optIdx);
+
+                // Distinct colorful badge styles for each option
+                const badgeStyle =
+                  optIdx === 0
+                    ? "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-950 dark:text-blue-200 dark:border-blue-700"
+                    : optIdx === 1
+                    ? "bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-950 dark:text-purple-200 dark:border-purple-700"
+                    : optIdx === 2
+                    ? "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-200 dark:border-emerald-700"
+                    : "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-200 dark:border-amber-700";
+
+                const hoverBorder =
+                  optIdx === 0
+                    ? "hover:border-blue-400 dark:hover:border-blue-500"
+                    : optIdx === 1
+                    ? "hover:border-purple-400 dark:hover:border-purple-500"
+                    : optIdx === 2
+                    ? "hover:border-emerald-400 dark:hover:border-emerald-500"
+                    : "hover:border-amber-400 dark:hover:border-amber-500";
 
                 return (
                   <button
@@ -703,16 +722,16 @@ export const QuizAssessment: React.FC = () => {
                     onClick={() => handleSelectOption(currentIndex, optIdx)}
                     className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between gap-4 cursor-pointer active:scale-[0.99] ${
                       isSelected
-                        ? "bg-[#E6F4FA] dark:bg-[#006393] border-[#008DD2] text-[#006393] dark:text-white ring-2 ring-[#008DD2] dark:ring-[#59B5E2] shadow-md scale-[1.008]"
-                        : "bg-white hover:bg-[#E6F4FA]/50 dark:bg-[#2B2A28] dark:hover:bg-[#403F3E] border-[#D5D4D4] dark:border-[#403F3E] hover:border-[#008DD2] dark:hover:border-[#008DD2] text-[#2B2A28] dark:text-white shadow-2xs"
+                        ? "bg-gradient-to-r from-blue-100/90 via-indigo-100/80 to-purple-100/70 dark:from-blue-950/80 dark:to-indigo-950/70 border-blue-600 dark:border-blue-400 text-blue-950 dark:text-white ring-2 ring-blue-500/50 shadow-md scale-[1.008]"
+                        : `bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 ${hoverBorder} text-slate-900 dark:text-slate-100 shadow-2xs`
                     }`}
                   >
                     <div className="flex items-center gap-3.5">
                       <span
                         className={`w-8 h-8 rounded-xl font-black text-xs flex items-center justify-center shrink-0 border transition-all ${
                           isSelected
-                            ? "bg-[#008DD2] text-white border-[#008DD2] scale-110 shadow-sm"
-                            : "bg-[#E6F4FA] dark:bg-[#403F3E] text-[#006393] dark:text-[#E6F4FA] border-[#CCE8F6] dark:border-[#52514E]"
+                            ? "bg-blue-600 text-white border-blue-600 scale-110 shadow-sm"
+                            : badgeStyle
                         }`}
                       >
                         {letter}
@@ -721,11 +740,11 @@ export const QuizAssessment: React.FC = () => {
                     </div>
 
                     {isSelected ? (
-                      <span className="w-6 h-6 rounded-full bg-[#008DD2] text-white flex items-center justify-center shrink-0 shadow-sm">
+                      <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
                         <CheckCircle2 className="w-4 h-4" />
                       </span>
                     ) : (
-                      <span className="text-[10px] text-[#757573] dark:text-[#B5B4B4] font-bold hidden sm:inline-block">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold hidden sm:inline-block">
                         Key [{letter}]
                       </span>
                     )}
@@ -735,12 +754,12 @@ export const QuizAssessment: React.FC = () => {
             </div>
 
             {/* Controls */}
-            <div className="flex items-center justify-between pt-6 border-t border-[#EAEAEA] dark:border-[#403F3E]">
+            <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800">
               <button
                 type="button"
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
-                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#EAEAEA] hover:bg-[#D5D4D4] dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-[#403F3E] dark:text-white border border-[#D5D4D4] dark:border-[#52514E] flex items-center gap-2 transition-all disabled:opacity-40 cursor-pointer shadow-2xs"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 flex items-center gap-2 transition-all disabled:opacity-40 cursor-pointer shadow-2xs"
               >
                 <ArrowLeft className="w-4 h-4" /> Previous
               </button>
@@ -751,7 +770,7 @@ export const QuizAssessment: React.FC = () => {
                     type="button"
                     onClick={handleAttemptSubmitClick}
                     disabled={submitting}
-                    className="px-6 py-3 rounded-xl text-xs font-black bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white shadow-md shadow-[#008DD2]/20 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                    className="px-6 py-3 rounded-xl text-xs font-black bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-white shadow-xl shadow-emerald-500/20 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer active:scale-[0.99]"
                   >
                     {submitting ? "Submitting Assessment..." : "Submit Final Answers"}
                     <Award className="w-4 h-4" />
@@ -760,7 +779,7 @@ export const QuizAssessment: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="px-5 py-2.5 rounded-xl text-xs font-black bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white shadow-md shadow-[#008DD2]/20 flex items-center gap-2 transition-all cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl text-xs font-black bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md shadow-blue-500/20 flex items-center gap-2 transition-all cursor-pointer active:scale-[0.99]"
                   >
                     Next Question <ArrowRight className="w-4 h-4" />
                   </button>
@@ -779,7 +798,7 @@ export const QuizAssessment: React.FC = () => {
               <button
                 type="button"
                 onClick={handleJumpToNextUnanswered}
-                className="font-bold text-[#006B9C] dark:text-[#66C5EF] underline hover:text-[#005075] dark:hover:text-[#99D9F5] cursor-pointer"
+                className="font-bold text-blue-700 dark:text-blue-400 underline hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer"
               >
                 Jump to next
               </button>
@@ -793,31 +812,31 @@ export const QuizAssessment: React.FC = () => {
       {/* ========================================================= */}
       {showUnansweredConfirmModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#2B2A28] border border-slate-200 dark:border-[#403F3E] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-sm">
+              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
                 <AlertCircle className="w-5 h-5 text-amber-500" />
                 <span>Unanswered Questions Remaining</span>
               </div>
               <button
                 onClick={() => setShowUnansweredConfirmModal(false)}
-                className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+                className="text-slate-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium">
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
               You still have <strong className="text-rose-600 dark:text-rose-400">{unansweredCount} unanswered questions</strong> out of {totalCount}. Any unanswered questions will be marked as 0 marks.
             </p>
 
-            <div className="p-3 bg-slate-50 dark:bg-[#1E1D1B] rounded-xl border border-slate-200 dark:border-[#403F3E] text-xs">
+            <div className="p-3 bg-slate-100 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
               <div className="flex justify-between font-semibold">
-                <span className="text-slate-700 dark:text-slate-400">Answered Questions:</span>
+                <span className="text-slate-500">Answered Questions:</span>
                 <span className="text-emerald-600 dark:text-emerald-400 font-bold">{answeredCount}</span>
               </div>
               <div className="flex justify-between font-semibold mt-1">
-                <span className="text-slate-700 dark:text-slate-400">Unanswered Questions:</span>
+                <span className="text-slate-500">Unanswered Questions:</span>
                 <span className="text-rose-600 dark:text-rose-400 font-bold">{unansweredCount}</span>
               </div>
             </div>
@@ -826,7 +845,7 @@ export const QuizAssessment: React.FC = () => {
               <button
                 type="button"
                 onClick={handleJumpToNextUnanswered}
-                className="w-full py-2.5 px-4 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
+                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all cursor-pointer"
               >
                 Review Unanswered ({unansweredCount})
               </button>
@@ -836,7 +855,7 @@ export const QuizAssessment: React.FC = () => {
                   setShowUnansweredConfirmModal(false);
                   submitQuizAttempt();
                 }}
-                className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 dark:bg-[#403F3E] dark:hover:bg-[#52514E] text-slate-800 dark:text-[#F8FAFC] border border-slate-300 dark:border-[#52514E] rounded-xl text-xs font-bold transition-all cursor-pointer shadow-xs"
+                className="w-full py-2.5 px-4 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
               >
                 Submit Anyway
               </button>

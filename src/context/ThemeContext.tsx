@@ -15,9 +15,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setThemeState] = useState<ThemeMode>(() => {
     try {
       const saved = safeStorage.getItem("app_theme");
-      return saved === "light" || saved === "dark" ? saved : "light";
+      return saved === "light" || saved === "dark" ? saved : "dark";
     } catch {
-      return "light";
+      return "dark";
     }
   });
 

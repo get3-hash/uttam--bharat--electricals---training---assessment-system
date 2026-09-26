@@ -27,7 +27,7 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F0F4F8] dark:bg-[#1E1D1C] text-[#2B2A28] dark:text-white flex items-center justify-center text-sm font-medium">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex items-center justify-center text-sm font-medium">
         Authenticating...
       </div>
     );
@@ -44,7 +44,7 @@ function AppContent() {
   const { isAdmin } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] dark:bg-[#1E1D1C] text-[#2B2A28] dark:text-[#EAEAEA] flex flex-col font-sans selection:bg-[#008DD2] selection:text-white transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white transition-colors">
       <Navbar />
 
       <div className="flex-1">

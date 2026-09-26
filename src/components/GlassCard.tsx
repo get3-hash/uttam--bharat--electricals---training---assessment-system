@@ -15,8 +15,8 @@ export const GlassCard: React.FC<Props> = ({ children, className = "" }) => {
     <div
       className={`rounded-2xl transition-colors duration-200 ${
         isDark
-          ? "bg-[#2B2A28] border border-[#403F3E] text-white shadow-md"
-          : "bg-white border border-[#D5D4D4] text-[#2B2A28] shadow-xs hover:shadow-sm"
+          ? "bg-slate-900/95 backdrop-blur-md border border-slate-800 text-slate-100 shadow-xl shadow-slate-950/40"
+          : "bg-white backdrop-blur-md border border-slate-200 text-slate-900 shadow-sm hover:shadow-md"
       } ${className}`}
     >
       {children}

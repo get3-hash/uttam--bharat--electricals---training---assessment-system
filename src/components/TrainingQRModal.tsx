@@ -149,22 +149,22 @@ export const TrainingQRModal: React.FC<TrainingQRModalProps> = ({ training, onCl
         <div className="p-4 sm:p-6 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex items-start justify-between gap-4 border-b border-slate-800">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#008DD2] text-white">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-400 text-slate-950">
                 Official QR Portal
               </span>
-              <span className="text-xs text-[#E6F4FA] flex items-center gap-1 font-medium">
+              <span className="text-xs text-blue-200 flex items-center gap-1 font-medium">
                 <Building2 className="w-3.5 h-3.5" /> {training.department}
               </span>
             </div>
             <h2 className="text-lg sm:text-xl font-black text-white line-clamp-1">
               {training.title}
             </h2>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-[#D5D4D4]">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
               <span className="flex items-center gap-1">
-                <User className="w-3.5 h-3.5 text-[#59B5E2]" /> Trainer: <strong>{training.trainerName}</strong>
+                <User className="w-3.5 h-3.5 text-blue-400" /> Trainer: <strong>{training.trainerName}</strong>
               </span>
               <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-[#59B5E2]" /> Date: <strong>{training.trainingDate}</strong>
+                <Calendar className="w-3.5 h-3.5 text-blue-400" /> Date: <strong>{training.trainingDate}</strong>
               </span>
             </div>
           </div>
@@ -217,14 +217,14 @@ export const TrainingQRModal: React.FC<TrainingQRModalProps> = ({ training, onCl
           {activeTab === "flyer" && (
             <div className="border-2 border-slate-300 dark:border-slate-700 rounded-2xl overflow-hidden bg-white text-slate-900 shadow-md">
               {/* Flyer Header Banner */}
-              <div className="bg-[#2B2A28] text-white p-4 text-center border-b-4 border-[#008DD2]">
+              <div className="bg-gradient-to-r from-[#0F2942] to-[#1E3A8A] text-white p-4 text-center border-b-4 border-sky-400">
                 <div className="bg-white/10 backdrop-blur-xs py-1.5 px-3 rounded-xl inline-block mb-2 border border-white/20">
                   <CompanyLogo variant="compact" darkBg={true} height={28} />
                 </div>
                 <div className="text-xs sm:text-sm font-black tracking-wider uppercase">
                   UTTAM (BHARAT) ELECTRICALS PVT. LTD.
                 </div>
-                <div className="text-[10px] text-[#59B5E2] tracking-widest font-semibold mt-0.5">
+                <div className="text-[10px] text-sky-200 tracking-widest font-semibold mt-0.5">
                   UTTAM® • POWER AND DISTRIBUTION TRANSFORMERS • JAIPUR
                 </div>
               </div>

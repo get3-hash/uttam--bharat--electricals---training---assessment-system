@@ -40,19 +40,19 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-[#2B2A28] border-b border-[#403F3E] text-white sticky top-0 z-40 shadow-md transition-colors">
+    <nav className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 sticky top-0 z-40 shadow-xs dark:shadow-lg transition-colors">
       <div className="w-full max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-3 sm:gap-6">
           <div className="flex items-center gap-3 lg:gap-5 min-w-0 shrink-0">
             <Link to={isAdmin ? "/admin/dashboard" : "/"} className="flex items-center gap-2 sm:gap-2.5 group shrink-0">
-              <div className="bg-[#403F3E] px-2 py-1 rounded-xl shadow-xs border border-[#52514E] flex items-center shrink-0 group-hover:scale-105 transition-transform">
-                <CompanyLogo variant="compact" darkBg={true} />
+              <div className="bg-slate-50 dark:bg-slate-800/90 px-2 py-1 rounded-xl shadow-xs border border-slate-200 dark:border-slate-700/50 flex items-center shrink-0 group-hover:scale-105 transition-transform">
+                <CompanyLogo variant="compact" darkBg={theme === "dark"} />
               </div>
-              <div className="hidden sm:flex flex-col justify-center border-l border-[#403F3E] pl-2.5 shrink-0">
-                <h1 className="text-white font-bold text-xs leading-tight uppercase tracking-wide whitespace-nowrap">
+              <div className="hidden sm:flex flex-col justify-center border-l border-slate-200 dark:border-slate-800 pl-2.5 shrink-0">
+                <h1 className="text-slate-900 dark:text-white font-bold text-xs leading-tight uppercase tracking-wide whitespace-nowrap">
                   Uttam (Bharat) Electricals
                 </h1>
-                <p className="hidden 2xl:block text-[#59B5E2] text-[10px] font-semibold tracking-wider uppercase whitespace-nowrap">
+                <p className="hidden 2xl:block text-blue-600 dark:text-blue-400 text-[10px] font-semibold tracking-wider uppercase whitespace-nowrap">
                   Power & Distribution Transformers
                 </p>
               </div>
@@ -68,10 +68,10 @@ export const Navbar: React.FC = () => {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 ${
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 ${
                         isActive
-                          ? "bg-[#008DD2] text-white font-bold shadow-xs"
-                          : "text-[#D5D4D4] hover:text-white hover:bg-[#403F3E]"
+                          ? "bg-blue-50 dark:bg-blue-600/15 text-blue-700 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-500 font-bold"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -90,19 +90,19 @@ export const Navbar: React.FC = () => {
               onClick={toggleTheme}
               title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
               aria-label="Toggle Theme"
-              className="p-2 rounded-xl bg-[#403F3E] hover:bg-[#52514E] text-[#EAEAEA] border border-[#52514E] transition-all flex items-center justify-center shadow-xs shrink-0 cursor-pointer"
+              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 transition-all flex items-center justify-center shadow-xs shrink-0 cursor-pointer"
             >
               {theme === "dark" ? (
-                <Sun className="w-4 h-4 text-[#59B5E2]" />
+                <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <Moon className="w-4 h-4 text-[#59B5E2]" />
+                <Moon className="w-4 h-4 text-indigo-600" />
               )}
             </button>
 
             {!isAdmin ? (
               <Link
                 to="/login"
-                className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white flex items-center gap-1.5 shadow-md shadow-[#008DD2]/20 transition-all shrink-0 whitespace-nowrap"
+                className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 shadow-md shadow-blue-600/20 transition-all shrink-0 whitespace-nowrap"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 Admin Login
@@ -113,26 +113,26 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/admin/settings"
                     title={`Google Sheets Auto-Sync is ON (10 min). Next sync in ${Math.floor(secondsRemaining / 60)}m ${secondsRemaining % 60}s`}
-                    className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#403F3E] text-[#59B5E2] border border-[#52514E] shadow-xs hover:bg-[#52514E] transition-colors whitespace-nowrap"
+                    className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/60 shadow-xs hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors whitespace-nowrap"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#008DD2] animate-ping" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                     <span>Sheets Auto-Sync</span>
                   </Link>
                 )}
                 <Link
                   to="/admin/settings?tab=admins"
                   title={`Logged in as ${currentAdmin?.name || "Admin"} (${currentAdmin?.email || ""}) - ${isSuperAdmin ? "Super Admin" : "Admin"}`}
-                  className="hidden 2xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#403F3E] text-white border border-[#52514E] hover:bg-[#52514E] transition-colors whitespace-nowrap"
+                  className="hidden 2xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors whitespace-nowrap"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#008DD2] animate-pulse shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                   <span className="truncate max-w-[130px] font-bold">{currentAdmin?.name || "Admin"}</span>
-                  <span className="text-[10px] text-[#59B5E2] font-normal">
+                  <span className="text-[10px] text-blue-600 dark:text-blue-400 font-normal">
                     {isSuperAdmin ? "(Super)" : ""}
                   </span>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#403F3E] hover:bg-[#006393] text-[#EAEAEA] hover:text-white border border-[#52514E] transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-rose-100 dark:bg-slate-800 dark:hover:bg-rose-900/50 text-slate-700 hover:text-rose-700 dark:text-slate-300 dark:hover:text-rose-300 border border-slate-200 dark:border-slate-700 transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap cursor-pointer"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Logout
@@ -144,7 +144,7 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile, Tablet & Standard Laptop Submenu for Admin (Clean row, no overlap with header controls) */}
         {isAdmin && (
-          <div className="2xl:hidden flex items-center gap-1.5 overflow-x-auto pb-3 pt-1 border-t border-[#403F3E] no-scrollbar">
+          <div className="2xl:hidden flex items-center gap-1.5 overflow-x-auto pb-3 pt-1 border-t border-slate-200 dark:border-slate-800/80 no-scrollbar">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -154,8 +154,8 @@ export const Navbar: React.FC = () => {
                   to={item.path}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 shrink-0 transition-all ${
                     isActive
-                      ? "bg-[#008DD2] text-white shadow-xs font-bold"
-                      : "text-[#D5D4D4] bg-[#403F3E] hover:bg-[#52514E] hover:text-white border border-[#52514E]"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "text-slate-700 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/50"
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />

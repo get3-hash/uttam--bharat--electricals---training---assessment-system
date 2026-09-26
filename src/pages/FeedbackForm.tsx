@@ -282,17 +282,17 @@ export const FeedbackForm: React.FC = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 px-4 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white font-extrabold text-sm rounded-xl shadow-md shadow-[#008DD2]/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              className="w-full py-4 px-4 bg-gradient-to-r from-blue-600 via-blue-500 to-amber-500 hover:from-blue-500 hover:to-amber-400 text-slate-950 font-extrabold text-sm rounded-xl shadow-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer active:scale-[0.99]"
             >
               {submitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
                   <span>Saving Section A...</span>
                 </>
               ) : (
                 <>
                   <span>Save Section A & Proceed to Section B: Action Plan</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
+                  <ArrowRight className="w-4 h-4 text-slate-950" />
                 </>
               )}
             </button>

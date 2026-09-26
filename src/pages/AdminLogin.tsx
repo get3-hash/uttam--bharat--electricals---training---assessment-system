@@ -223,28 +223,28 @@ export const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] dark:bg-[#1E1D1C] flex flex-col justify-between text-[#2B2A28] dark:text-[#EAEAEA] transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-between text-slate-900 dark:text-slate-100 transition-colors">
       <HeaderBranding subtitle="Authorized Quality & Management Personnel Portal" />
 
       <main className="flex-1 flex items-center justify-center p-4 py-12">
         <div className="w-full max-w-md">
-          <GlassCard className="p-8 border border-[#D5D4D4] dark:border-[#403F3E] shadow-sm relative overflow-hidden bg-white dark:bg-[#2B2A28]">
+          <GlassCard className="p-8 border border-slate-200 dark:border-slate-800 shadow-xl dark:shadow-2xl relative overflow-hidden">
             {/* Top accent bar */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#006393] via-[#008DD2] to-[#59B5E2]" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600" />
 
             {/* Brand Logo & Title Header */}
             <div className="text-center mb-6">
-              <div className="bg-[#EAEAEA] dark:bg-[#403F3E] p-3.5 rounded-2xl shadow-xs border border-[#D5D4D4] dark:border-[#52514E] inline-block mb-3 max-w-[240px]">
+              <div className="bg-slate-50 dark:bg-slate-800/90 p-3.5 rounded-2xl shadow-xs dark:shadow-xl border border-slate-200 dark:border-slate-700/50 inline-block mb-3 max-w-[240px]">
                 <CompanyLogo variant="full" darkBg={theme === "dark"} />
               </div>
-              <h2 className="text-xl font-bold text-[#2B2A28] dark:text-white tracking-tight">Management Admin Portal</h2>
-              <p className="text-xs text-[#757573] dark:text-[#D5D4D4] mt-1">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Management Admin Portal</h2>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
                 Uttam (Bharat) Electricals Pvt. Ltd.
               </p>
             </div>
 
             {/* Login Mode Selection Tabs */}
-            <div className="flex bg-[#EAEAEA] dark:bg-[#403F3E] p-1.5 rounded-xl border border-[#D5D4D4] dark:border-[#52514E] mb-6">
+            <div className="flex bg-slate-100 dark:bg-slate-900 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700/80 mb-6">
               <button
                 type="button"
                 onClick={() => {
@@ -254,8 +254,8 @@ export const AdminLogin: React.FC = () => {
                 }}
                 className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                   loginMode === "password"
-                    ? "bg-[#008DD2] text-white shadow-xs font-bold"
-                    : "text-[#403F3E] hover:text-[#2B2A28] dark:text-[#D5D4D4] dark:hover:text-white"
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                    : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
                 }`}
               >
                 <Lock className="w-3.5 h-3.5 text-current" />
@@ -271,8 +271,8 @@ export const AdminLogin: React.FC = () => {
                 }}
                 className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                   loginMode === "otp"
-                    ? "bg-[#008DD2] text-white shadow-xs font-bold"
-                    : "text-[#403F3E] hover:text-[#2B2A28] dark:text-[#D5D4D4] dark:hover:text-white"
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                    : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
                 }`}
               >
                 <Smartphone className="w-3.5 h-3.5 text-current" />
@@ -299,56 +299,56 @@ export const AdminLogin: React.FC = () => {
 
                 <form onSubmit={handlePasswordSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA] mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
                       Email or Username
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 text-[#008DD2] dark:text-[#59B5E2] absolute left-3.5 top-3" />
+                      <Mail className="w-4 h-4 text-blue-500 dark:text-blue-400 absolute left-3.5 top-3" />
                       <input
                         type="text"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="admin@uttambharat.com or username"
-                        className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] dark:focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 transition-all placeholder:text-[#757573] font-medium"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-medium"
                       />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-[#403F3E] dark:text-[#EAEAEA]">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200">
                         Password
                       </label>
                       <button
                         type="button"
                         onClick={switchToOtpLogin}
-                        className="text-xs font-semibold text-[#008DD2] dark:text-[#59B5E2] hover:text-[#0078B2] dark:hover:text-[#59B5E2] transition-colors underline-offset-2 hover:underline cursor-pointer"
+                        className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors underline-offset-2 hover:underline"
                       >
                         Forgot Password? (Login with OTP)
                       </button>
                     </div>
                     <div className="relative">
-                      <Lock className="w-4 h-4 text-[#008DD2] dark:text-[#59B5E2] absolute left-3.5 top-3" />
+                      <Lock className="w-4 h-4 text-blue-500 dark:text-blue-400 absolute left-3.5 top-3" />
                       <input
                         type={showPassword ? "text" : "password"}
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full bg-white dark:bg-[#1E1D1C] border border-[#D5D4D4] dark:border-[#403F3E] rounded-xl pl-10 pr-11 py-2.5 text-sm text-[#2B2A28] dark:text-white focus:outline-none focus:border-[#008DD2] dark:focus:border-[#008DD2] focus:ring-2 focus:ring-[#008DD2]/20 transition-all placeholder:text-[#757573] tracking-wide font-medium"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-10 pr-11 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 tracking-wide font-medium"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword((prev) => !prev)}
-                        className="absolute right-2.5 top-2 p-1.5 rounded-lg text-[#757573] hover:text-[#2B2A28] dark:hover:text-white hover:bg-[#EAEAEA] dark:hover:bg-[#403F3E] transition-colors focus:outline-none cursor-pointer"
+                        className="absolute right-2.5 top-2 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                         title={showPassword ? "Hide password" : "Show password"}
                         aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? (
-                          <EyeOff className="w-4 h-4 text-[#757573] dark:text-[#D5D4D4]" />
+                          <EyeOff className="w-4 h-4 text-slate-500 dark:text-slate-300" />
                         ) : (
-                          <Eye className="w-4 h-4 text-[#757573] dark:text-[#D5D4D4]" />
+                          <Eye className="w-4 h-4 text-slate-500 dark:text-slate-300" />
                         )}
                       </button>
                     </div>
@@ -357,7 +357,7 @@ export const AdminLogin: React.FC = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-white shadow-md shadow-[#008DD2]/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 mt-2 cursor-pointer"
+                    className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition-all disabled:opacity-50 active:scale-[0.99] mt-2"
                   >
                     {loading ? "Authenticating..." : "Sign In to Admin Portal"}
                     <ArrowRight className="w-4 h-4" />

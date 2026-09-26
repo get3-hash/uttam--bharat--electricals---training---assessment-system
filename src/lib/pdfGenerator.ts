@@ -22,20 +22,20 @@ export async function generateCertificatePdf(
   const width = doc.internal.pageSize.getWidth();
   const height = doc.internal.pageSize.getHeight();
 
-  // Outer Border & Decorative Frame - Uttam Charcoal (#2B2A28 -> RGB: 43, 42, 40)
+  // Outer Border & Decorative Frame - Deep Slate (#0F172A)
   doc.setLineWidth(1.8);
-  doc.setDrawColor(43, 42, 40);
+  doc.setDrawColor(15, 23, 42);
   doc.rect(8, 8, width - 16, height - 16);
 
-  // Inset Accent Frame - Official Uttam Blue (#008DD2 -> RGB: 0, 141, 210)
+  // Inset Accent Frame - Official Uttam Electric Blue (#009FE3 -> RGB: 0, 159, 227)
   doc.setLineWidth(0.8);
-  doc.setDrawColor(0, 141, 210);
+  doc.setDrawColor(0, 159, 227);
   doc.rect(12, 12, width - 24, height - 24);
 
   // Corner Geometric Accents (Matching transformer engineering aesthetic)
   const drawCornerAccent = (x: number, y: number, dx: number, dy: number) => {
     doc.setLineWidth(1.2);
-    doc.setDrawColor(0, 141, 210);
+    doc.setDrawColor(0, 159, 227);
     doc.line(x, y, x + dx * 7, y);
     doc.line(x, y, x, y + dy * 7);
   };

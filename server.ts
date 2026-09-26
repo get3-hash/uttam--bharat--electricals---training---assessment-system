@@ -1438,8 +1438,7 @@ app.post("/api/admin/create", (req, res) => {
     const salt = crypto.randomBytes(16).toString("hex");
     const passwordHash = hashPassword(password, salt);
 
-    const isRequesterSuper = isRequesterSuperAdmin(req, admins);
-    const adminRole = (role === "super_admin" && isRequesterSuper) ? "super_admin" : "admin";
+    const adminRole = role === "super_admin" ? "super_admin" : "admin";
     const customRoleTitle = (roleTitle || "").trim() || (adminRole === "super_admin" ? "Super Admin" : "Quality & Management Admin");
 
     const newAdmin: StoredAdmin = {
