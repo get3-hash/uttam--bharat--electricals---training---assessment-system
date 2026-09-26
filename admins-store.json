@@ -1,0 +1,41 @@
+[
+  {
+    "id": "super-admin-primary",
+    "name": "Super Admin",
+    "email": "admin@uttambharat.com",
+    "username": "admin",
+    "role": "super_admin",
+    "roleTitle": "HR",
+    "status": "active",
+    "passwordHash": "7408206848eccad65c70494fc39d18d186f73df4ebd41e8a1dab8ba8a71fd56c30f24ec9a04f0515307db8b13467915ce6b82484b11b107273cfbf57cbb0f6b2",
+    "salt": "f5a411d4f4ee126ec6427a4fe27214eb",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2026-09-25T08:18:26.492Z"
+  },
+  {
+    "id": "admin_get3_super",
+    "name": "Management Admin",
+    "email": "get3@uttam-bharat.com",
+    "username": "get3",
+    "role": "admin",
+    "roleTitle": "HR & Admin",
+    "status": "active",
+    "passwordHash": "7408206848eccad65c70494fc39d18d186f73df4ebd41e8a1dab8ba8a71fd56c30f24ec9a04f0515307db8b13467915ce6b82484b11b107273cfbf57cbb0f6b2",
+    "salt": "f5a411d4f4ee126ec6427a4fe27214eb",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2026-09-25T08:18:59.304Z"
+  },
+  {
+    "id": "admin_1790320548962_a1oh0",
+    "name": "Hr",
+    "email": "hr@gmail.com",
+    "username": "hr",
+    "role": "admin",
+    "roleTitle": "HR & Admin Specialist",
+    "status": "active",
+    "passwordHash": "e75c2d34afa81a20d7d6b30c49e7cc0353761c8baa52a7c43e3327cae5902a02ab494a3c22909bff2fed06651155965fe5148ef95202954df914972b559ccf00",
+    "salt": "6f6c6918ec142fc52aff1d0fbf4f3476",
+    "createdAt": "2026-09-25T07:15:48.962Z",
+    "updatedAt": "2026-09-25T08:22:12.070Z"
+  }
+]

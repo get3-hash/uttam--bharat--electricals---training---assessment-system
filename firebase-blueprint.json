@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "trainings": {
+      "title": "Trainings",
+      "description": "Training programs conducted by Uttam Electricals",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "department": { "type": "string" },
+        "trainerName": { "type": "string" },
+        "trainingDate": { "type": "string" },
+        "description": { "type": "string" },
+        "passingPercentage": { "type": "number" },
+        "timeLimitMinutes": { "type": "number" },
+        "trainingPdfUrl": { "type": "string" },
+        "questionPdfUrl": { "type": "string" },
+        "qrCodeDataUrl": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "questionNumber": { "type": "number" },
+              "questionText": { "type": "string" },
+              "options": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "correctOption": { "type": "number" }
+            }
+          }
+        },
+        "isAnswerKeyComplete": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["title", "department", "trainerName", "trainingDate"]
+    },
+    "registrations": {
+      "title": "Employee Registrations",
+      "description": "Employee registrations for specific training sessions",
+      "type": "object",
+      "properties": {
+        "trainingId": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "employeeCode": { "type": "string" },
+        "department": { "type": "string" },
+        "designation": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "trainingTitle": { "type": "string" },
+        "trainerName": { "type": "string" },
+        "trainingDate": { "type": "string" },
+        "registeredAt": { "type": "string" }
+      },
+      "required": ["trainingId", "employeeName", "employeeCode", "department"]
+    },
+    "feedbacks": {
+      "title": "Training Feedbacks",
+      "description": "Section A and Section B evaluation responses submitted by employees",
+      "type": "object",
+      "properties": {
+        "registrationId": { "type": "string" },
+        "trainingId": { "type": "string" },
+        "employeeCode": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "department": { "type": "string" },
+        "ratings": {
+          "type": "object",
+          "properties": {
+            "objectivesCovered": { "type": "number" },
+            "trainerKnowledge": { "type": "number" },
+            "presentationDelivery": { "type": "number" },
+            "communicationClarity": { "type": "number" },
+            "interactionQa": { "type": "number" },
+            "practicalSession": { "type": "number" },
+            "trainingMaterial": { "type": "number" },
+            "overallExperience": { "type": "number" }
+          }
+        },
+        "learnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "applicationTimeline": { "type": "string" },
+        "suggestions": { "type": "string" },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["registrationId", "trainingId", "ratings"]
+    },
+    "quiz_attempts": {
+      "title": "Quiz Attempts",
+      "description": "Assessment answers, timed metrics and result breakdown",
+      "type": "object",
+      "properties": {
+        "registrationId": { "type": "string" },
+        "trainingId": { "type": "string" },
+        "employeeCode": { "type": "string" },
+        "employeeName": { "type": "string" },
+        "department": { "type": "string" },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "correctCount": { "type": "number" },
+        "wrongCount": { "type": "number" },
+        "percentage": { "type": "number" },
+        "passed": { "type": "boolean" },
+        "userAnswers": {
+          "type": "object"
+        },
+        "attemptTimeSeconds": { "type": "number" },
+        "tabSwitches": { "type": "number" },
+        "certificateId": { "type": "string" },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["registrationId", "trainingId", "score", "passed"]
+    },
+    "admins": {
+      "title": "Admin Accounts",
+      "description": "Authorized administrator accounts with roles and access status",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "username": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "admin"] },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "email", "role", "status"]
+    }
+  }
+}

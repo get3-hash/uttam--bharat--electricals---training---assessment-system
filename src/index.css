@@ -1,0 +1,558 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
+/* =========================================================================
+   1. CENTRALIZED CSS VARIABLES (Uttam Brand Color System)
+   ========================================================================= */
+:root {
+  /* Exact Uttam Charcoal Tonal Ramp */
+  --uttam-charcoal-900: #2B2A28;
+  --uttam-charcoal-700: #403F3E;
+  --uttam-charcoal-500: #757573;
+  --uttam-charcoal-300: #B5B4B4;
+  --uttam-charcoal-150: #D5D4D4;
+  --uttam-charcoal-100: #EAEAEA;
+
+  /* Exact Uttam Blue Tonal Ramp */
+  --uttam-blue-900: #006393;
+  --uttam-blue-700: #0078B2;
+  --uttam-blue-500: #008DD2;
+  --uttam-blue-300: #59B5E2;
+  --uttam-blue-150: #CCE8F6;
+  --uttam-blue-100: #E6F4FA;
+
+  /* Core Semantic Tokens requested by user */
+  --uttam-main-dark: #2B2A28;
+  --uttam-secondary-dark: #403F3E;
+  --uttam-muted: #757573;
+  --uttam-light-border: #D5D4D4;
+  --uttam-very-light: #EAEAEA;
+  --uttam-light-blue: #E6F4FA;
+  --uttam-soft-blue: #CCE8F6;
+  --uttam-primary-blue: #008DD2;
+
+  /* Theme Canvas Tokens */
+  --bg-app: #F0F4F8;
+  --bg-surface: #FFFFFF;
+  --bg-surface-subtle: #E6F4FA;
+  --border-light: #D5D4D4;
+  --border-divider: #EAEAEA;
+  --text-primary: #2B2A28;
+  --text-secondary: #403F3E;
+  --text-muted: #757573;
+  --brand-primary: #008DD2;
+  --brand-primary-hover: #0078B2;
+  --brand-primary-active: #006393;
+}
+
+[data-theme="dark"],
+html.dark {
+  --bg-app: #1E1D1C;
+  --bg-surface: #2B2A28;
+  --bg-surface-subtle: #403F3E;
+  --border-light: #403F3E;
+  --border-divider: #52514E;
+  --text-primary: #FFFFFF;
+  --text-secondary: #EAEAEA;
+  --text-muted: #B5B4B4;
+}
+
+/* =========================================================================
+   2. TAILWIND CSS THEME MAPPINGS
+   ========================================================================= */
+@theme {
+  /* Uttam Charcoal Scale */
+  --color-uttam-charcoal-900: #2B2A28;
+  --color-uttam-charcoal-700: #403F3E;
+  --color-uttam-charcoal-500: #757573;
+  --color-uttam-charcoal-300: #B5B4B4;
+  --color-uttam-charcoal-150: #D5D4D4;
+  --color-uttam-charcoal-100: #EAEAEA;
+
+  /* Uttam Blue Scale */
+  --color-uttam-blue-900: #006393;
+  --color-uttam-blue-700: #0078B2;
+  --color-uttam-blue-500: #008DD2;
+  --color-uttam-blue-300: #59B5E2;
+  --color-uttam-blue-150: #CCE8F6;
+  --color-uttam-blue-100: #E6F4FA;
+
+  /* Semantic Aliases */
+  --color-uttam-main-dark: #2B2A28;
+  --color-uttam-secondary-dark: #403F3E;
+  --color-uttam-muted: #757573;
+  --color-uttam-light-border: #D5D4D4;
+  --color-uttam-very-light: #EAEAEA;
+  --color-uttam-light-blue: #E6F4FA;
+  --color-uttam-soft-blue: #CCE8F6;
+  --color-uttam-primary-blue: #008DD2;
+
+  /* Map Slate utilities to Uttam Brand Colors */
+  --color-slate-50: #F0F4F8;
+  --color-slate-100: #EAEAEA;
+  --color-slate-200: #D5D4D4;
+  --color-slate-300: #B5B4B4;
+  --color-slate-400: #757573;
+  --color-slate-500: #757573;
+  --color-slate-600: #403F3E;
+  --color-slate-700: #403F3E;
+  --color-slate-800: #2B2A28;
+  --color-slate-900: #2B2A28;
+  --color-slate-950: #1E1D1C;
+
+  /* Map Gray utilities to Uttam Brand Colors */
+  --color-gray-50: #F0F4F8;
+  --color-gray-100: #EAEAEA;
+  --color-gray-200: #D5D4D4;
+  --color-gray-300: #B5B4B4;
+  --color-gray-400: #757573;
+  --color-gray-500: #757573;
+  --color-gray-600: #403F3E;
+  --color-gray-700: #403F3E;
+  --color-gray-800: #2B2A28;
+  --color-gray-900: #2B2A28;
+  --color-gray-950: #1E1D1C;
+
+  /* Map Blue utilities to Uttam Blue Ramp */
+  --color-blue-50: #E6F4FA;
+  --color-blue-100: #E6F4FA;
+  --color-blue-200: #CCE8F6;
+  --color-blue-300: #59B5E2;
+  --color-blue-400: #59B5E2;
+  --color-blue-500: #008DD2;
+  --color-blue-600: #008DD2;
+  --color-blue-700: #0078B2;
+  --color-blue-800: #006393;
+  --color-blue-900: #006393;
+  --color-blue-950: #004566;
+}
+
+@layer utilities {
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Core Uttam Utility Classes */
+  .bg-uttam-primary,
+  .bg-uttam-primary-blue {
+    background-color: #008DD2;
+  }
+  .bg-uttam-dark,
+  .bg-uttam-main-dark {
+    background-color: #2B2A28;
+  }
+  .bg-uttam-secondary,
+  .bg-uttam-secondary-dark {
+    background-color: #403F3E;
+  }
+  .bg-uttam-muted {
+    background-color: #757573;
+  }
+  .bg-uttam-light-border {
+    background-color: #D5D4D4;
+  }
+  .bg-uttam-very-light {
+    background-color: #EAEAEA;
+  }
+  .bg-uttam-blue-light,
+  .bg-uttam-light-blue {
+    background-color: #E6F4FA;
+  }
+  .bg-uttam-blue-soft,
+  .bg-uttam-soft-blue {
+    background-color: #CCE8F6;
+  }
+  .text-uttam-primary,
+  .text-uttam-primary-blue {
+    color: #008DD2;
+  }
+  .text-uttam-dark,
+  .text-uttam-main-dark {
+    color: #2B2A28;
+  }
+  .text-uttam-secondary,
+  .text-uttam-secondary-dark {
+    color: #403F3E;
+  }
+  .text-uttam-muted {
+    color: #757573;
+  }
+  .text-uttam-light-border {
+    color: #D5D4D4;
+  }
+  .text-uttam-very-light {
+    color: #EAEAEA;
+  }
+  .text-uttam-light-blue {
+    color: #E6F4FA;
+  }
+  .text-uttam-soft-blue {
+    color: #CCE8F6;
+  }
+  .border-uttam-light,
+  .border-uttam-light-border {
+    border-color: #D5D4D4;
+  }
+  .border-uttam-divider,
+  .border-uttam-very-light {
+    border-color: #EAEAEA;
+  }
+  .border-uttam-primary,
+  .border-uttam-primary-blue {
+    border-color: #008DD2;
+  }
+  .border-uttam-secondary,
+  .border-uttam-secondary-dark {
+    border-color: #403F3E;
+  }
+  .border-uttam-soft-blue {
+    border-color: #CCE8F6;
+  }
+  .border-uttam-light-blue {
+    border-color: #E6F4FA;
+  }
+}
+
+/* =========================================================================
+   3. BASE STYLING (Section 6: Background, Section 11: Text)
+   ========================================================================= */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #F0F4F8;
+  background-image: radial-gradient(at 0% 0%, rgba(230, 244, 250, 0.7) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(234, 234, 234, 0.8) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: #2B2A28;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark body,
+[data-theme="dark"] body {
+  background-color: #1E1D1C;
+  background-image: radial-gradient(at 0% 0%, rgba(0, 99, 147, 0.12) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(43, 42, 40, 0.4) 0px, transparent 50%);
+  color: #FFFFFF;
+}
+
+/* Base Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #2B2A28;
+}
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6,
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 {
+  color: #FFFFFF;
+}
+
+/* Base Links */
+a {
+  color: #008DD2;
+  transition: color 0.15s ease;
+}
+a:hover {
+  color: #0078B2;
+}
+
+/* =========================================================================
+   4. BUTTONS (Section 9: Uttam Button System)
+   ========================================================================= */
+.btn-primary,
+button.bg-blue-600,
+a.bg-blue-600 {
+  background-color: #008DD2 !important;
+  color: #FFFFFF !important;
+  transition: all 0.15s ease;
+}
+.btn-primary:hover,
+button.bg-blue-600:hover,
+a.bg-blue-600:hover,
+button.hover\:bg-blue-500:hover,
+a.hover\:bg-blue-500:hover {
+  background-color: #0078B2 !important;
+  color: #FFFFFF !important;
+}
+.btn-primary:active,
+button.bg-blue-600:active,
+a.bg-blue-600:active {
+  background-color: #006393 !important;
+}
+
+.btn-secondary {
+  background-color: #E6F4FA !important;
+  color: #006393 !important;
+  border: 1px solid #59B5E2 !important;
+}
+.btn-secondary:hover {
+  background-color: #CCE8F6 !important;
+}
+
+/* =========================================================================
+   5. INPUT FIELDS (Section 12: Uttam Form System)
+   ========================================================================= */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D5D4D4 !important;
+  color: #2B2A28 !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input:not([type="checkbox"]):not([type="radio"]):hover,
+select:hover,
+textarea:hover {
+  border-color: #59B5E2 !important;
+}
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: #008DD2 !important;
+  box-shadow: 0 0 0 3px rgba(0, 141, 210, 0.18) !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #757573 !important;
+}
+
+/* Dark mode form inputs */
+html.dark input:not([type="checkbox"]):not([type="radio"]),
+html.dark select,
+html.dark textarea,
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: #2B2A28 !important;
+  border: 1px solid #403F3E !important;
+  color: #FFFFFF !important;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder,
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #757573 !important;
+}
+
+/* =========================================================================
+   6. TABLES (Section 13: Uttam Table System)
+   ========================================================================= */
+table thead {
+  background-color: #2B2A28 !important;
+  color: #FFFFFF !important;
+}
+table thead th {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  border-bottom: 2px solid #008DD2 !important;
+}
+table tbody tr {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #EAEAEA !important;
+  color: #2B2A28 !important;
+  transition: background-color 0.15s ease;
+}
+table tbody tr:hover {
+  background-color: #E6F4FA !important;
+}
+
+/* Dark mode table */
+html.dark table thead,
+[data-theme="dark"] table thead {
+  background-color: #1E1D1C !important;
+  border-bottom: 2px solid #008DD2 !important;
+}
+html.dark table tbody tr,
+[data-theme="dark"] table tbody tr {
+  background-color: #2B2A28 !important;
+  border-bottom: 1px solid #403F3E !important;
+  color: #FFFFFF !important;
+}
+html.dark table tbody tr:hover,
+[data-theme="dark"] table tbody tr:hover {
+  background-color: #403F3E !important;
+}
+
+/* =========================================================================
+   7. BADGES & STATUS INDICATORS (Section 14: Badges System)
+   ========================================================================= */
+.badge-active {
+  background-color: #008DD2 !important;
+  color: #FFFFFF !important;
+}
+.badge-dark-active {
+  background-color: #006393 !important;
+  color: #FFFFFF !important;
+}
+.badge-info {
+  background-color: #E6F4FA !important;
+  color: #006393 !important;
+  border: 1px solid #CCE8F6 !important;
+}
+.badge-neutral {
+  background-color: #EAEAEA !important;
+  color: #403F3E !important;
+  border: 1px solid #D5D4D4 !important;
+}
+
+/* =========================================================================
+   8. CARD & SURFACE MAPPINGS (Section 8: Cards System)
+   ========================================================================= */
+/* Light Mode Surfaces */
+html.light .bg-white,
+[data-theme="light"] .bg-white {
+  background-color: #FFFFFF !important;
+  border-color: #D5D4D4;
+}
+html.light .bg-slate-900,
+html.light .bg-slate-900\/95,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/80,
+[data-theme="light"] .bg-slate-900,
+[data-theme="light"] .bg-slate-900\/95,
+[data-theme="light"] .bg-slate-900\/90,
+[data-theme="light"] .bg-slate-900\/80 {
+  background-color: #FFFFFF !important;
+  color: #2B2A28 !important;
+  border-color: #D5D4D4 !important;
+  box-shadow: 0 1px 3px 0 rgba(43, 42, 40, 0.05);
+}
+
+html.light .bg-slate-50,
+html.light .bg-slate-100,
+[data-theme="light"] .bg-slate-50,
+[data-theme="light"] .bg-slate-100 {
+  background-color: #F0F4F8 !important;
+}
+
+html.light .border-slate-200,
+html.light .border-slate-300,
+[data-theme="light"] .border-slate-200,
+[data-theme="light"] .border-slate-300 {
+  border-color: #D5D4D4 !important;
+}
+
+/* Text Mappings in Light Mode */
+html.light .text-slate-900,
+[data-theme="light"] .text-slate-900 {
+  color: #2B2A28 !important;
+}
+html.light .text-slate-700,
+html.light .text-slate-800,
+[data-theme="light"] .text-slate-700,
+[data-theme="light"] .text-slate-800 {
+  color: #403F3E !important;
+}
+html.light .text-slate-500,
+html.light .text-slate-600,
+[data-theme="light"] .text-slate-500,
+[data-theme="light"] .text-slate-600 {
+  color: #757573 !important;
+}
+
+/* Dark Mode Surfaces: Uttam Charcoal 900 (#2B2A28) and Charcoal 700 (#403F3E) */
+html.dark .bg-slate-900,
+html.dark .bg-slate-900\/95,
+html.dark .bg-slate-900\/90,
+html.dark .bg-slate-900\/80,
+[data-theme="dark"] .bg-slate-900,
+[data-theme="dark"] .bg-slate-900\/95,
+[data-theme="dark"] .bg-slate-900\/90,
+[data-theme="dark"] .bg-slate-900\/80 {
+  background-color: #2B2A28 !important;
+  color: #FFFFFF !important;
+  border-color: #403F3E !important;
+}
+
+html.dark .bg-slate-800,
+html.dark .bg-slate-800\/90,
+html.dark .bg-slate-800\/80,
+[data-theme="dark"] .bg-slate-800,
+[data-theme="dark"] .bg-slate-800\/90,
+[data-theme="dark"] .bg-slate-800\/80 {
+  background-color: #403F3E !important;
+  color: #FFFFFF !important;
+}
+
+html.dark .border-slate-800,
+html.dark .border-slate-700,
+[data-theme="dark"] .border-slate-800,
+[data-theme="dark"] .border-slate-700 {
+  border-color: #403F3E !important;
+}
+
+html.dark .text-slate-100,
+html.dark .text-slate-200,
+[data-theme="dark"] .text-slate-100,
+[data-theme="dark"] .text-slate-200 {
+  color: #FFFFFF !important;
+}
+html.dark .text-slate-300,
+html.dark .text-slate-400,
+[data-theme="dark"] .text-slate-300,
+[data-theme="dark"] .text-slate-400 {
+  color: #D5D4D4 !important;
+}
+html.dark .text-slate-500,
+[data-theme="dark"] .text-slate-500 {
+  color: #B5B4B4 !important;
+}
+
+/* =========================================================================
+   9. ASSESSMENT & QUIZ STYLING (Uttam Blue #008DD2 & Charcoal System)
+   ========================================================================= */
+/* Quiz Selected Option */
+.quiz-option-selected-light {
+  background-color: #E6F4FA !important;
+  border-color: #008DD2 !important;
+  color: #006393 !important;
+  box-shadow: 0 0 0 2px #008DD2, 0 4px 12px rgba(0, 141, 210, 0.15) !important;
+}
+
+.quiz-option-selected-dark {
+  background-color: #006393 !important;
+  border-color: #59B5E2 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 0 2px #59B5E2, 0 4px 16px rgba(0, 141, 210, 0.3) !important;
+}
+
+/* Quiz Option Badges */
+.quiz-option-badge-selected {
+  background-color: #008DD2 !important;
+  color: #FFFFFF !important;
+  border-color: #008DD2 !important;
+}
+
+html.light .quiz-option-badge-unselected {
+  background-color: #E6F4FA !important;
+  color: #006393 !important;
+  border-color: #CCE8F6 !important;
+}
+
+html.dark .quiz-option-badge-unselected {
+  background-color: #403F3E !important;
+  color: #E6F4FA !important;
+  border-color: #52514E !important;
+}
+
+/* Quiz Navigation Current */
+.quiz-nav-current {
+  background-color: #008DD2 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 0 3px #CCE8F6 !important;
+}
+
+html.dark .quiz-nav-current {
+  box-shadow: 0 0 0 3px #006393 !important;
+}
+
+/* Quiz Progress Bar Fill */
+.quiz-progress-fill {
+  background: linear-gradient(90deg, #006393 0%, #008DD2 50%, #59B5E2 100%) !important;
+}

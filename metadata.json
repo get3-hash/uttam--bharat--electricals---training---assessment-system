@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Remix Uttam (Bharat) Electricals - Training \u0026 Assessment System",
+  "description": "Production-Ready Employee Training Assessment \u0026 Feedback System for Uttam (Bharat) Electricals Pvt. Ltd. with AI PDF Question Extraction, QR Registration, Feedback, Timed Quizzes, Certificates, and Admin Analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
