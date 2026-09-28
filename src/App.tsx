@@ -116,10 +116,15 @@ function AppContent() {
 
           {/* Employee Routes (NO LOGIN REQUIRED) */}
           <Route path="/employee/register/:trainingId" element={<EmployeePortal />} />
+          <Route path="/employee/register" element={<EmployeePortal />} />
           <Route path="/employee/feedback/:registrationId" element={<FeedbackForm />} />
+          <Route path="/employee/feedback" element={<FeedbackForm />} />
           <Route path="/employee/section-b/:registrationId" element={<SectionBActionPlan />} />
+          <Route path="/employee/section-b" element={<SectionBActionPlan />} />
           <Route path="/employee/quiz/:registrationId" element={<QuizAssessment />} />
+          <Route path="/employee/quiz" element={<QuizAssessment />} />
           <Route path="/employee/certificate/:attemptId" element={<CertificateView />} />
+          <Route path="/employee/certificate" element={<CertificateView />} />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />

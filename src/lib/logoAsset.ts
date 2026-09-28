@@ -5,13 +5,13 @@
  * (Features the official blue triangle 'A' with internal white lightning & spark line)
  */
 
-export const UTTAM_BRAND_BLUE = "#009fe3"; // Official Uttam Sky/Electric Blue
-export const UTTAM_BRAND_DARK = "#18181b"; // Deep Jet Black
-export const UTTAM_BRAND_SLATE = "#0f172a"; // Corporate Slate Navy
+export const UTTAM_BRAND_BLUE = "#008DD2"; // Official Uttam Blue 500
+export const UTTAM_BRAND_DARK = "#2B2A28"; // Uttam Charcoal 900
+export const UTTAM_BRAND_SLATE = "#403F3E"; // Uttam Charcoal 700
 
 export function getUttamLogoSvg(darkBg = false): string {
-  const textColor = darkBg ? "#ffffff" : "#18181b";
-  const subtextColor = darkBg ? "#cbd5e1" : "#18181b";
+  const textColor = darkBg ? "#FFFFFF" : "#2B2A28";
+  const subtextColor = darkBg ? "#D5D4D4" : "#403F3E";
   const blueColor = UTTAM_BRAND_BLUE;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 135" width="480" height="135">

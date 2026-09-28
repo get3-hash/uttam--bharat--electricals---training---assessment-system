@@ -398,31 +398,47 @@ export const GoogleSheetsSyncSettings: React.FC = () => {
             <span className="flex-1 leading-relaxed">{activeMessage.text}</span>
           </div>
 
-          {/* Quick Resolution Help Card if Google Apps Script is running an outdated deployment */}
+          {/* Quick Resolution Help Card if Google Apps Script is running an outdated deployment or cell data validation error */}
           {!activeMessage.success &&
             (activeMessage.text.includes("number of columns") ||
               activeMessage.text.includes("Exception") ||
+              activeMessage.text.includes("violates the data validation rules") ||
+              activeMessage.text.includes("data validation") ||
               activeMessage.text.includes("Script Execution Error")) && (
-              <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs space-y-2">
-                <div className="font-bold flex items-center gap-2">
-                  <span>⚠️ How to fix this in Google Apps Script (Outdated Deployment):</span>
+              <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs space-y-2.5">
+                <div className="font-bold flex items-center gap-2 text-sm">
+                  <span>⚠️ Resolution: {activeMessage.text.includes("violates the data validation rules") ? "Cell Data Validation Conflict in Google Sheet" : "Google Apps Script Update Needed"}</span>
                 </div>
-                <p className="text-[11px] leading-relaxed opacity-90">
-                  Your Google Spreadsheet Web App URL is still running an older version of <code className="font-mono bg-amber-200/50 dark:bg-amber-900/50 px-1 py-0.5 rounded">Code.gs</code>. Apps Script requires publishing a <strong>New Version</strong> when updating code:
+                <p className="text-[11px] leading-relaxed opacity-95">
+                  {activeMessage.text.includes("violates the data validation rules")
+                    ? "Your Google Sheet has existing cell validation constraints (such as a dropdown list on Column E / cell E7) that reject incoming training records. The latest Code.gs script automatically clears cell validation rules before writing to guarantee seamless synchronization."
+                    : "Your Google Spreadsheet Web App URL is running an older script deployment that encountered a write error. Apps Script requires saving and deploying a New Version:"}
                 </p>
-                <ol className="list-decimal list-inside text-[11px] space-y-1 pl-1">
-                  <li>Click <strong>Copy Code.gs</strong> below and paste it into your sheet's <em>Extensions → Apps Script</em> editor. Click <strong>Save (💾)</strong>.</li>
-                  <li>At top right, click <strong>Deploy → Manage deployments</strong>.</li>
+                <ol className="list-decimal list-inside text-[11px] space-y-1.5 pl-1">
+                  <li>Click <strong>Copy Updated Code.gs (Validation-Safe)</strong> below and paste it into your sheet under <em>Extensions → Apps Script</em>. Click <strong>Save (💾)</strong>.</li>
+                  <li>At the top right of Apps Script, click <strong>Deploy → Manage deployments</strong>.</li>
                   <li>Click the pencil icon <strong>(✏️ Edit)</strong>, select <strong>Version: "New version"</strong>, and click <strong>Deploy</strong>.</li>
+                  {activeMessage.text.includes("violates the data validation rules") && (
+                    <li><em>Instant alternative:</em> In your Google Sheet, select the entire sheet (Ctrl+A / Cmd+A), then click <strong>Data → Data validation → Remove validation</strong>, and then click Retry Sync below.</li>
+                  )}
                 </ol>
-                <div className="pt-1">
+                <div className="pt-1.5 flex flex-wrap items-center gap-2">
                   <button
                     type="button"
                     onClick={handleCopyCode}
-                    className="px-3.5 py-1.5 rounded-lg text-[11px] font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-xs inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                    className="px-3.5 py-2 rounded-lg text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-xs inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>{copiedCode ? "Copied Updated Code.gs!" : "Copy Updated Code.gs"}</span>
+                    <span>{copiedCode ? "Copied Updated Code.gs!" : "Copy Updated Code.gs (Validation-Safe)"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleManualSync}
+                    disabled={isSyncing}
+                    className="px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin" : ""}`} />
+                    <span>Retry Sync Now</span>
                   </button>
                 </div>
               </div>

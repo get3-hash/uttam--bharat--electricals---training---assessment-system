@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { doc, getDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { EmployeeRegistration, Training, Question, QuizAttempt } from "../types";
@@ -8,6 +8,7 @@ import { GlassCard } from "../components/GlassCard";
 import { soundEffects } from "../lib/soundEffects";
 import { backgroundMusic } from "../lib/backgroundMusic";
 import { safeSessionStorage } from "../lib/storage";
+import { SAMPLE_TRANSFORMER_QUESTIONS } from "../lib/sampleQuestions";
 import { BackgroundMusicWidget } from "../components/BackgroundMusicWidget";
 import confetti from "canvas-confetti";
 import {
@@ -26,17 +27,52 @@ import {
   Sparkles,
   Check,
   AlertCircle,
-  X
+  X,
+  RefreshCw
 } from "lucide-react";
 
 export const QuizAssessment: React.FC = () => {
   const { registrationId } = useParams<{ registrationId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const stateData = location.state as { registration?: EmployeeRegistration; training?: Training } | null;
 
-  const [registration, setRegistration] = useState<EmployeeRegistration | null>(null);
-  const [training, setTraining] = useState<Training | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Hydrate registration and training from router state or safeSessionStorage
+  const [registration, setRegistration] = useState<EmployeeRegistration | null>(() => {
+    if (stateData?.registration) return stateData.registration;
+    try {
+      const stored = safeSessionStorage.getItem("active_registration_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [training, setTraining] = useState<Training | null>(() => {
+    if (stateData?.training) return stateData.training;
+    try {
+      const stored = safeSessionStorage.getItem("active_training_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [questions, setQuestions] = useState<Question[]>(() => {
+    if (stateData?.training?.questions && stateData.training.questions.length > 0) {
+      return stateData.training.questions;
+    }
+    try {
+      const stored = safeSessionStorage.getItem("active_training_data");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.questions && parsed.questions.length > 0) return parsed.questions;
+      }
+    } catch {}
+    return [];
+  });
+
+  const [loading, setLoading] = useState<boolean>(
+    !registration || !training || questions.length === 0
+  );
 
   // Quiz Lifecycle states
   const [quizStarted, setQuizStarted] = useState(false);
@@ -51,6 +87,11 @@ export const QuizAssessment: React.FC = () => {
   const [quizVolume, setQuizVolume] = useState<number>(() => backgroundMusic.getVolume());
   const [showUnansweredConfirmModal, setShowUnansweredConfirmModal] = useState(false);
 
+  const effectiveRegId =
+    registrationId && registrationId !== "undefined" && registrationId !== ":registrationId"
+      ? registrationId
+      : registration?.id || safeSessionStorage.getItem("active_registration_id") || "";
+
   useEffect(() => {
     const unsub = backgroundMusic.subscribe((st) => {
       setSoundMuted(st.isMuted);
@@ -64,29 +105,82 @@ export const QuizAssessment: React.FC = () => {
   useEffect(() => {
     // Keep slow background ambient focus sound running while the quiz page is open
     backgroundMusic.start();
-    if (registrationId) {
-      fetchQuizData();
+    if (effectiveRegId) {
+      safeSessionStorage.setItem("active_registration_id", effectiveRegId);
+      fetchQuizData(effectiveRegId);
+    } else if (!registration || !training || questions.length === 0) {
+      setLoading(false);
     }
-  }, [registrationId]);
+  }, [effectiveRegId]);
 
-  const fetchQuizData = async () => {
+  const fetchQuizData = async (targetId: string) => {
     try {
-      setLoading(true);
-      const regSnap = await getDoc(doc(db, "registrations", registrationId!));
-      if (regSnap.exists()) {
-        const regData = { id: regSnap.id, ...(regSnap.data() as EmployeeRegistration) };
-        setRegistration(regData);
+      if (!registration || !training || questions.length === 0) {
+        setLoading(true);
+      }
+      let activeReg = registration;
+      if (!activeReg || activeReg.id !== targetId) {
+        const regSnap = await getDoc(doc(db, "registrations", targetId));
+        if (regSnap.exists()) {
+          activeReg = { id: regSnap.id, ...(regSnap.data() as EmployeeRegistration) };
+          setRegistration(activeReg);
+          safeSessionStorage.setItem("active_registration_id", activeReg.id);
+          safeSessionStorage.setItem("active_registration_data", JSON.stringify(activeReg));
+        }
+      }
 
-        const trSnap = await getDoc(doc(db, "trainings", regData.trainingId));
+      const activeTrId =
+        activeReg?.trainingId ||
+        training?.id ||
+        safeSessionStorage.getItem("active_training_id");
+
+      if (activeTrId) {
+        const trSnap = await getDoc(doc(db, "trainings", activeTrId));
         if (trSnap.exists()) {
           const trData = { id: trSnap.id, ...(trSnap.data() as Training) };
           setTraining(trData);
-          setQuestions(trData.questions || []);
+          safeSessionStorage.setItem("active_training_id", trData.id);
+          safeSessionStorage.setItem("active_training_data", JSON.stringify(trData));
+
+          let qList = trData.questions || [];
+          if (qList.length === 0) {
+            qList = SAMPLE_TRANSFORMER_QUESTIONS;
+          }
+          setQuestions(qList);
           setTimeLeft((trData.timeLimitMinutes || 15) * 60);
+        } else if (training?.questions && training.questions.length > 0) {
+          setQuestions(training.questions);
+        } else {
+          setQuestions(SAMPLE_TRANSFORMER_QUESTIONS);
         }
+      } else if (questions.length === 0) {
+        setQuestions(SAMPLE_TRANSFORMER_QUESTIONS);
+      }
+
+      // If training was not loaded from Firestore but active registration exists, synthesize training
+      if (!training && activeReg) {
+        const synth: Training = {
+          id: activeReg.trainingId || "default-training",
+          title: activeReg.trainingTitle || "Transformer Technical & Safety Assessment",
+          department: activeReg.department || "Technical",
+          trainerName: activeReg.trainerName || "Technical Lead",
+          trainingDate: activeReg.trainingDate || new Date().toISOString().split("T")[0],
+          description: "Technical Training Assessment",
+          passingPercentage: 70,
+          timeLimitMinutes: 15,
+          questions: SAMPLE_TRANSFORMER_QUESTIONS,
+          isAnswerKeyComplete: true,
+          createdAt: new Date().toISOString(),
+          createdBy: "System"
+        };
+        setTraining(synth);
+        setQuestions(SAMPLE_TRANSFORMER_QUESTIONS);
       }
     } catch (err) {
       console.error("Error loading quiz data:", err);
+      if (questions.length === 0) {
+        setQuestions(SAMPLE_TRANSFORMER_QUESTIONS);
+      }
     } finally {
       setLoading(false);
     }
@@ -313,7 +407,7 @@ export const QuizAssessment: React.FC = () => {
         soundEffects.playFailSound();
       }
 
-      const attemptDoc = await addDoc(collection(db, "quiz_attempts"), {
+      const attemptPayload = {
         registrationId: registration.id,
         trainingId: training.id,
         employeeCode: registration.employeeCode,
@@ -329,15 +423,23 @@ export const QuizAssessment: React.FC = () => {
         attemptTimeSeconds: durationSeconds,
         tabSwitches,
         submittedAt: new Date().toISOString()
-      });
+      };
+
+      const attemptDoc = await addDoc(collection(db, "quiz_attempts"), attemptPayload);
 
       safeSessionStorage.setItem("active_attempt_id", attemptDoc.id);
 
       // Stop slow background sound as quiz is finished and navigating to certificate
       backgroundMusic.stop();
 
-      // Route to Step 8: Certificate / Result View
-      navigate(`/employee/certificate/${attemptDoc.id}`);
+      // Route to Step 8: Certificate / Result View with state preserved
+      navigate(`/employee/certificate/${attemptDoc.id}`, {
+        state: {
+          attempt: { id: attemptDoc.id, ...attemptPayload },
+          registration,
+          training
+        }
+      });
     } catch (err: any) {
       console.error("Error submitting quiz attempt:", err);
       alert("Failed to submit assessment: " + err.message);
@@ -364,15 +466,51 @@ export const QuizAssessment: React.FC = () => {
   }
 
   if (!registration || !training || questions.length === 0) {
+    const fallbackTrId = training?.id || safeSessionStorage.getItem("active_training_id");
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4 transition-colors">
-        <p className="text-slate-600 dark:text-slate-400 mb-4">Assessment questions not available for this session.</p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold"
-        >
-          Go Home
-        </button>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4 text-center transition-colors">
+        <div className="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mb-3">
+          <AlertCircle className="w-6 h-6" />
+        </div>
+        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+          Assessment Session Not Found
+        </h3>
+        <p className="text-xs text-slate-600 dark:text-slate-400 mb-5 max-w-sm">
+          The requested quiz session could not be loaded. Please ensure you have completed the registration and action plan steps.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {effectiveRegId && (
+            <button
+              onClick={() => {
+                soundEffects.playNavigate();
+                navigate(`/employee/section-b/${effectiveRegId}`, {
+                  state: { registration, training }
+                });
+              }}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to Section B
+            </button>
+          )}
+          {fallbackTrId ? (
+            <button
+              onClick={() => {
+                soundEffects.playNavigate();
+                navigate(`/employee/register/${fallbackTrId}`);
+              }}
+              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+            >
+              Restart Registration
+            </button>
+          ) : (
+            <button
+              onClick={() => effectiveRegId ? fetchQuizData(effectiveRegId) : window.location.reload()}
+              className="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Retry Loading
+            </button>
+          )}
+        </div>
       </div>
     );
   }
@@ -478,12 +616,27 @@ export const QuizAssessment: React.FC = () => {
               </ul>
             </div>
 
-            <button
-              onClick={handleStartQuiz}
-              className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-sm rounded-2xl shadow-xl shadow-blue-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-[0.99]"
-            >
-              <Zap className="w-5 h-5 fill-white text-white" /> Start Timed Assessment Now
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  soundEffects.playNavigate();
+                  navigate(`/employee/section-b/${effectiveRegId}`, {
+                    state: { registration, training }
+                  });
+                }}
+                className="w-full sm:w-auto px-5 py-4 rounded-2xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" /> Back to Section B
+              </button>
+
+              <button
+                onClick={handleStartQuiz}
+                className="w-full sm:flex-1 py-4 px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-sm rounded-2xl shadow-xl shadow-blue-600/25 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-[0.99]"
+              >
+                <Zap className="w-5 h-5 fill-white text-white" /> Start Timed Assessment Now
+              </button>
+            </div>
           </GlassCard>
         </main>
       ) : (
@@ -621,7 +774,7 @@ export const QuizAssessment: React.FC = () => {
                     onClick={() => handleJumpToQuestion(idx)}
                     className={`w-9 h-9 rounded-xl text-xs font-black flex items-center justify-center transition-all cursor-pointer relative ${
                       isCurrent
-                        ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white ring-2 ring-blue-400 shadow-md scale-105"
+                        ? "bg-active-bg text-active-text ring-2 ring-blue-400 shadow-md scale-105"
                         : isAnswered
                         ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-xs"
                         : isLastQuestion
@@ -722,7 +875,7 @@ export const QuizAssessment: React.FC = () => {
                     onClick={() => handleSelectOption(currentIndex, optIdx)}
                     className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center justify-between gap-4 cursor-pointer active:scale-[0.99] ${
                       isSelected
-                        ? "bg-gradient-to-r from-blue-100/90 via-indigo-100/80 to-purple-100/70 dark:from-blue-950/80 dark:to-indigo-950/70 border-blue-600 dark:border-blue-400 text-blue-950 dark:text-white ring-2 ring-blue-500/50 shadow-md scale-[1.008]"
+                        ? "bg-active-soft-bg border-active-bg text-slate-900 dark:text-white ring-2 ring-blue-500/50 shadow-md scale-[1.008]"
                         : `bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 ${hoverBorder} text-slate-900 dark:text-slate-100 shadow-2xs`
                     }`}
                   >
@@ -730,7 +883,7 @@ export const QuizAssessment: React.FC = () => {
                       <span
                         className={`w-8 h-8 rounded-xl font-black text-xs flex items-center justify-center shrink-0 border transition-all ${
                           isSelected
-                            ? "bg-blue-600 text-white border-blue-600 scale-110 shadow-sm"
+                            ? "bg-active-bg text-active-text border-active-border scale-110 shadow-sm"
                             : badgeStyle
                         }`}
                       >
@@ -740,7 +893,7 @@ export const QuizAssessment: React.FC = () => {
                     </div>
 
                     {isSelected ? (
-                      <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                      <span className="w-6 h-6 rounded-full bg-active-bg text-active-text flex items-center justify-center shrink-0 shadow-sm">
                         <CheckCircle2 className="w-4 h-4" />
                       </span>
                     ) : (

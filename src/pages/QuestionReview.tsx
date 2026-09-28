@@ -12,12 +12,10 @@ import {
   ArrowLeft,
   Check,
   Zap,
-  Sparkles,
   Trash2,
   Plus,
   X,
-  Loader2,
-  AlertCircle
+  Loader2
 } from "lucide-react";
 
 export const QuestionReview: React.FC = () => {
@@ -74,7 +72,6 @@ export const QuestionReview: React.FC = () => {
       setCurrentIndex(Math.max(0, updated.length - 1));
     }
 
-    // Persist immediately to Firestore so changes aren't lost
     if (trainingId) {
       try {
         const isComplete = updated.every(
@@ -98,38 +95,38 @@ export const QuestionReview: React.FC = () => {
 
   const handleAddQuestionSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newQText.trim()) {
-      alert("Please enter the question text.");
-      return;
-    }
-    if (!newOptA.trim() || !newOptB.trim()) {
-      alert("Please enter at least Option A and Option B.");
+    if (!newQText.trim() || !newOptA.trim() || !newOptB.trim()) {
+      alert("Please provide question text and at least 2 options (A and B).");
       return;
     }
 
-    const options = [newOptA.trim(), newOptB.trim()];
-    if (newOptC.trim()) options.push(newOptC.trim());
-    if (newOptD.trim()) options.push(newOptD.trim());
+    const opts = [newOptA.trim(), newOptB.trim()];
+    if (newOptC.trim()) opts.push(newOptC.trim());
+    if (newOptD.trim()) opts.push(newOptD.trim());
 
-    const newQuestion: Question = {
-      id: `custom_${Date.now()}`,
+    const newQ: Question = {
+      id: `q_custom_${Date.now()}`,
       questionNumber: questions.length + 1,
       questionText: newQText.trim(),
-      options: options,
-      correctOption: newCorrectOpt < options.length ? newCorrectOpt : 0
+      options: opts,
+      correctOption: Math.min(newCorrectOpt, opts.length - 1)
     };
 
-    const updated = [...questions, newQuestion];
+    const updated = [...questions, newQ];
     setQuestions(updated);
     setCurrentIndex(updated.length - 1);
     setShowAddQuestionModal(false);
 
+    // Reset inputs
     setNewQText("");
     setNewOptA("");
     setNewOptB("");
     setNewOptC("");
     setNewOptD("");
     setNewCorrectOpt(0);
+
+    setNoticeMessage("New question added. Review it and click Save Answer Key.");
+    setTimeout(() => setNoticeMessage(null), 4500);
   };
 
   useEffect(() => {
@@ -141,14 +138,20 @@ export const QuestionReview: React.FC = () => {
   const fetchTraining = async () => {
     try {
       setLoading(true);
-      const snap = await getDoc(doc(db, "trainings", trainingId!));
-      if (snap.exists()) {
-        const data = snap.data() as Training;
-        setTraining({ id: snap.id, ...data });
-        setQuestions(data.questions || []);
+      const docSnap = await getDoc(doc(db, "trainings", trainingId!));
+      if (docSnap.exists()) {
+        const data = { id: docSnap.id, ...(docSnap.data() as Training) };
+        setTraining(data);
+
+        const loadedQuestions: Question[] = (data.questions || []).map((q, idx) => ({
+          ...q,
+          correctOption: q.correctOption !== undefined ? q.correctOption : 0
+        }));
+
+        setQuestions(loadedQuestions);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error loading training for review:", err);
     } finally {
       setLoading(false);
     }
@@ -156,44 +159,34 @@ export const QuestionReview: React.FC = () => {
 
   const handleSelectCorrectOption = (optionIndex: number) => {
     const updated = [...questions];
-    updated[currentIndex].correctOption = optionIndex;
+    updated[currentIndex] = {
+      ...updated[currentIndex],
+      correctOption: optionIndex
+    };
     setQuestions(updated);
   };
 
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentIndex((prev) => prev - 1);
     }
   };
 
   const handleSaveAnswerKey = async () => {
-    const unselected = questions.filter(
-      (q) => q.correctOption === null || q.correctOption === undefined || q.correctOption < 0
-    );
-
-    if (unselected.length > 0) {
-      if (
-        !confirm(
-          `There are ${unselected.length} questions without a selected correct answer. Save anyway?`
-        )
-      ) {
-        return;
-      }
-    }
-
+    if (!trainingId || questions.length === 0) return;
     setSaving(true);
     try {
       const isComplete = questions.every(
         (q) => q.correctOption !== null && q.correctOption !== undefined && q.correctOption >= 0
       );
 
-      await updateDoc(doc(db, "trainings", trainingId!), {
+      await updateDoc(doc(db, "trainings", trainingId), {
         questions,
         isAnswerKeyComplete: isComplete
       });
@@ -210,7 +203,7 @@ export const QuestionReview: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex items-center justify-center text-sm transition-colors">
+      <div className="min-h-screen bg-[#EAEAEA] text-[#2B2A28] flex items-center justify-center text-sm transition-colors">
         Loading Question Review Screen...
       </div>
     );
@@ -218,11 +211,11 @@ export const QuestionReview: React.FC = () => {
 
   if (!training || questions.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4 transition-colors">
-        <p className="text-slate-600 dark:text-slate-400 mb-4">No questions found for this training session.</p>
+      <div className="min-h-screen bg-[#EAEAEA] text-[#403F3E] flex flex-col items-center justify-center p-4 transition-colors">
+        <p className="text-[#757573] mb-4">No questions found for this training session.</p>
         <button
           onClick={() => navigate("/admin/trainings")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold"
+          className="px-4 py-2 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] rounded-xl text-xs font-bold cursor-pointer"
         >
           Back to Trainings
         </button>
@@ -237,23 +230,23 @@ export const QuestionReview: React.FC = () => {
   ).length;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8 space-y-6 max-w-4xl mx-auto transition-colors">
+    <div className="min-h-screen bg-[#EAEAEA] text-[#403F3E] p-4 sm:p-6 lg:p-8 space-y-6 max-w-4xl mx-auto transition-colors">
       {/* Notice Banner */}
       {noticeMessage && (
-        <div className="bg-amber-500/10 border border-amber-500/30 text-amber-300 p-3 rounded-xl text-xs font-semibold flex items-center justify-between">
+        <div className="bg-[#E6F4FA] border border-[#59B5E2] text-[#006393] p-3 rounded-xl text-xs font-semibold flex items-center justify-between">
           <span>{noticeMessage}</span>
-          <button onClick={() => setNoticeMessage(null)} className="text-amber-400 hover:text-white font-bold">✕</button>
+          <button onClick={() => setNoticeMessage(null)} className="text-[#008DD2] hover:text-[#006393] font-bold cursor-pointer">✕</button>
         </div>
       )}
 
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-[#D5D4D4] rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#006393] bg-[#E6F4FA] px-2.5 py-1 rounded-md border border-[#59B5E2]">
             Step 4: AI Answer Key Review
           </span>
-          <h1 className="text-xl font-bold text-white mt-1">{training.title}</h1>
-          <p className="text-xs text-slate-400">
+          <h1 className="text-xl font-bold text-[#2B2A28] mt-1">{training.title}</h1>
+          <p className="text-xs text-[#757573]">
             Select the correct option for each extracted question. No typing required!
           </p>
         </div>
@@ -262,7 +255,7 @@ export const QuestionReview: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowAddQuestionModal(true)}
-            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center gap-1.5 transition-all"
+            className="px-4 py-2.5 bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] border border-[#59B5E2] font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" /> Add Question
           </button>
@@ -270,7 +263,7 @@ export const QuestionReview: React.FC = () => {
           <button
             onClick={handleSaveAnswerKey}
             disabled={saving}
-            className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg flex items-center gap-2 transition-all disabled:opacity-50"
+            className="px-5 py-2.5 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] font-extrabold text-xs rounded-xl shadow-sm flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
           >
             <Save className="w-4 h-4" />
             {saving ? "Saving..." : "Save Answer Key Permanently"}
@@ -279,31 +272,31 @@ export const QuestionReview: React.FC = () => {
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+      <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#D5D4D4] space-y-2 shadow-xs">
         <div className="flex justify-between items-center text-xs">
-          <span className="font-semibold text-slate-300">
+          <span className="font-semibold text-[#403F3E]">
             Answer Key Progress: {answeredCount} / {totalCount} Selected
           </span>
-          <span className="text-amber-400 font-bold">
+          <span className="text-[#008DD2] font-bold">
             Question {currentIndex + 1} of {totalCount}
           </span>
         </div>
-        <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+        <div className="w-full bg-[#EAEAEA] h-2 rounded-full overflow-hidden border border-[#D5D4D4]">
           <div
-            className="bg-gradient-to-r from-blue-500 to-emerald-400 h-full transition-all duration-300"
+            className="bg-[#008DD2] h-full transition-all duration-300 rounded-full"
             style={{ width: `${((currentIndex + 1) / totalCount) * 100}%` }}
           />
         </div>
       </div>
 
       {/* Main Question Review Card */}
-      <GlassCard dark className="p-6 sm:p-8 space-y-6 border border-slate-800">
+      <div className="bg-[#FFFFFF] p-6 sm:p-8 space-y-6 border border-[#D5D4D4] rounded-2xl shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <span className="w-9 h-9 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center shrink-0">
+            <span className="w-9 h-9 rounded-xl bg-[#008DD2] text-[#FFFFFF] font-extrabold flex items-center justify-center shrink-0">
               Q{currentIndex + 1}
             </span>
-            <h3 className="text-base sm:text-lg font-bold text-white leading-relaxed">
+            <h3 className="text-base sm:text-lg font-bold text-[#2B2A28] leading-relaxed">
               {currentQ.questionText}
             </h3>
           </div>
@@ -312,13 +305,13 @@ export const QuestionReview: React.FC = () => {
             type="button"
             onClick={() => triggerDeleteQuestion(currentIndex)}
             title="Delete Question"
-            className="px-3 py-1.5 bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shrink-0"
+            className="px-3 py-1.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] text-[#403F3E] border border-[#D5D4D4] rounded-xl text-xs font-bold transition-all flex items-center gap-1 shrink-0 cursor-pointer"
           >
-            <Trash2 className="w-3.5 h-3.5 text-rose-400" /> Delete Question
+            <Trash2 className="w-3.5 h-3.5 text-[#2B2A28]" /> Delete Question
           </button>
         </div>
 
-        <p className="text-xs text-slate-400 font-medium">
+        <p className="text-xs text-[#757573] font-medium">
           Click the card corresponding to the CORRECT answer:
         </p>
 
@@ -326,7 +319,7 @@ export const QuestionReview: React.FC = () => {
         <div className="grid grid-cols-1 gap-3">
           {currentQ.options?.map((optText, optIdx) => {
             const isSelected = currentQ.correctOption === optIdx;
-            const letter = String.fromCharCode(65 + optIdx); // A, B, C, D
+            const letter = String.fromCharCode(65 + optIdx);
 
             return (
               <button
@@ -335,16 +328,16 @@ export const QuestionReview: React.FC = () => {
                 onClick={() => handleSelectCorrectOption(optIdx)}
                 className={`w-full p-4 rounded-xl border text-left transition-all flex items-center justify-between gap-4 cursor-pointer ${
                   isSelected
-                    ? "bg-emerald-50 dark:bg-emerald-500/20 border-2 border-emerald-600 dark:border-emerald-500 text-emerald-950 dark:text-white shadow-md ring-2 ring-emerald-500/30"
-                    : "bg-white dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-slate-700 text-slate-800 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white shadow-xs"
+                    ? "bg-[#E6F4FA] border-2 border-[#008DD2] text-[#006393] shadow-xs ring-1 ring-[#008DD2]"
+                    : "bg-[#FFFFFF] border-[#D5D4D4] hover:border-[#59B5E2] hover:bg-[#E6F4FA]/30 text-[#403F3E] shadow-xs"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <span
                     className={`w-8 h-8 rounded-lg font-bold text-xs flex items-center justify-center shrink-0 ${
                       isSelected
-                        ? "bg-emerald-600 text-white shadow-xs"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-transparent"
+                        ? "bg-[#008DD2] text-[#FFFFFF] shadow-xs"
+                        : "bg-[#EAEAEA] text-[#2B2A28] border border-[#D5D4D4]"
                     }`}
                   >
                     {letter}
@@ -353,8 +346,8 @@ export const QuestionReview: React.FC = () => {
                 </div>
 
                 {isSelected && (
-                  <span className="text-emerald-700 dark:text-emerald-400 font-bold text-xs flex items-center gap-1 shrink-0 bg-emerald-100 dark:bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-300 dark:border-emerald-500/20">
-                    <Check className="w-4 h-4" /> Correct Answer
+                  <span className="text-[#006393] font-bold text-xs flex items-center gap-1 shrink-0 bg-[#CCE8F6] px-2.5 py-1 rounded-md border border-[#59B5E2]">
+                    <Check className="w-4 h-4 text-[#008DD2]" /> Correct Answer
                   </span>
                 )}
               </button>
@@ -363,12 +356,12 @@ export const QuestionReview: React.FC = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between pt-6 border-t border-[#D5D4D4]">
           <button
             type="button"
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center gap-2 transition-all disabled:opacity-40"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] border border-[#59B5E2] flex items-center gap-2 transition-all disabled:opacity-40 cursor-pointer shadow-xs"
           >
             <ArrowLeft className="w-4 h-4" /> Previous Question
           </button>
@@ -377,16 +370,16 @@ export const QuestionReview: React.FC = () => {
             type="button"
             onClick={handleNext}
             disabled={currentIndex === totalCount - 1}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 transition-all disabled:opacity-40"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] flex items-center gap-2 transition-all disabled:opacity-40 cursor-pointer shadow-xs"
           >
             Next Question <ArrowRight className="w-4 h-4" />
           </button>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Quick Jump Bar */}
-      <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-        <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">Quick Jump to Question:</p>
+      <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#D5D4D4] shadow-xs">
+        <p className="text-xs font-semibold text-[#757573] mb-2">Quick Jump to Question:</p>
         <div className="flex flex-wrap gap-2">
           {questions.map((q, idx) => {
             const hasAns = q.correctOption !== null && q.correctOption !== undefined && q.correctOption >= 0;
@@ -394,12 +387,12 @@ export const QuestionReview: React.FC = () => {
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   currentIndex === idx
-                    ? "bg-blue-600 text-white ring-2 ring-blue-400 shadow-sm"
+                    ? "bg-[#008DD2] text-[#FFFFFF] ring-2 ring-[#0078B2] shadow-xs"
                     : hasAns
-                    ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30"
-                    : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 border border-slate-200 dark:border-transparent"
+                    ? "bg-[#E6F4FA] text-[#006393] border border-[#59B5E2]"
+                    : "bg-[#EAEAEA] text-[#403F3E] border border-[#D5D4D4]"
                 }`}
               >
                 {idx + 1}
@@ -410,20 +403,20 @@ export const QuestionReview: React.FC = () => {
       </div>
 
       {/* All Questions List & Quick Delete Management Table */}
-      <GlassCard className="p-6 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+      <div className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#D5D4D4] shadow-sm space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-[#D5D4D4]">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-amber-500" /> All Questions in Training ({questions.length})
+            <h3 className="text-sm font-bold text-[#2B2A28] flex items-center gap-2">
+              <HelpCircle className="w-4 h-4 text-[#008DD2]" /> All Questions in Training ({questions.length})
             </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            <p className="text-[11px] text-[#757573]">
               Manage or delete individual questions directly from this list.
             </p>
           </div>
           <button
             type="button"
             onClick={() => setShowAddQuestionModal(true)}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg flex items-center gap-1 shadow-md transition-all"
+            className="px-3 py-1.5 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] text-xs font-bold rounded-lg flex items-center gap-1 shadow-xs transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" /> Add Question
           </button>
@@ -437,27 +430,27 @@ export const QuestionReview: React.FC = () => {
                 key={q.id || idx}
                 className={`p-3.5 rounded-xl border text-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                   currentIndex === idx
-                    ? "bg-blue-50/80 dark:bg-slate-900 border-blue-500 ring-1 ring-blue-500/30"
-                    : "bg-slate-50 dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs"
+                    ? "bg-[#E6F4FA] border-[#008DD2] ring-1 ring-[#008DD2]"
+                    : "bg-[#FFFFFF] border-[#D5D4D4] hover:bg-[#E6F4FA]/30 shadow-xs"
                 }`}
               >
                 <div className="flex items-start gap-3 flex-1">
-                  <span className="w-7 h-7 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold border border-slate-200 dark:border-transparent flex items-center justify-center shrink-0 shadow-xs">
+                  <span className="w-7 h-7 rounded-lg bg-[#EAEAEA] text-[#2B2A28] font-bold border border-[#D5D4D4] flex items-center justify-center shrink-0 shadow-xs">
                     Q{idx + 1}
                   </span>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">{q.questionText}</p>
+                    <p className="font-semibold text-[#2B2A28]">{q.questionText}</p>
                     <div className="flex items-center gap-2 mt-1">
                       {hasAns ? (
-                        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">
+                        <span className="text-[10px] font-bold text-[#006393] bg-[#E6F4FA] px-2 py-0.5 rounded border border-[#59B5E2]">
                           Ans: {String.fromCharCode(65 + q.correctOption!)} ({q.options[q.correctOption!]})
                         </span>
                       ) : (
-                        <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/10 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-500/20">
+                        <span className="text-[10px] font-bold text-[#757573] bg-[#EAEAEA] px-2 py-0.5 rounded border border-[#D5D4D4]">
                           Answer Not Set
                         </span>
                       )}
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400">{q.options?.length || 0} Options</span>
+                      <span className="text-[10px] text-[#757573]">{q.options?.length || 0} Options</span>
                     </div>
                   </div>
                 </div>
@@ -466,7 +459,7 @@ export const QuestionReview: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setCurrentIndex(idx)}
-                    className="px-2.5 py-1.5 bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 font-semibold rounded-lg text-[11px] border border-slate-200 dark:border-transparent transition-all shadow-xs"
+                    className="px-2.5 py-1.5 bg-[#FFFFFF] hover:bg-[#EAEAEA] text-[#2B2A28] font-semibold rounded-lg text-[11px] border border-[#D5D4D4] transition-all shadow-xs cursor-pointer"
                   >
                     Review Q{idx + 1}
                   </button>
@@ -474,7 +467,7 @@ export const QuestionReview: React.FC = () => {
                     type="button"
                     onClick={() => triggerDeleteQuestion(idx)}
                     title="Delete Question"
-                    className="p-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30 rounded-lg text-xs font-semibold transition-all flex items-center gap-1"
+                    className="p-1.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] text-[#2B2A28] border border-[#D5D4D4] rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" /> Delete
                   </button>
@@ -483,19 +476,19 @@ export const QuestionReview: React.FC = () => {
             );
           })}
         </div>
-      </GlassCard>
+      </div>
 
       {/* Add Custom Question Modal */}
       {showAddQuestionModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Plus className="w-5 h-5 text-blue-400" /> Add New Custom Question
+        <div className="fixed inset-0 z-50 bg-[#2B2A28]/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-[#FFFFFF] border border-[#D5D4D4] rounded-2xl p-6 shadow-md space-y-4">
+            <div className="flex items-center justify-between border-b border-[#D5D4D4] pb-3">
+              <h3 className="text-base font-bold text-[#2B2A28] flex items-center gap-2">
+                <Plus className="w-5 h-5 text-[#008DD2]" /> Add New Custom Question
               </h3>
               <button
                 onClick={() => setShowAddQuestionModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-[#757573] hover:text-[#2B2A28] p-1 rounded-lg cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -503,7 +496,7 @@ export const QuestionReview: React.FC = () => {
 
             <form onSubmit={handleAddQuestionSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#403F3E] mb-1">
                   Question Text *
                 </label>
                 <textarea
@@ -512,13 +505,13 @@ export const QuestionReview: React.FC = () => {
                   value={newQText}
                   onChange={(e) => setNewQText(e.target.value)}
                   placeholder="e.g. What is the standard oil viscosity test frequency for power transformers?"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl p-3 text-sm text-[#2B2A28] placeholder-[#757573] focus:outline-none focus:border-[#008DD2] focus:bg-[#E6F4FA]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#403F3E] mb-1">
                     Option A *
                   </label>
                   <input
@@ -527,12 +520,12 @@ export const QuestionReview: React.FC = () => {
                     value={newOptA}
                     onChange={(e) => setNewOptA(e.target.value)}
                     placeholder="e.g. Monthly"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl px-3 py-2 text-xs text-[#2B2A28] placeholder-[#757573] focus:outline-none focus:border-[#008DD2]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#403F3E] mb-1">
                     Option B *
                   </label>
                   <input
@@ -541,12 +534,12 @@ export const QuestionReview: React.FC = () => {
                     value={newOptB}
                     onChange={(e) => setNewOptB(e.target.value)}
                     placeholder="e.g. Annually"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl px-3 py-2 text-xs text-[#2B2A28] placeholder-[#757573] focus:outline-none focus:border-[#008DD2]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#403F3E] mb-1">
                     Option C
                   </label>
                   <input
@@ -554,12 +547,12 @@ export const QuestionReview: React.FC = () => {
                     value={newOptC}
                     onChange={(e) => setNewOptC(e.target.value)}
                     placeholder="e.g. Every 5 Years"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl px-3 py-2 text-xs text-[#2B2A28] placeholder-[#757573] focus:outline-none focus:border-[#008DD2]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#403F3E] mb-1">
                     Option D
                   </label>
                   <input
@@ -567,19 +560,19 @@ export const QuestionReview: React.FC = () => {
                     value={newOptD}
                     onChange={(e) => setNewOptD(e.target.value)}
                     placeholder="e.g. Only on Breakdown"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl px-3 py-2 text-xs text-[#2B2A28] placeholder-[#757573] focus:outline-none focus:border-[#008DD2]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#403F3E] mb-1">
                   Select Correct Answer *
                 </label>
                 <select
                   value={newCorrectOpt}
                   onChange={(e) => setNewCorrectOpt(Number(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl px-3 py-2 text-xs text-[#2B2A28] focus:outline-none focus:border-[#008DD2]"
                 >
                   <option value={0}>Option A</option>
                   <option value={1}>Option B</option>
@@ -588,17 +581,17 @@ export const QuestionReview: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#D5D4D4]">
                 <button
                   type="button"
                   onClick={() => setShowAddQuestionModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#EAEAEA] hover:bg-[#D5D4D4] text-[#403F3E] cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-md flex items-center gap-1.5"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] shadow-sm flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" /> Add Question to Set
                 </button>
@@ -610,18 +603,18 @@ export const QuestionReview: React.FC = () => {
 
       {/* Delete Question Modal */}
       {deleteQTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative space-y-4">
-            <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center mx-auto">
+        <div className="fixed inset-0 z-50 bg-[#2B2A28]/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#D5D4D4] rounded-2xl max-w-md w-full p-6 text-center shadow-md relative space-y-4">
+            <div className="w-12 h-12 rounded-full bg-[#EAEAEA] border border-[#D5D4D4] text-[#2B2A28] flex items-center justify-center mx-auto">
               <Trash2 className="w-6 h-6" />
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-white">Delete Question {deleteQTarget.index + 1}?</h3>
-              <p className="text-xs text-slate-400 mt-2 line-clamp-3 bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-left text-slate-300">
+              <h3 className="text-lg font-bold text-[#2B2A28]">Delete Question {deleteQTarget.index + 1}?</h3>
+              <p className="text-xs text-[#403F3E] mt-2 line-clamp-3 bg-[#EAEAEA] p-2.5 rounded-xl border border-[#D5D4D4] text-left">
                 "{deleteQTarget.questionText}"
               </p>
-              <p className="text-[11px] text-rose-400 mt-2">
+              <p className="text-[11px] text-[#757573] mt-2">
                 This question will be deleted and question numbers will be re-indexed automatically.
               </p>
             </div>
@@ -631,7 +624,7 @@ export const QuestionReview: React.FC = () => {
                 type="button"
                 disabled={deletingQ}
                 onClick={() => setDeleteQTarget(null)}
-                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl"
+                className="flex-1 py-2.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] text-[#403F3E] font-semibold text-xs rounded-xl cursor-pointer"
               >
                 Cancel
               </button>
@@ -639,7 +632,7 @@ export const QuestionReview: React.FC = () => {
                 type="button"
                 disabled={deletingQ}
                 onClick={confirmDeleteQuestion}
-                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 disabled:opacity-50"
+                className="flex-1 py-2.5 bg-[#2B2A28] hover:bg-[#403F3E] text-[#FFFFFF] font-bold text-xs rounded-xl shadow-sm flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {deletingQ ? (
                   <>

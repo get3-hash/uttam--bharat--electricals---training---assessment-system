@@ -351,10 +351,10 @@ export const AdminSettings: React.FC = () => {
                 soundEffects.playTouchTap();
                 setActiveTab("preferences");
               }}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-semibold flex items-center gap-3 transition-all ${
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 transition-all cursor-pointer ${
                 activeTab === "preferences"
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                  ? "bg-active-bg text-active-text shadow-md shadow-blue-500/25"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
               }`}
             >
               <Palette className="w-4 h-4" />
@@ -366,10 +366,10 @@ export const AdminSettings: React.FC = () => {
                 soundEffects.playTouchTap();
                 setActiveTab("security");
               }}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-semibold flex items-center gap-3 transition-all ${
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 transition-all cursor-pointer ${
                 activeTab === "security"
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                  ? "bg-active-bg text-active-text shadow-md shadow-blue-500/25"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
               }`}
             >
               <Shield className="w-4 h-4" />
@@ -381,10 +381,10 @@ export const AdminSettings: React.FC = () => {
                 soundEffects.playTouchTap();
                 setActiveTab("profile");
               }}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-semibold flex items-center gap-3 transition-all ${
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 transition-all cursor-pointer ${
                 activeTab === "profile"
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                  ? "bg-active-bg text-active-text shadow-md shadow-blue-500/25"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
               }`}
             >
               <User className="w-4 h-4" />
@@ -396,10 +396,10 @@ export const AdminSettings: React.FC = () => {
                 soundEffects.playTouchTap();
                 setActiveTab("admins");
               }}
-              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-semibold flex items-center gap-3 transition-all ${
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 transition-all cursor-pointer ${
                 activeTab === "admins"
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
+                  ? "bg-active-bg text-active-text shadow-md shadow-blue-500/25"
+                  : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60"
               }`}
             >
               <Users className="w-4 h-4" />

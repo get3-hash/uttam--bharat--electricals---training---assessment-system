@@ -782,7 +782,46 @@ function safeSetValues(sheet, startRow, startCol, matrix, targetCols) {
     }
     normalized.push(row);
   }
-  sheet.getRange(startRow, startCol, normalized.length, cols).setValues(normalized);
+
+  // Ensure sheet has adequate row and column bounds
+  var maxR = sheet.getMaxRows();
+  var maxC = sheet.getMaxColumns();
+  var neededRows = startRow + normalized.length - 1;
+  var neededCols = startCol + cols - 1;
+  if (neededRows > maxR) {
+    sheet.insertRowsAfter(maxR, neededRows - maxR);
+  }
+  if (neededCols > maxC) {
+    sheet.insertColumnsAfter(maxC, neededCols - maxC);
+  }
+
+  var targetRange = sheet.getRange(startRow, startCol, normalized.length, cols);
+  
+  // Clear any data validation rules on the write range so cell restrictions (e.g. dropdowns) never block sync
+  try {
+    targetRange.clearDataValidations();
+  } catch (_) {}
+
+  try {
+    targetRange.setValues(normalized);
+  } catch (err) {
+    // If a sheet-wide validation rule blocked batch writing, clear all validations on the sheet and retry
+    try {
+      sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).clearDataValidations();
+      targetRange.setValues(normalized);
+    } catch (retryErr) {
+      // Cell-by-cell resilient fallback: write individual cells safely
+      for (var r = 0; r < normalized.length; r++) {
+        for (var c = 0; c < cols; c++) {
+          try {
+            var cCell = sheet.getRange(startRow + r, startCol + c);
+            try { cCell.clearDataValidations(); } catch (_) {}
+            cCell.setValue(normalized[r][c]);
+          } catch (_) {}
+        }
+      }
+    }
+  }
 }
 
 function syncSummarySheet(ss, summaryList, timestamp) {
@@ -790,7 +829,10 @@ function syncSummarySheet(ss, summaryList, timestamp) {
   if (!sheet) {
     sheet = ss.insertSheet("Department_KPI_Summary", 0);
   } else {
-    sheet.clear();
+    try { sheet.clear(); } catch (_) {}
+    try {
+      sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).clearDataValidations();
+    } catch (_) {}
   }
 
   // Ensure gridlines are visible
@@ -816,24 +858,24 @@ function syncSummarySheet(ss, summaryList, timestamp) {
   var topBlock = [titleRow, subtitleRow, spacerRow, headers];
   safeSetValues(sheet, 1, 1, topBlock, 7);
 
-  // Format Row 1: Merged Title Banner
+  // Format Row 1: Merged Title Banner (Uttam Charcoal 900 #2B2A28)
   var r1 = sheet.getRange(1, 1, 1, 7);
   r1.merge();
   r1.setFontWeight("bold")
     .setFontSize(14)
-    .setBackground("#0F2942")
+    .setBackground("#2B2A28")
     .setFontColor("#FFFFFF")
     .setHorizontalAlignment("center")
     .setVerticalAlignment("middle");
   sheet.setRowHeight(1, 44);
 
-  // Format Row 2: Subtitle Banner
+  // Format Row 2: Subtitle Banner (Uttam Blue 900 #006393)
   var r2 = sheet.getRange(2, 1, 1, 7);
   r2.merge();
   r2.setFontWeight("normal")
     .setFontSize(10)
-    .setBackground("#1E3A8A")
-    .setFontColor("#E0E7FF")
+    .setBackground("#006393")
+    .setFontColor("#E6F4FA")
     .setHorizontalAlignment("center")
     .setVerticalAlignment("middle");
   sheet.setRowHeight(2, 24);
@@ -841,11 +883,11 @@ function syncSummarySheet(ss, summaryList, timestamp) {
   // Format Row 3: Spacer
   sheet.setRowHeight(3, 10);
 
-  // Format Row 4: Column Headers
+  // Format Row 4: Column Headers (Uttam Blue 500 #008DD2)
   var r4 = sheet.getRange(4, 1, 1, 7);
   r4.setFontWeight("bold")
     .setFontSize(11)
-    .setBackground("#2563EB")
+    .setBackground("#008DD2")
     .setFontColor("#FFFFFF")
     .setVerticalAlignment("middle")
     .setHorizontalAlignment("center");
@@ -913,16 +955,16 @@ function syncSummarySheet(ss, summaryList, timestamp) {
     var rowRange = sheet.getRange(rowIdx, 1, 1, 7);
     rowRange.setVerticalAlignment("middle");
 
-    // Total Row highlighting
+    // Total Row highlighting (Uttam Blue 100 tint)
     if (k === rows.length - 1 && rows.length > 1) {
       rowRange.setFontWeight("bold")
-              .setBackground("#EEF2FF")
-              .setFontColor("#1E3A8A");
+              .setBackground("#E6F4FA")
+              .setFontColor("#006393");
       sheet.getRange(rowIdx, 1).setHorizontalAlignment("left");
       sheet.getRange(rowIdx, 2, 1, 6).setHorizontalAlignment("center");
     } else {
       if (k % 2 === 1) {
-        rowRange.setBackground("#F8FAFC");
+        rowRange.setBackground("#F7F8F9");
       } else {
         rowRange.setBackground("#FFFFFF");
       }
@@ -933,15 +975,15 @@ function syncSummarySheet(ss, summaryList, timestamp) {
       var passCell = sheet.getRange(rowIdx, 6);
       var passVal = parseInt(rows[k][5], 10) || 0;
       if (passVal >= 70) {
-        passCell.setFontColor("#047857").setFontWeight("bold");
+        passCell.setFontColor("#008DD2").setFontWeight("bold");
       } else if (passVal > 0) {
         passCell.setFontColor("#B91C1C").setFontWeight("bold");
       }
     }
   }
 
-  // Elegant Grid Borders
-  sheet.getRange(4, 1, rows.length + 1, 7).setBorder(true, true, true, true, true, true, "#CBD5E1", SpreadsheetApp.BorderStyle.SOLID);
+  // Elegant Grid Borders (Uttam Charcoal 150 #D5D4D4)
+  sheet.getRange(4, 1, rows.length + 1, 7).setBorder(true, true, true, true, true, true, "#D5D4D4", SpreadsheetApp.BorderStyle.SOLID);
 
   sheet.setFrozenRows(4);
 
@@ -966,7 +1008,10 @@ function syncTab(ss, tabName, records) {
   if (!sheet) {
     sheet = ss.insertSheet(tabName);
   } else {
-    sheet.clear();
+    try { sheet.clear(); } catch (_) {}
+    try {
+      sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).clearDataValidations();
+    } catch (_) {}
   }
 
   try {
@@ -1002,24 +1047,24 @@ function syncTab(ss, tabName, records) {
   var topBlock = [titleRow, subtitleRow, spacerRow, headers];
   safeSetValues(sheet, 1, 1, topBlock, 12);
 
-  // Row 1: Banner
+  // Row 1: Banner (Uttam Charcoal 900 #2B2A28)
   var r1 = sheet.getRange(1, 1, 1, 12);
   r1.merge();
   r1.setFontWeight("bold")
     .setFontSize(13)
-    .setBackground("#0F2942")
+    .setBackground("#2B2A28")
     .setFontColor("#FFFFFF")
     .setHorizontalAlignment("center")
     .setVerticalAlignment("middle");
   sheet.setRowHeight(1, 40);
 
-  // Row 2: Subtitle
+  // Row 2: Subtitle (Uttam Blue 900 #006393)
   var r2 = sheet.getRange(2, 1, 1, 12);
   r2.merge();
   r2.setFontWeight("normal")
     .setFontSize(10)
-    .setBackground("#1E3A8A")
-    .setFontColor("#E0E7FF")
+    .setBackground("#006393")
+    .setFontColor("#E6F4FA")
     .setHorizontalAlignment("center")
     .setVerticalAlignment("middle");
   sheet.setRowHeight(2, 22);
@@ -1027,11 +1072,11 @@ function syncTab(ss, tabName, records) {
   // Row 3: Spacer
   sheet.setRowHeight(3, 8);
 
-  // Row 4: Table Headers
+  // Row 4: Table Headers (Uttam Blue 500 #008DD2)
   var r4 = sheet.getRange(4, 1, 1, 12);
   r4.setFontWeight("bold")
     .setFontSize(10.5)
-    .setBackground("#2563EB")
+    .setBackground("#008DD2")
     .setFontColor("#FFFFFF")
     .setVerticalAlignment("middle")
     .setHorizontalAlignment("center");
@@ -1070,7 +1115,7 @@ function syncTab(ss, tabName, records) {
     rowR.setVerticalAlignment("middle");
 
     if (j % 2 === 1) {
-      rowR.setBackground("#F8FAFC");
+      rowR.setBackground("#F7F8F9");
     } else {
       rowR.setBackground("#FFFFFF");
     }
@@ -1087,14 +1132,14 @@ function syncTab(ss, tabName, records) {
     var resCell = sheet.getRange(rowNum, 10);
     var resText = tableData[j][9];
     if (resText === "PASSED") {
-      resCell.setFontColor("#047857").setFontWeight("bold");
+      resCell.setFontColor("#008DD2").setFontWeight("bold");
     } else if (resText === "FAILED") {
       resCell.setFontColor("#B91C1C").setFontWeight("bold");
     }
   }
 
-  // Border
-  sheet.getRange(4, 1, tableData.length + 1, 12).setBorder(true, true, true, true, true, true, "#CBD5E1", SpreadsheetApp.BorderStyle.SOLID);
+  // Border (Uttam Charcoal 150 #D5D4D4)
+  sheet.getRange(4, 1, tableData.length + 1, 12).setBorder(true, true, true, true, true, true, "#D5D4D4", SpreadsheetApp.BorderStyle.SOLID);
 
   sheet.setFrozenRows(4);
 

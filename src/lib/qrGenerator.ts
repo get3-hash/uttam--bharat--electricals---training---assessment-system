@@ -35,7 +35,7 @@ export async function generateTrainingQRCode(
   const targetUrl = `${origin}/employee/register/${trainingId}`;
   const width = options?.width || 512;
   const margin = options?.margin !== undefined ? options?.margin : 2;
-  const darkColor = options?.darkColor || "#0F2942"; // Uttam Corporate Navy
+  const darkColor = options?.darkColor || "#2B2A28"; // Uttam Charcoal 900
   const lightColor = options?.lightColor || "#FFFFFF";
   const preferPng = options?.preferPng !== undefined ? options?.preferPng : true;
 
@@ -196,7 +196,7 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
   const qrUrl = await generateTrainingQRCode(training.id, {
     width: 600,
     preferPng: true,
-    darkColor: "#0F2942",
+    darkColor: "#2B2A28",
     margin: 2
   });
 
@@ -224,7 +224,7 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
     }
     body {
       background: #ffffff;
-      color: #0f172a;
+      color: #2b2a28;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -234,7 +234,7 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
     .standee-card {
       width: 100%;
       max-width: 680px;
-      border: 3px solid #0f2942;
+      border: 3px solid #2b2a28;
       border-radius: 20px;
       overflow: hidden;
       background: #ffffff;
@@ -243,11 +243,11 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
       flex-direction: column;
     }
     .header-banner {
-      background: linear-gradient(135deg, #0f2942 0%, #1e3a8a 100%);
+      background: linear-gradient(135deg, #2b2a28 0%, #006393 100%);
       color: #ffffff;
       text-align: center;
       padding: 20px 20px 16px;
-      border-bottom: 4px solid #009fe3;
+      border-bottom: 4px solid #008dd2;
     }
     .logo-container {
       max-width: 220px;
@@ -268,7 +268,7 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
     .company-sub {
       font-size: 10.5px;
       font-weight: 600;
-      color: #7dd3fc;
+      color: #59b5e2;
       letter-spacing: 1.5px;
       text-transform: uppercase;
     }
@@ -282,9 +282,9 @@ export async function printTrainingQRStandee(training: TrainingStandeeData): Pro
     }
     .portal-tag {
       display: inline-block;
-      background: #f1f5f9;
-      color: #1e3a8a;
-      border: 1px solid #cbd5e1;
+      background: #e6f4fa;
+      color: #006393;
+      border: 1px solid #cce8f6;
       padding: 5px 14px;
       border-radius: 9999px;
       font-size: 11px;

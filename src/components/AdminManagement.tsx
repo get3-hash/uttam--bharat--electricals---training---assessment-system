@@ -896,7 +896,7 @@ export const AdminManagement: React.FC = () => {
                     }}
                     className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                       addRole === "admin"
-                        ? "bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-900 dark:text-blue-200 ring-1 ring-blue-500 shadow-xs"
+                        ? "bg-active-soft-bg border-active-bg text-slate-900 dark:text-white ring-2 ring-blue-500/50 shadow-xs"
                         : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
                     }`}
                   >
@@ -957,9 +957,9 @@ export const AdminManagement: React.FC = () => {
                         key={preset}
                         type="button"
                         onClick={() => setAddRoleTitle(preset)}
-                        className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                        className={`text-[10px] px-2.5 py-1 rounded-lg border transition-all cursor-pointer font-semibold ${
                           addRoleTitle === preset
-                            ? "bg-blue-600 text-white border-blue-600 font-semibold shadow-xs"
+                            ? "bg-active-bg text-active-text border-active-border shadow-xs"
                             : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400"
                         }`}
                       >
@@ -1120,7 +1120,7 @@ export const AdminManagement: React.FC = () => {
                     }}
                     className={`p-2.5 rounded-xl border text-left transition-all ${
                       editRole === "admin"
-                        ? "bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-900 dark:text-blue-200 ring-1 ring-blue-500 shadow-xs"
+                        ? "bg-active-soft-bg border-active-bg text-slate-900 dark:text-white ring-2 ring-blue-500/50 shadow-xs"
                         : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
                     } ${(!isSuperAdmin || selectedAdmin.id === "super-admin-primary") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                   >
@@ -1187,9 +1187,9 @@ export const AdminManagement: React.FC = () => {
                           key={preset}
                           type="button"
                           onClick={() => setEditRoleTitle(preset)}
-                          className={`text-[10px] px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                          className={`text-[10px] px-2.5 py-1 rounded-lg border transition-all cursor-pointer font-semibold ${
                             editRoleTitle === preset
-                              ? "bg-blue-600 text-white border-blue-600 font-semibold shadow-xs"
+                              ? "bg-active-bg text-active-text border-active-border shadow-xs"
                               : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400"
                           }`}
                         >

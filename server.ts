@@ -444,20 +444,20 @@ function generateOtpHtml(otpCode: string, targetEmail: string) {
 <head>
   <meta charset="utf-8">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b1120; margin: 0; padding: 24px; color: #f8fafc; }
-    .container { max-width: 520px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; border: 1px solid #334155; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
-    .header { background: linear-gradient(135deg, #1d4ed8, #0284c7); padding: 28px 24px; text-align: center; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #1b1a19; margin: 0; padding: 24px; color: #eaeaea; }
+    .container { max-width: 520px; margin: 0 auto; background-color: #2b2a28; border-radius: 16px; border: 1px solid #403f3e; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    .header { background: linear-gradient(135deg, #2b2a28 0%, #006393 50%, #008dd2 100%); padding: 28px 24px; text-align: center; }
     .header h1 { color: #ffffff; margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -0.02em; }
-    .header p { color: #bfdbfe; margin: 6px 0 0 0; font-size: 13px; font-weight: 500; }
+    .header p { color: #e6f4fa; margin: 6px 0 0 0; font-size: 13px; font-weight: 500; }
     .content { padding: 32px 28px; text-align: center; }
-    .badge { display: inline-block; padding: 4px 12px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 9999px; color: #38bdf8; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+    .badge { display: inline-block; padding: 4px 12px; background: rgba(0, 141, 210, 0.15); border: 1px solid rgba(0, 141, 210, 0.4); border-radius: 9999px; color: #59b5e2; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
     .title { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 10px; }
-    .desc { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 24px; }
-    .otp-box { background: #0f172a; border: 2px dashed #0284c7; border-radius: 14px; padding: 20px 30px; display: inline-block; margin: 8px 0 24px 0; }
-    .otp-code { font-size: 34px; font-weight: 900; letter-spacing: 8px; color: #38bdf8; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-    .validity { font-size: 12px; color: #94a3b8; margin-top: 8px; font-weight: 500; }
+    .desc { font-size: 14px; color: #b5b4b4; line-height: 1.6; margin-bottom: 24px; }
+    .otp-box { background: #1b1a19; border: 2px dashed #008dd2; border-radius: 14px; padding: 20px 30px; display: inline-block; margin: 8px 0 24px 0; }
+    .otp-code { font-size: 34px; font-weight: 900; letter-spacing: 8px; color: #008dd2; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .validity { font-size: 12px; color: #b5b4b4; margin-top: 8px; font-weight: 500; }
     .security-note { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px; padding: 14px; font-size: 12px; color: #fde68a; text-align: left; line-height: 1.5; margin-top: 16px; }
-    .footer { border-top: 1px solid #334155; padding: 18px 24px; text-align: center; font-size: 12px; color: #64748b; background: #0f172a; }
+    .footer { border-top: 1px solid #403f3e; padding: 18px 24px; text-align: center; font-size: 12px; color: #757573; background: #1b1a19; }
   </style>
 </head>
 <body>
@@ -996,9 +996,13 @@ app.post("/api/sync-google-sheets", async (req, res) => {
     } catch (_) {}
 
     if (parsedJson && parsedJson.status === "error") {
+      let errorMsg = parsedJson.message || "Google Apps Script encountered an execution error while writing to the sheet.";
+      if (errorMsg.includes("violates the data validation rules")) {
+        errorMsg = `${errorMsg}. (Solution: Copy and deploy the latest Code.gs script in Settings which clears conflicting cell validations automatically, or open your Google Sheet and remove cell validation under Data > Data validation).`;
+      }
       return res.status(400).json({
         success: false,
-        message: parsedJson.message || "Google Apps Script encountered an execution error while writing to the sheet."
+        message: errorMsg
       });
     }
 

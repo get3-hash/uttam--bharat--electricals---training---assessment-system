@@ -64,10 +64,10 @@ export const TrainingQRCode: React.FC<TrainingQRCodeProps> = ({
     return (
       <div
         style={{ width: `${size}px`, height: `${size}px` }}
-        className={`bg-slate-900 border border-slate-800 rounded-xl flex flex-col items-center justify-center text-amber-400 gap-1 p-2 ${className}`}
+        className={`bg-[#E6F4FA] border border-[#59B5E2] rounded-xl flex flex-col items-center justify-center text-[#008DD2] gap-1 p-2 ${className}`}
       >
-        <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
-        <span className="text-[10px] font-medium text-slate-400">QR Loading...</span>
+        <Loader2 className="w-5 h-5 animate-spin text-[#008DD2]" />
+        <span className="text-[10px] font-medium text-[#757573]">QR Loading...</span>
       </div>
     );
   }
@@ -76,9 +76,9 @@ export const TrainingQRCode: React.FC<TrainingQRCodeProps> = ({
     return (
       <div
         style={{ width: `${size}px`, height: `${size}px` }}
-        className={`bg-slate-900 border border-slate-800 rounded-xl flex flex-col items-center justify-center text-slate-500 p-2 ${className}`}
+        className={`bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl flex flex-col items-center justify-center text-[#757573] p-2 ${className}`}
       >
-        <QrCode className="w-6 h-6 text-slate-600 mb-1" />
+        <QrCode className="w-6 h-6 text-[#757573] mb-1" />
         <span className="text-[10px]">No QR</span>
       </div>
     );
@@ -89,7 +89,7 @@ export const TrainingQRCode: React.FC<TrainingQRCodeProps> = ({
       src={qrUrl}
       alt="Training QR Code"
       style={{ width: `${size}px`, height: `${size}px` }}
-      className={`bg-white p-1 rounded-xl shadow-md object-contain ${className}`}
+      className={`bg-[#FFFFFF] p-1 rounded-xl border border-[#D5D4D4] shadow-xs object-contain ${className}`}
     />
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { QuizAttempt, EmployeeRegistration, Training } from "../types";
@@ -9,6 +9,8 @@ import { GlassCard } from "../components/GlassCard";
 import { CompanyLogo } from "../components/CompanyLogo";
 import { backgroundMusic } from "../lib/backgroundMusic";
 import { useTheme } from "../context/ThemeContext";
+import { safeSessionStorage } from "../lib/storage";
+import { soundEffects } from "../lib/soundEffects";
 import {
   Award,
   Download,
@@ -22,45 +24,88 @@ import {
   FileCheck,
   HelpCircle,
   AlertCircle,
-  Loader2
+  Loader2,
+  RefreshCw,
+  ArrowLeft
 } from "lucide-react";
 
 export const CertificateView: React.FC = () => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme } = useTheme();
 
-  const [attempt, setAttempt] = useState<QuizAttempt | null>(null);
-  const [registration, setRegistration] = useState<EmployeeRegistration | null>(null);
-  const [training, setTraining] = useState<Training | null>(null);
-  const [loading, setLoading] = useState(true);
+  const stateData = location.state as {
+    attempt?: QuizAttempt;
+    registration?: EmployeeRegistration;
+    training?: Training;
+  } | null;
+
+  const [attempt, setAttempt] = useState<QuizAttempt | null>(() => {
+    if (stateData?.attempt) return stateData.attempt;
+    return null;
+  });
+
+  const [registration, setRegistration] = useState<EmployeeRegistration | null>(() => {
+    if (stateData?.registration) return stateData.registration;
+    try {
+      const stored = safeSessionStorage.getItem("active_registration_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [training, setTraining] = useState<Training | null>(() => {
+    if (stateData?.training) return stateData.training;
+    try {
+      const stored = safeSessionStorage.getItem("active_training_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [loading, setLoading] = useState(!attempt || !registration || !training);
   const [downloading, setDownloading] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<"all" | "wrong" | "correct">("all");
+
+  const effectiveAttemptId =
+    attemptId && attemptId !== "undefined" && attemptId !== ":attemptId"
+      ? attemptId
+      : attempt?.id || safeSessionStorage.getItem("active_attempt_id") || "";
 
   useEffect(() => {
     // Stop background music upon entering certificate view
     backgroundMusic.stop();
-    if (attemptId) {
-      fetchAttemptData();
+    if (effectiveAttemptId) {
+      safeSessionStorage.setItem("active_attempt_id", effectiveAttemptId);
+      fetchAttemptData(effectiveAttemptId);
+    } else if (!attempt || !registration || !training) {
+      setLoading(false);
     }
-  }, [attemptId]);
+  }, [effectiveAttemptId]);
 
-  const fetchAttemptData = async () => {
+  const fetchAttemptData = async (targetId: string) => {
     try {
-      setLoading(true);
-      const attSnap = await getDoc(doc(db, "quiz_attempts", attemptId!));
+      if (!attempt || !registration || !training) {
+        setLoading(true);
+      }
+      const attSnap = await getDoc(doc(db, "quiz_attempts", targetId));
       if (attSnap.exists()) {
         const attData = { id: attSnap.id, ...(attSnap.data() as QuizAttempt) };
         setAttempt(attData);
 
         const regSnap = await getDoc(doc(db, "registrations", attData.registrationId));
         if (regSnap.exists()) {
-          setRegistration({ id: regSnap.id, ...(regSnap.data() as EmployeeRegistration) });
+          const regData = { id: regSnap.id, ...(regSnap.data() as EmployeeRegistration) };
+          setRegistration(regData);
+          safeSessionStorage.setItem("active_registration_data", JSON.stringify(regData));
         }
 
         const trSnap = await getDoc(doc(db, "trainings", attData.trainingId));
         if (trSnap.exists()) {
-          setTraining({ id: trSnap.id, ...(trSnap.data() as Training) });
+          const trData = { id: trSnap.id, ...(trSnap.data() as Training) };
+          setTraining(trData);
+          safeSessionStorage.setItem("active_training_data", JSON.stringify(trData));
         }
       }
     } catch (err) {
@@ -98,6 +143,7 @@ export const CertificateView: React.FC = () => {
   }
 
   if (!attempt || !registration || !training) {
+    const fallbackTrId = training?.id || safeSessionStorage.getItem("active_training_id");
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col items-center justify-center p-6 transition-colors">
         <div className="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-3">
@@ -109,12 +155,26 @@ export const CertificateView: React.FC = () => {
         <p className="text-xs text-slate-600 dark:text-slate-400 mb-5 text-center max-w-sm">
           The requested certificate or assessment attempt record could not be loaded.
         </p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
-        >
-          Go Home
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {fallbackTrId ? (
+            <button
+              onClick={() => {
+                soundEffects.playNavigate();
+                navigate(`/employee/register/${fallbackTrId}`);
+              }}
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+            >
+              Register for Training Session
+            </button>
+          ) : (
+            <button
+              onClick={() => effectiveAttemptId ? fetchAttemptData(effectiveAttemptId) : window.location.reload()}
+              className="px-5 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Retry Loading
+            </button>
+          )}
+        </div>
       </div>
     );
   }

@@ -26,6 +26,7 @@ export interface SendOtpResult {
   emailSent: boolean;
   message: string;
   fallbackOtp?: string;
+  otp?: string;
   needSmtpSetup?: boolean;
   provider?: string;
 }
@@ -433,7 +434,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return {
       emailSent: Boolean(data.emailSent),
       message: data.message || "OTP generated.",
-      fallbackOtp: data.fallbackOtp,
+      fallbackOtp: data.fallbackOtp || data.otp,
+      otp: data.otp || data.fallbackOtp,
       needSmtpSetup: Boolean(data.needSmtpSetup),
       provider: data.provider,
     };

@@ -14,9 +14,9 @@ export const CompanyLogo: React.FC<CompanyLogoProps> = ({
   className = "",
   height
 }) => {
-  const textColor = darkBg ? "#ffffff" : "#18181b";
-  const subtextColor = darkBg ? "#cbd5e1" : "#18181b";
-  const blueColor = UTTAM_BRAND_BLUE; // Official Uttam Sky/Electric Blue (#009fe3)
+  const textColor = darkBg ? "#FFFFFF" : "#2B2A28";
+  const subtextColor = darkBg ? "#D5D4D4" : "#403F3E";
+  const blueColor = UTTAM_BRAND_BLUE; // Official Uttam Blue 500 (#008DD2)
 
   if (variant === "badge") {
     return (
@@ -25,16 +25,16 @@ export const CompanyLogo: React.FC<CompanyLogoProps> = ({
           {/* Blue Triangle */}
           <polygon points="50,6 94,84 6,84" fill={blueColor} />
           {/* White cutout lightning bolt */}
-          <polygon points="48,16 60,42 50,42 66,74 38,48 48,48" fill="#ffffff" />
+          <polygon points="48,16 60,42 50,42 66,74 38,48 48,48" fill="#FFFFFF" />
           {/* Spark cut line */}
           <line x1="20" y1="94" x2="80" y2="-4" stroke={blueColor} strokeWidth="4" strokeLinecap="round" />
         </svg>
         <div className="flex flex-col leading-none">
           <div className="flex items-center font-black text-sm tracking-tight" style={{ color: textColor }}>
             <span>UTTAM</span>
-            <span className="text-[10px] text-sky-500 font-bold ml-0.5">®</span>
+            <span className="text-[10px] text-[#008DD2] font-bold ml-0.5">®</span>
           </div>
-          <span className="text-[8.5px] uppercase tracking-wider font-bold text-sky-600 dark:text-sky-400 mt-0.5">
+          <span className="text-[8.5px] uppercase tracking-wider font-bold text-[#008DD2] mt-0.5">
             Transformers
           </span>
         </div>

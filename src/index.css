@@ -2,6 +2,200 @@
 
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
+@theme {
+  /* ========================================================
+     UTTAM CORPORATE BRAND PALETTE (HEX CODES & TONAL RAMPS)
+     ======================================================== */
+  
+  /* Uttam Charcoal Tonal Ramp:
+     900: #2B2A28 (Primary Brand Charcoal)
+     700: #403F3E
+     500: #757573
+     300: #B5B4B4
+     150: #D5D4D4
+     100: #EAEAEA
+  */
+  --color-brand-charcoal-900: #2b2a28;
+  --color-brand-charcoal-700: #403f3e;
+  --color-brand-charcoal-500: #757573;
+  --color-brand-charcoal-300: #b5b4b4;
+  --color-brand-charcoal-150: #d5d4d4;
+  --color-brand-charcoal-100: #eaeaea;
+
+  --color-uttam-charcoal-900: #2b2a28;
+  --color-uttam-charcoal-700: #403f3e;
+  --color-uttam-charcoal-500: #757573;
+  --color-uttam-charcoal-300: #b5b4b4;
+  --color-uttam-charcoal-150: #d5d4d4;
+  --color-uttam-charcoal-100: #eaeaea;
+
+  /* Uttam Blue Tonal Ramp:
+     900: #006393
+     700: #0078B2
+     500: #008DD2 (Primary Brand Blue)
+     300: #59B5E2
+     150: #CCE8F6
+     100: #E6F4FA
+  */
+  --color-brand-blue-900: #006393;
+  --color-brand-blue-700: #0078b2;
+  --color-brand-blue-600: #008dd2;
+  --color-brand-blue-500: #008dd2;
+  --color-brand-blue-300: #59b5e2;
+  --color-brand-blue-150: #cce8f6;
+  --color-brand-blue-100: #e6f4fa;
+
+  --color-uttam-blue-900: #006393;
+  --color-uttam-blue-700: #0078b2;
+  --color-uttam-blue-600: #008dd2;
+  --color-uttam-blue-500: #008dd2;
+  --color-uttam-blue-400: #59b5e2;
+  --color-uttam-blue-300: #59b5e2;
+  --color-uttam-blue-150: #cce8f6;
+  --color-uttam-blue-100: #e6f4fa;
+
+  /* Semantic Theme Tokens mapped to Tailwind utility classes */
+  --color-theme-app: var(--bg-app);
+  --color-theme-surface: var(--bg-surface);
+  --color-theme-surface-elevated: var(--bg-surface-elevated);
+  --color-theme-card: var(--bg-card);
+  --color-theme-card-subtle: var(--bg-card-subtle);
+  --color-theme-input: var(--bg-input);
+
+  --color-theme-text-primary: var(--text-primary);
+  --color-theme-text-secondary: var(--text-secondary);
+  --color-theme-text-muted: var(--text-muted);
+  --color-theme-text-dim: var(--text-dim);
+
+  --color-theme-border: var(--border-default);
+  --color-theme-border-subtle: var(--border-subtle);
+  --color-theme-border-focus: var(--border-focus);
+
+  --color-theme-accent: var(--accent-primary);
+  --color-theme-accent-hover: var(--accent-primary-hover);
+  --color-theme-accent-light: var(--accent-light);
+  --color-theme-accent-border: var(--accent-border);
+
+  /* Explicit Active & Selected State Tokens (High Contrast, Solid & Vibrant, Never Washed Out) */
+  --color-active-bg: var(--state-active-bg);
+  --color-active-text: var(--state-active-text);
+  --color-active-border: var(--state-active-border);
+  --color-active-soft-bg: var(--state-active-soft-bg);
+  --color-active-soft-text: var(--state-active-soft-text);
+  --color-active-soft-border: var(--state-active-soft-border);
+
+  /* Standard Tailwind Slate utilities mapped to Uttam Charcoal Palette */
+  --color-slate-950: #1b1a19;
+  --color-slate-900: #2b2a28;
+  --color-slate-800: #403f3e;
+  --color-slate-700: #575654;
+  --color-slate-600: #757573;
+  --color-slate-500: #757573;
+  --color-slate-400: #b5b4b4;
+  --color-slate-300: #d5d4d4;
+  --color-slate-200: #d5d4d4;
+  --color-slate-100: #eaeaea;
+  --color-slate-50: #f7f8f9;
+
+  /* Standard Tailwind Blue utilities mapped to Uttam Blue Palette */
+  --color-blue-950: #003652;
+  --color-blue-900: #006393;
+  --color-blue-800: #0078b2;
+  --color-blue-700: #0078b2;
+  --color-blue-600: #008dd2;
+  --color-blue-500: #008dd2;
+  --color-blue-400: #59b5e2;
+  --color-blue-300: #59b5e2;
+  --color-blue-200: #cce8f6;
+  --color-blue-100: #e6f4fa;
+  --color-blue-50: #f2f9fd;
+}
+
+:root {
+  /* Brand Palette Variables */
+  --uttam-charcoal-900: #2b2a28;
+  --uttam-charcoal-700: #403f3e;
+  --uttam-charcoal-500: #757573;
+  --uttam-charcoal-300: #b5b4b4;
+  --uttam-charcoal-150: #d5d4d4;
+  --uttam-charcoal-100: #eaeaea;
+
+  --uttam-blue-900: #006393;
+  --uttam-blue-700: #0078b2;
+  --uttam-blue-600: #008dd2;
+  --uttam-blue-500: #008dd2;
+  --uttam-blue-300: #59b5e2;
+  --uttam-blue-150: #cce8f6;
+  --uttam-blue-100: #e6f4fa;
+
+  /* Semantic Theme Tokens - Light Mode */
+  --bg-app: #f7f8f9;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #eaeaea;
+  --bg-input: #ffffff;
+
+  --text-primary: #2b2a28;
+  --text-secondary: #403f3e;
+  --text-muted: #757573;
+  --text-dim: #b5b4b4;
+
+  --border-default: #d5d4d4;
+  --border-subtle: #eaeaea;
+  --border-focus: #008dd2;
+
+  --accent-primary: #008dd2;
+  --accent-primary-hover: #0078b2;
+  --accent-light: #e6f4fa;
+  --accent-border: #cce8f6;
+
+  /* Explicit Active & Selected State Tokens (Light Mode: Bold solid Uttam Blue) */
+  --state-active-bg: #008dd2;
+  --state-active-text: #ffffff;
+  --state-active-border: #006393;
+  --state-active-soft-bg: #e6f4fa;
+  --state-active-soft-text: #006393;
+  --state-active-soft-border: #008dd2;
+
+  color-scheme: light;
+}
+
+.dark,
+[data-theme="dark"] {
+  /* Semantic Theme Tokens - Dark Mode */
+  --bg-app: #1b1a19;
+  --bg-surface: #2b2a28;
+  --bg-surface-elevated: #363533;
+  --bg-card: #2b2a28;
+  --bg-card-subtle: #403f3e;
+  --bg-input: #2b2a28;
+
+  --text-primary: #ffffff;
+  --text-secondary: #eaeaea;
+  --text-muted: #b5b4b4;
+  --text-dim: #757573;
+
+  --border-default: #403f3e;
+  --border-subtle: rgba(117, 117, 115, 0.4);
+  --border-focus: #59b5e2;
+
+  --accent-primary: #008dd2;
+  --accent-primary-hover: #59b5e2;
+  --accent-light: rgba(0, 141, 210, 0.18);
+  --accent-border: rgba(0, 141, 210, 0.4);
+
+  /* Explicit Active & Selected State Tokens (Dark Mode: Vivid Uttam Blue with crisp white text) */
+  --state-active-bg: #008dd2;
+  --state-active-text: #ffffff;
+  --state-active-border: #59b5e2;
+  --state-active-soft-bg: rgba(0, 141, 210, 0.25);
+  --state-active-soft-text: #59b5e2;
+  --state-active-soft-border: #008dd2;
+
+  color-scheme: dark;
+}
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -12,6 +206,32 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+
+  /* Explicit State Helper Classes to guarantee active/selected items are never hidden or washed out */
+  .btn-active-solid {
+    background-color: var(--state-active-bg) !important;
+    color: var(--state-active-text) !important;
+    border-color: var(--state-active-border) !important;
+    box-shadow: 0 4px 12px rgba(0, 141, 210, 0.3) !important;
+  }
+
+  .btn-active-soft {
+    background-color: var(--state-active-soft-bg) !important;
+    color: var(--state-active-soft-text) !important;
+    border-color: var(--state-active-soft-border) !important;
+  }
+
+  .nav-link-active {
+    background-color: var(--state-active-bg) !important;
+    color: var(--state-active-text) !important;
+    box-shadow: 0 2px 8px rgba(0, 141, 210, 0.3) !important;
+  }
+
+  .tab-item-active {
+    background-color: var(--state-active-bg) !important;
+    color: var(--state-active-text) !important;
+    box-shadow: 0 2px 6px rgba(0, 141, 210, 0.25) !important;
+  }
 }
 
 /* =========================================
@@ -20,173 +240,20 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #090d16;
-  color: #f1f5f9;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
   transition: background-color 0.2s ease, color 0.2s ease;
   min-height: 100vh;
 }
 
-/* =========================================
-   DARK MODE REFINEMENTS (High Contrast & Attractive)
-   ========================================= */
-html.dark body,
-[data-theme="dark"] body {
-  background-color: #090d16;
-  color: #f1f5f9;
+/* Smooth transitions for theme toggle elements */
+input, select, textarea, button {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-/* =========================================
-   LIGHT MODE (Crisp, High Contrast, Attractive)
-   ========================================= */
-html.light body,
-[data-theme="light"] body {
-  background-color: #f8fafc;
-  color: #0f172a;
+/* Subtle focus ring using Uttam Blue */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #008dd2;
+  box-shadow: 0 0 0 3px rgba(0, 141, 210, 0.2);
 }
-
-/* Base Light Mode Containers */
-html.light .min-h-screen.bg-slate-950,
-[data-theme="light"] .min-h-screen.bg-slate-950,
-html.light .bg-slate-950,
-[data-theme="light"] .bg-slate-950 {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-}
-
-html.light div.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]):not(button *):not(a *),
-[data-theme="light"] div.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]):not(button *):not(a *),
-html.light span.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]):not(button *):not(a *),
-[data-theme="light"] span.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]):not(button *):not(a *),
-html.light td.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]),
-[data-theme="light"] td.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]),
-html.light th.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]),
-[data-theme="light"] th.text-white:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-purple"]):not([class*="bg-gradient"]) {
-  color: #0f172a !important;
-}
-
-/* Light Mode Card Surfaces */
-html.light .bg-slate-900,
-[data-theme="light"] .bg-slate-900,
-html.light .bg-slate-900\/95,
-[data-theme="light"] .bg-slate-900\/95,
-html.light .bg-slate-900\/90,
-[data-theme="light"] .bg-slate-900\/90,
-html.light .bg-slate-900\/80,
-[data-theme="light"] .bg-slate-900\/80,
-html.light .bg-slate-900\/60,
-[data-theme="light"] .bg-slate-900\/60 {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-/* Light Mode Nested Row / Item Backgrounds */
-html.light .bg-slate-950\/80,
-[data-theme="light"] .bg-slate-950\/80,
-html.light .bg-slate-950\/70,
-[data-theme="light"] .bg-slate-950\/70,
-html.light .bg-slate-950\/60,
-[data-theme="light"] .bg-slate-950\/60,
-html.light .bg-slate-950\/50,
-[data-theme="light"] .bg-slate-950\/50,
-html.light .bg-slate-800,
-[data-theme="light"] .bg-slate-800,
-html.light .bg-slate-800\/60,
-[data-theme="light"] .bg-slate-800\/60,
-html.light .bg-slate-800\/80,
-[data-theme="light"] .bg-slate-800\/80 {
-  background-color: #f8fafc !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-/* Borders in Light Mode */
-html.light .border-slate-800,
-[data-theme="light"] .border-slate-800,
-html.light .border-slate-800\/80,
-[data-theme="light"] .border-slate-800\/80,
-html.light .border-slate-800\/60,
-[data-theme="light"] .border-slate-800\/60,
-html.light .border-slate-700,
-[data-theme="light"] .border-slate-700 {
-  border-color: #e2e8f0 !important;
-}
-
-/* Text Colors in Light Mode */
-html.light .text-slate-100,
-[data-theme="light"] .text-slate-100,
-html.light .text-slate-200,
-[data-theme="light"] .text-slate-200 {
-  color: #0f172a !important;
-}
-
-html.light .text-slate-300,
-[data-theme="light"] .text-slate-300 {
-  color: #1e293b !important;
-}
-
-html.light .text-slate-400,
-[data-theme="light"] .text-slate-400 {
-  color: #475569 !important;
-}
-
-html.light .text-slate-500,
-[data-theme="light"] .text-slate-500 {
-  color: #64748b !important;
-}
-
-/* Headers and text in Light Mode - avoid overriding colored buttons */
-html.light h1.text-white,
-[data-theme="light"] h1.text-white,
-html.light h2.text-white,
-[data-theme="light"] h2.text-white,
-html.light h3.text-white,
-[data-theme="light"] h3.text-white,
-html.light h4.text-white,
-[data-theme="light"] h4.text-white,
-html.light h5.text-white,
-[data-theme="light"] h5.text-white,
-html.light p.text-white,
-[data-theme="light"] p.text-white {
-  color: #0f172a !important;
-}
-
-html.light button.text-white,
-[data-theme="light"] button.text-white,
-html.light a.text-white,
-[data-theme="light"] a.text-white {
-  color: #ffffff !important;
-}
-
-/* Form Controls in Light Mode */
-html.light input:not([type="checkbox"]):not([type="radio"]),
-html.light select,
-html.light textarea,
-[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
-[data-theme="light"] select,
-[data-theme="light"] textarea {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
-}
-
-html.light input::placeholder,
-[data-theme="light"] input::placeholder {
-  color: #94a3b8 !important;
-}
-
-/* Table styling in Light Mode */
-html.light thead.bg-slate-950,
-[data-theme="light"] thead.bg-slate-950,
-html.light thead.bg-slate-900,
-[data-theme="light"] thead.bg-slate-900 {
-  background-color: #f1f5f9 !important;
-  color: #475569 !important;
-  border-bottom-color: #cbd5e1 !important;
-}
-
-html.light tr.hover\:bg-slate-800\/40:hover,
-[data-theme="light"] tr.hover\:bg-slate-800\/40:hover {
-  background-color: #f8fafc !important;
-}
-
-

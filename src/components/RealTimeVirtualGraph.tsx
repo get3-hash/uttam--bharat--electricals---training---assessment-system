@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { CheckCircle2, XCircle, Star, Sparkles } from "lucide-react";
 
 export interface VirtualGraphDataPoint {
   label: string;
@@ -14,11 +13,11 @@ export interface VirtualGraphDataPoint {
 interface RealTimeVirtualGraphProps {
   type: "feedback" | "passRate";
   data: VirtualGraphDataPoint[];
-  currentAverage?: string | number; // Total overall average
-  totalCount?: number;             // Total submissions / attempts
-  totalPassed?: number;            // Total passed attempts across all
-  totalFailed?: number;            // Total failed attempts across all
-  maxRecent?: number;              // Number of recent people to show (default 4)
+  currentAverage?: string | number;
+  totalCount?: number;
+  totalPassed?: number;
+  totalFailed?: number;
+  maxRecent?: number;
   className?: string;
   height?: number;
 }
@@ -65,48 +64,48 @@ export const RealTimeVirtualGraph: React.FC<RealTimeVirtualGraphProps> = ({
   return (
     <div className={`space-y-2 select-none ${className}`}>
       {/* Mini Header: Recent 4 indicator */}
-      <div className="flex items-center justify-between text-[11px] font-extrabold text-slate-700 dark:text-slate-300">
+      <div className="flex items-center justify-between text-[11px] font-bold text-[#403F3E]">
         <span className="flex items-center gap-1.5 uppercase tracking-wider">
-          <span className={`w-2 h-2 rounded-full ${isFeedback ? "bg-amber-500" : "bg-blue-500"} animate-pulse`} />
+          <span className="w-2 h-2 rounded-full bg-[#008DD2]" />
           {isFeedback ? "4 Recent Feedbacks" : "4 Recent Candidates"}
         </span>
-        <span className={`text-[10px] font-bold ${isFeedback ? "text-amber-600 dark:text-amber-400" : "text-blue-600 dark:text-blue-400"}`}>
+        <span className="text-[10px] font-bold text-[#008DD2]">
           {isFeedback ? `${currentAverage || "4.8"}★ Avg` : `${allPassed}P / ${allFailed}F`}
         </span>
       </div>
 
-      {/* Compact 1-line progress ratio meter */}
+      {/* Progress ratio meter */}
       {!isFeedback ? (
-        <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex border border-slate-300/50 dark:border-slate-700/50">
+        <div className="w-full h-1.5 bg-[#EAEAEA] rounded-full overflow-hidden flex border border-[#D5D4D4]">
           <div
-            className="bg-emerald-500 h-full transition-all duration-300"
+            className="bg-[#008DD2] h-full transition-all duration-300"
             style={{ width: `${overallPassRatio}%` }}
             title={`Pass Ratio: ${overallPassRatio}%`}
           />
           <div
-            className="bg-rose-500 h-full transition-all duration-300"
+            className="bg-[#757573] h-full transition-all duration-300"
             style={{ width: `${100 - overallPassRatio}%` }}
             title={`Needs Retest: ${100 - overallPassRatio}%`}
           />
         </div>
       ) : (
-        <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-300/50 dark:border-slate-700/50">
+        <div className="w-full h-1.5 bg-[#EAEAEA] rounded-full overflow-hidden border border-[#D5D4D4]">
           <div
-            className="bg-gradient-to-r from-amber-400 to-emerald-500 h-full rounded-full transition-all duration-300"
+            className="bg-[#008DD2] h-full rounded-full transition-all duration-300"
             style={{ width: `${Math.min(100, (Number(currentAverage || 4.8) / 5) * 100)}%` }}
           />
         </div>
       )}
 
       {/* Compact Bar Chart Canvas */}
-      <div className="relative bg-slate-50/80 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 shadow-2xs">
+      <div className="relative bg-[#FFFFFF] border border-[#D5D4D4] rounded-lg p-2 shadow-2xs">
         {/* Pass rate benchmark 60% line */}
         {!isFeedback && (
           <div
-            className="absolute left-2 right-2 border-b border-dashed border-blue-400/50 pointer-events-none z-10 flex items-center justify-end"
+            className="absolute left-2 right-2 border-b border-dashed border-[#59B5E2] pointer-events-none z-10 flex items-center justify-end"
             style={{ bottom: "34px" }}
           >
-            <span className="text-[8px] font-bold text-blue-600 dark:text-blue-400 bg-white/95 dark:bg-slate-900/95 px-1 py-0.2 rounded border border-blue-200/80 dark:border-blue-800/80 -translate-y-1.5 shadow-2xs">
+            <span className="text-[8px] font-bold text-[#006393] bg-[#E6F4FA] px-1 py-0.2 rounded border border-[#59B5E2] -translate-y-1.5">
               60%
             </span>
           </div>
@@ -128,16 +127,7 @@ export const RealTimeVirtualGraph: React.FC<RealTimeVirtualGraphProps> = ({
               isPassed = pt.status === "passed" || pt.value >= 60;
             }
 
-            const barGradient = isFeedback
-              ? pt.value >= 4.5
-                ? "bg-gradient-to-t from-emerald-500 to-teal-400"
-                : pt.value >= 3.5
-                ? "bg-gradient-to-t from-amber-500 to-yellow-400"
-                : "bg-gradient-to-t from-rose-500 to-orange-400"
-              : isPassed
-              ? "bg-gradient-to-t from-emerald-500 to-teal-400"
-              : "bg-gradient-to-t from-rose-500 to-pink-500";
-
+            const barColor = isPassed ? "bg-[#008DD2]" : "bg-[#757573]";
             const displayName = pt.fullName ? pt.fullName.split(" ")[0] : pt.label;
 
             return (
@@ -149,22 +139,18 @@ export const RealTimeVirtualGraph: React.FC<RealTimeVirtualGraphProps> = ({
               >
                 {/* Score Number Above Bar */}
                 <span
-                  className={`text-[9.5px] font-extrabold transition-all leading-none mb-1 truncate ${
-                    isHovered
-                      ? "scale-105 text-slate-900 dark:text-white"
-                      : isPassed
-                      ? "text-emerald-700 dark:text-emerald-400"
-                      : "text-rose-600 dark:text-rose-400"
+                  className={`text-[9.5px] font-bold transition-all leading-none mb-1 truncate ${
+                    isPassed ? "text-[#008DD2]" : "text-[#757573]"
                   }`}
                 >
                   {isFeedback ? `${pt.value}★` : `${pt.value}%`}
                 </span>
 
                 {/* Vertical Bar track */}
-                <div className="w-full max-w-[26px] h-9 bg-slate-200/80 dark:bg-slate-800/90 rounded-t-md flex items-end p-0.5 relative overflow-hidden shadow-inner">
+                <div className="w-full max-w-[26px] h-9 bg-[#EAEAEA] rounded-t-md flex items-end p-0.5 relative overflow-hidden">
                   <div
-                    className={`w-full rounded-t-sm transition-all duration-300 ${barGradient} ${
-                      isHovered ? "brightness-110 ring-1 ring-blue-500" : ""
+                    className={`w-full rounded-t-sm transition-all duration-300 ${barColor} ${
+                      isHovered ? "brightness-110 ring-1 ring-[#0078B2]" : ""
                     }`}
                     style={{ height: `${pctHeight}%` }}
                   />
@@ -172,10 +158,8 @@ export const RealTimeVirtualGraph: React.FC<RealTimeVirtualGraphProps> = ({
 
                 {/* Candidate Name Below Bar */}
                 <span
-                  className={`text-[9.5px] font-bold truncate max-w-[56px] text-center block pt-1 leading-tight transition-colors ${
-                    isHovered
-                      ? "text-blue-600 dark:text-blue-400 font-extrabold"
-                      : "text-slate-700 dark:text-slate-300"
+                  className={`text-[9.5px] font-semibold truncate max-w-[56px] text-center block pt-1 leading-tight transition-colors ${
+                    isHovered ? "text-[#008DD2] font-bold" : "text-[#403F3E]"
                   }`}
                   title={`${pt.fullName || pt.label} (${pt.department || "General"})`}
                 >
@@ -188,21 +172,20 @@ export const RealTimeVirtualGraph: React.FC<RealTimeVirtualGraphProps> = ({
 
         {/* Floating Tooltip during Hover */}
         {activeItem && (
-          <div className="absolute inset-x-2 bottom-1.5 p-1.5 bg-slate-900/95 text-white dark:bg-white/95 dark:text-slate-900 text-[10px] rounded-lg shadow-lg border border-slate-700 dark:border-slate-300 flex items-center justify-between gap-1 z-20 pointer-events-none">
-            <span className="truncate max-w-[90px] font-bold">
+          <div className="absolute inset-x-2 bottom-1.5 p-1.5 bg-[#2B2A28] text-[#FFFFFF] text-[10px] rounded-md shadow-md border border-[#403F3E] flex items-center justify-between gap-1 z-20 pointer-events-none">
+            <span className="truncate max-w-[90px] font-semibold">
               {activeItem.fullName || activeItem.label}
             </span>
-            <span className="font-extrabold shrink-0">
+            <span className="font-bold shrink-0 text-[#E6F4FA]">
               {isFeedback ? `${activeItem.value}★` : `${activeItem.value}% (${activeItem.value >= 60 ? "PASS" : "FAIL"})`}
             </span>
           </div>
         )}
       </div>
 
-      {/* Sublabel matching Card 1 and Card 2's coverage sublabel */}
-      <div className="flex items-center justify-between text-[9.5px] text-slate-500 dark:text-slate-400 pt-0.5">
+      <div className="flex items-center justify-between text-[9.5px] text-[#757573] pt-0.5">
         <span>{isFeedback ? "Satisfaction Rate" : "Passing Benchmark"}</span>
-        <span className="font-bold text-slate-700 dark:text-slate-300">
+        <span className="font-bold text-[#403F3E]">
           {isFeedback ? `${Math.round((Number(currentAverage || 4.8) / 5) * 100)}% Positive` : "60% Threshold"}
         </span>
       </div>

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { collection, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import {
-  generateTrainingQRCode,
   downloadQRCodePNG,
   printTrainingQRStandee
 } from "../lib/qrGenerator";
@@ -17,7 +16,6 @@ import {
   CheckCircle,
   AlertTriangle,
   Trash2,
-  ExternalLink,
   Edit,
   Download,
   Copy,
@@ -126,132 +124,132 @@ export const TrainingsList: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8 space-y-6 transition-colors">
+    <div className="min-h-screen bg-[#EAEAEA] text-[#403F3E] p-4 sm:p-6 lg:p-8 space-y-6 transition-colors">
       {/* Alert Notifications */}
       {actionSuccess && (
-        <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 p-4 rounded-2xl text-xs font-semibold flex items-center justify-between">
+        <div className="bg-[#E6F4FA] border border-[#59B5E2] text-[#006393] p-4 rounded-xl text-xs font-semibold flex items-center justify-between">
           <span>{actionSuccess}</span>
-          <button onClick={() => setActionSuccess(null)} className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-white font-bold">✕</button>
+          <button onClick={() => setActionSuccess(null)} className="text-[#006393] hover:text-[#0078B2] font-bold cursor-pointer">✕</button>
         </div>
       )}
       {actionError && (
-        <div className="bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 p-4 rounded-2xl text-xs font-semibold flex items-center justify-between">
+        <div className="bg-[#EAEAEA] border border-[#D5D4D4] text-[#2B2A28] p-4 rounded-xl text-xs font-semibold flex items-center justify-between">
           <span>{actionError}</span>
-          <button onClick={() => setActionError(null)} className="text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-white font-bold">✕</button>
+          <button onClick={() => setActionError(null)} className="text-[#757573] hover:text-[#2B2A28] font-bold cursor-pointer">✕</button>
         </div>
       )}
 
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FFFFFF] p-6 rounded-xl border border-[#D5D4D4] shadow-xs">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" /> Training Management
+          <h1 className="text-2xl font-bold text-[#2B2A28] flex items-center gap-2">
+            <BookOpen className="w-6 h-6 text-[#008DD2]" /> Training Management
           </h1>
-          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-            Manage training modules, QR code registrations, and AI-extracted question sets
+          <p className="text-xs text-[#757573] mt-1">
+            Manage training modules, QR code registrations, and assessment question sets
           </p>
         </div>
 
         <Link
           to="/admin/create-training"
-          className="px-4 py-2.5 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center gap-2 shadow-lg transition-all"
+          className="px-4 py-2.5 rounded-lg font-bold text-xs bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
         >
-          <PlusCircle className="w-4 h-4" /> Create New Training
+          <PlusCircle className="w-4 h-4 text-[#FFFFFF]" /> Create New Training
         </Link>
       </div>
 
       {loading ? (
-        <div className="p-12 text-center text-slate-500 text-sm animate-pulse">
+        <div className="p-12 text-center text-[#757573] text-sm animate-pulse">
           Loading training sessions...
         </div>
       ) : trainings.length === 0 ? (
-        <GlassCard dark className="p-12 text-center">
-          <BookOpen className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-white">No Training Programs Found</h3>
-          <p className="text-xs text-slate-400 mt-1 mb-6 max-w-md mx-auto">
-            Get started by creating a new training program for Uttam (Bharat) Electricals Pvt. Ltd. You can upload a Question PDF for automatic AI parsing.
+        <GlassCard className="p-12 text-center bg-[#FFFFFF] border border-[#D5D4D4]">
+          <BookOpen className="w-12 h-12 text-[#757573] mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-[#2B2A28]">No Training Programs Found</h3>
+          <p className="text-xs text-[#757573] mt-1 mb-6 max-w-md mx-auto">
+            Get started by creating a new training program for Uttam (Bharat) Electricals Pvt. Ltd.
           </p>
           <Link
             to="/admin/create-training"
-            className="px-5 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-xl inline-flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#008DD2] hover:bg-[#0078B2] text-[#FFFFFF] font-bold text-xs rounded-lg inline-flex items-center gap-2"
           >
-            <PlusCircle className="w-4 h-4" /> Create First Training
+            <PlusCircle className="w-4 h-4 text-[#FFFFFF]" /> Create First Training
           </Link>
         </GlassCard>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {trainings.map((t) => (
-            <GlassCard key={t.id} className="p-6 flex flex-col justify-between space-y-4 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
+            <GlassCard key={t.id} className="p-6 flex flex-col justify-between space-y-4 border border-[#D5D4D4] bg-[#FFFFFF] shadow-xs hover:bg-[#E6F4FA] transition-all">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30">
+                  <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-[#E6F4FA] text-[#006393] border border-[#59B5E2]">
                     {t.department}
                   </span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">{t.trainingDate}</span>
+                  <span className="text-xs text-[#757573] font-semibold">{t.trainingDate}</span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white line-clamp-2">{t.title}</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
-                  Trainer: <strong className="text-slate-900 dark:text-white font-bold">{t.trainerName}</strong>
+                <h3 className="text-lg font-bold text-[#2B2A28] line-clamp-2">{t.title}</h3>
+                <p className="text-xs text-[#403F3E] mt-1">
+                  Trainer: <strong className="text-[#008DD2] font-bold">{t.trainerName}</strong>
                 </p>
 
-                <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-[#757573] mt-2 line-clamp-2 leading-relaxed">
                   {t.description || "No description provided."}
                 </p>
 
                 {/* Question & Answer Key Status */}
-                <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
-                  <span className="text-slate-700 dark:text-slate-300 font-medium flex items-center gap-1.5">
+                <div className="mt-4 pt-3 border-t border-[#EAEAEA] flex items-center justify-between text-xs">
+                  <span className="text-[#403F3E] font-medium flex items-center gap-1.5">
                     <span>Questions:</span>
-                    <strong className="text-slate-900 dark:text-white font-black text-sm">{t.questions?.length || 0}</strong>
+                    <strong className="text-[#2B2A28] font-bold text-sm">{t.questions?.length || 0}</strong>
                   </span>
 
                   {t.isAnswerKeyComplete ? (
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 font-bold flex items-center gap-1 text-[11px]">
-                      <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Answer Key Set
+                    <span className="px-2 py-0.5 rounded-md bg-[#E6F4FA] text-[#006393] border border-[#59B5E2] font-bold flex items-center gap-1 text-[11px]">
+                      <CheckCircle className="w-3.5 h-3.5 text-[#008DD2]" /> Answer Key Set
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30 font-bold flex items-center gap-1 text-[11px]">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> Review Needed
+                    <span className="px-2 py-0.5 rounded-md bg-[#EAEAEA] text-[#403F3E] border border-[#D5D4D4] font-semibold flex items-center gap-1 text-[11px]">
+                      <AlertTriangle className="w-3.5 h-3.5 text-[#757573]" /> Review Needed
                     </span>
                   )}
                 </div>
               </div>
 
               {/* Card Action Controls */}
-              <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 space-y-2.5">
+              <div className="pt-3 border-t border-[#EAEAEA] space-y-2.5">
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => handleOpenQrModal(t)}
-                    className="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-amber-300 border border-slate-700 dark:border-slate-600 text-xs font-black flex items-center justify-center gap-1.5 transition-all shadow-xs hover:shadow"
+                    className="py-2.5 px-3 rounded-lg bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] border border-[#59B5E2] text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                     title="View QR Code, Print Standee Flyer & Download Assets"
                   >
-                    <QrCode className="w-4 h-4 text-amber-400" /> QR & Standee
+                    <QrCode className="w-4 h-4 text-[#008DD2]" /> QR & Standee
                   </button>
 
                   <Link
                     to={`/admin/review-questions/${t.id}`}
-                    className="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs hover:shadow active:scale-95"
+                    className="py-2.5 px-3 rounded-lg bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs"
                     title={`Review ${t.questions?.length || 0} Questions and Answer Key`}
                   >
-                    <Edit className="w-4 h-4 text-white" /> Questions ({t.questions?.length || 0})
+                    <Edit className="w-4 h-4 text-[#FFFFFF]" /> Questions ({t.questions?.length || 0})
                   </Link>
                 </div>
 
                 {/* Quick Shortcuts Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-slate-100 dark:border-slate-800/60">
+                <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-[#EAEAEA]">
                   <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       disabled={cardActionLoading?.id === t.id}
                       onClick={(e) => handleQuickDownloadQR(e, t)}
-                      className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10.5px] font-bold flex items-center gap-1 transition-colors border border-slate-200 dark:border-slate-700/60"
+                      className="px-2 py-1 rounded-md bg-[#EAEAEA] hover:bg-[#CCE8F6] text-[#403F3E] text-[10.5px] font-semibold flex items-center gap-1 transition-colors border border-[#D5D4D4] cursor-pointer"
                       title="Direct Download High-Res QR Code (PNG)"
                     >
                       {cardActionLoading?.id === t.id && cardActionLoading?.action === "download" ? (
-                        <Loader2 className="w-3 h-3 animate-spin text-blue-500" />
+                        <Loader2 className="w-3 h-3 animate-spin text-[#008DD2]" />
                       ) : (
-                        <Download className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+                        <Download className="w-3 h-3 text-[#008DD2]" />
                       )}
                       <span>Download QR</span>
                     </button>
@@ -260,13 +258,13 @@ export const TrainingsList: React.FC = () => {
                       type="button"
                       disabled={cardActionLoading?.id === t.id}
                       onClick={(e) => handleQuickPrintStandee(e, t)}
-                      className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10.5px] font-bold flex items-center gap-1 transition-colors border border-slate-200 dark:border-slate-700/60"
+                      className="px-2 py-1 rounded-md bg-[#EAEAEA] hover:bg-[#CCE8F6] text-[#403F3E] text-[10.5px] font-semibold flex items-center gap-1 transition-colors border border-[#D5D4D4] cursor-pointer"
                       title="Quick Print A4 Training Standee Flyer"
                     >
                       {cardActionLoading?.id === t.id && cardActionLoading?.action === "print" ? (
-                        <Loader2 className="w-3 h-3 animate-spin text-amber-500" />
+                        <Loader2 className="w-3 h-3 animate-spin text-[#008DD2]" />
                       ) : (
-                        <Printer className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                        <Printer className="w-3 h-3 text-[#008DD2]" />
                       )}
                       <span>Print Standee</span>
                     </button>
@@ -275,24 +273,24 @@ export const TrainingsList: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleCopyLink(t.id)}
-                      className="text-[11px] text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white flex items-center gap-1 font-medium transition-colors"
+                      className="text-[11px] text-[#008DD2] hover:text-[#0078B2] flex items-center gap-1 font-semibold transition-colors cursor-pointer"
                       title="Copy registration link for WhatsApp or email"
                     >
                       {copiedId === t.id ? (
-                        <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-bold">
-                          <Check className="w-3 h-3" /> Copied!
-                        </span>
+                        <>
+                          <Check className="w-3 h-3 text-[#008DD2]" /> Copied
+                        </>
                       ) : (
-                        <span className="flex items-center gap-1">
+                        <>
                           <Copy className="w-3 h-3" /> Link
-                        </span>
+                        </>
                       )}
                     </button>
 
                     <button
                       onClick={() => setDeleteTarget({ id: t.id, title: t.title })}
-                      className="text-[11px] text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 flex items-center gap-1 p-1 hover:bg-rose-500/10 rounded transition-all"
-                      title="Delete training program"
+                      className="p-1 rounded text-[#757573] hover:text-[#2B2A28] transition-colors cursor-pointer"
+                      title="Delete Training Session"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -304,29 +302,22 @@ export const TrainingsList: React.FC = () => {
         </div>
       )}
 
-      {/* Full-featured QR Code & Standee Flyer Modal */}
-      {selectedQr && (
-        <TrainingQRModal
-          training={selectedQr}
-          onClose={() => setSelectedQr(null)}
-        />
-      )}
-
-      {/* Session Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative space-y-4">
-            <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center mx-auto">
-              <Trash2 className="w-6 h-6" />
+        <div className="fixed inset-0 bg-[#2B2A28]/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl max-w-md w-full p-6 text-center shadow-lg space-y-4">
+            <div className="w-12 h-12 rounded-full bg-[#EAEAEA] border border-[#D5D4D4] text-[#403F3E] flex items-center justify-center mx-auto">
+              <Trash2 className="w-6 h-6 text-[#2B2A28]" />
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-white">Delete Training Program?</h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Are you sure you want to permanently delete <strong className="text-white">"{deleteTarget.title}"</strong>?
+              <h3 className="text-lg font-bold text-[#2B2A28]">Delete Training Session?</h3>
+              <p className="text-xs text-[#757573] mt-1">
+                Are you sure you want to delete <strong className="text-[#2B2A28]">"{deleteTarget.title}"</strong>?
               </p>
-              <p className="text-[11px] text-rose-400 mt-2 bg-rose-500/10 p-2 rounded-lg border border-rose-500/20">
-                Warning: This action cannot be undone and will remove the session from the database.
+              <p className="text-[11px] text-[#757573] mt-2 bg-[#EAEAEA] p-2.5 rounded-lg border border-[#D5D4D4]">
+                • Associated candidate registrations will remain in Firestore.<br />
+                • The QR code registration link will become invalid.
               </p>
             </div>
 
@@ -335,7 +326,7 @@ export const TrainingsList: React.FC = () => {
                 type="button"
                 disabled={deleting}
                 onClick={() => setDeleteTarget(null)}
-                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition-all"
+                className="flex-1 py-2.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] text-[#403F3E] font-semibold text-xs rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
@@ -343,15 +334,15 @@ export const TrainingsList: React.FC = () => {
                 type="button"
                 disabled={deleting}
                 onClick={confirmDelete}
-                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-1.5 transition-all disabled:opacity-50"
+                className="flex-1 py-2.5 bg-[#403F3E] hover:bg-[#2B2A28] text-[#FFFFFF] font-bold text-xs rounded-lg shadow-xs flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 {deleting ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" /> Deleting...
+                    <Loader2 className="w-4 h-4 animate-spin text-[#FFFFFF]" /> Deleting...
                   </>
                 ) : (
                   <>
-                    <Trash2 className="w-4 h-4" /> Yes, Delete Session
+                    <Trash2 className="w-4 h-4 text-[#FFFFFF]" /> Yes, Delete
                   </>
                 )}
               </button>
@@ -359,6 +350,12 @@ export const TrainingsList: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* QR Code Standee & Flyer Modal */}
+      <TrainingQRModal
+        training={selectedQr}
+        onClose={() => setSelectedQr(null)}
+      />
     </div>
   );
 };

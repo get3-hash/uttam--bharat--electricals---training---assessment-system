@@ -45,24 +45,24 @@ export class ErrorBoundary extends React.Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xl text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 mx-auto flex items-center justify-center">
-              <AlertTriangle className="w-6 h-6" />
+        <div className="min-h-screen bg-[#EAEAEA] text-[#2B2A28] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-2xl p-6 shadow-md text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#E6F4FA] text-[#008DD2] border border-[#59B5E2] mx-auto flex items-center justify-center">
+              <AlertTriangle className="w-6 h-6 text-[#008DD2]" />
             </div>
 
             <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              <h2 className="text-lg font-bold text-[#2B2A28]">
                 {this.props.fallbackTitle || "Something went wrong"}
               </h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+              <p className="text-xs text-[#757573] mt-1">
                 {this.props.fallbackMessage ||
                   "An unexpected display issue occurred. You can reload this view or return home."}
               </p>
             </div>
 
             {this.state.error && (
-              <div className="p-3 bg-slate-100 dark:bg-slate-950 rounded-xl text-left font-mono text-[11px] text-slate-700 dark:text-slate-400 overflow-x-auto max-h-32 border border-slate-200 dark:border-slate-800">
+              <div className="p-3 bg-[#EAEAEA] rounded-xl text-left font-mono text-[11px] text-[#403F3E] overflow-x-auto max-h-32 border border-[#D5D4D4]">
                 {this.state.error.toString()}
               </div>
             )}
@@ -71,7 +71,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
               <button
                 type="button"
                 onClick={this.handleReset}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 shadow-md shadow-blue-600/20 transition-all"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Reload Page
@@ -79,7 +79,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
               <button
                 type="button"
                 onClick={this.handleNavigateHome}
-                className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] border border-[#59B5E2] transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <Home className="w-3.5 h-3.5" />
                 Return Home

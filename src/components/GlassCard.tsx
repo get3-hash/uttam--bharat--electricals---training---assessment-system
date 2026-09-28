@@ -8,16 +8,9 @@ interface Props {
 }
 
 export const GlassCard: React.FC<Props> = ({ children, className = "" }) => {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
-
   return (
     <div
-      className={`rounded-2xl transition-colors duration-200 ${
-        isDark
-          ? "bg-slate-900/95 backdrop-blur-md border border-slate-800 text-slate-100 shadow-xl shadow-slate-950/40"
-          : "bg-white backdrop-blur-md border border-slate-200 text-slate-900 shadow-sm hover:shadow-md"
-      } ${className}`}
+      className={`rounded-2xl transition-colors duration-200 bg-white dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white shadow-sm dark:shadow-xl dark:shadow-slate-950/40 hover:shadow-md ${className}`}
     >
       {children}
     </div>

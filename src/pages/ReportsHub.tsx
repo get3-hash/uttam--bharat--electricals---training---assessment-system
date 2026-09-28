@@ -705,9 +705,9 @@ export const ReportsHub: React.FC = () => {
             <div className="flex flex-wrap border-t border-slate-200 dark:border-slate-800 pt-3 gap-2">
               <button
                 onClick={() => setActiveTab("registrations")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeTab === "registrations"
-                    ? "bg-blue-600 text-white shadow-sm"
+                    ? "bg-active-bg text-active-text shadow-sm ring-2 ring-blue-400/50"
                     : "bg-white hover:bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700/60 shadow-2xs"
                 }`}
               >
@@ -715,9 +715,9 @@ export const ReportsHub: React.FC = () => {
               </button>
               <button
                 onClick={() => setActiveTab("quiz")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeTab === "quiz"
-                    ? "bg-amber-600 text-white shadow-sm"
+                    ? "bg-amber-600 text-white shadow-sm ring-2 ring-amber-400/50"
                     : "bg-white hover:bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700/60 shadow-2xs"
                 }`}
               >
@@ -725,9 +725,9 @@ export const ReportsHub: React.FC = () => {
               </button>
               <button
                 onClick={() => setActiveTab("feedback")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeTab === "feedback"
-                    ? "bg-purple-600 text-white shadow-sm"
+                    ? "bg-purple-600 text-white shadow-sm ring-2 ring-purple-400/50"
                     : "bg-white hover:bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700/60 shadow-2xs"
                 }`}
               >

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { doc, getDoc, collection, addDoc, getDocs, query, where, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { EmployeeRegistration, Training, FeedbackRatings } from "../types";
@@ -14,16 +14,36 @@ import {
   ArrowRight,
   Loader2,
   CheckCircle2,
-  HelpCircle
+  HelpCircle,
+  RotateCcw
 } from "lucide-react";
 
 export const FeedbackForm: React.FC = () => {
   const { registrationId } = useParams<{ registrationId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const stateData = location.state as { registration?: EmployeeRegistration; training?: Training } | null;
 
-  const [registration, setRegistration] = useState<EmployeeRegistration | null>(null);
-  const [training, setTraining] = useState<Training | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Initialize from router state or safe session storage for instant, resilient display
+  const [registration, setRegistration] = useState<EmployeeRegistration | null>(() => {
+    if (stateData?.registration) return stateData.registration;
+    try {
+      const stored = safeSessionStorage.getItem("active_registration_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [training, setTraining] = useState<Training | null>(() => {
+    if (stateData?.training) return stateData.training;
+    try {
+      const stored = safeSessionStorage.getItem("active_training_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [loading, setLoading] = useState<boolean>(!registration || !training);
   const [submitting, setSubmitting] = useState(false);
 
   // Exact 5 Feedback Ratings (1 to 5 Stars) - Section A
@@ -35,25 +55,38 @@ export const FeedbackForm: React.FC = () => {
     trainerAnsweringQuestions: 5
   });
 
+  const effectiveRegId = registrationId && registrationId !== "undefined"
+    ? registrationId
+    : (registration?.id || safeSessionStorage.getItem("active_registration_id") || "");
+
   useEffect(() => {
     // Keep background ambient focus sound playing
     backgroundMusic.start();
-    if (registrationId) {
-      fetchData();
+    if (effectiveRegId) {
+      fetchData(effectiveRegId);
+    } else if (!registration || !training) {
+      setLoading(false);
     }
-  }, [registrationId]);
+  }, [effectiveRegId]);
 
-  const fetchData = async () => {
+  const fetchData = async (targetId: string) => {
     try {
-      setLoading(true);
-      const regSnap = await getDoc(doc(db, "registrations", registrationId!));
+      if (!registration || !training) {
+        setLoading(true);
+      }
+      const regSnap = await getDoc(doc(db, "registrations", targetId));
       if (regSnap.exists()) {
         const regData = { id: regSnap.id, ...(regSnap.data() as EmployeeRegistration) };
         setRegistration(regData);
+        safeSessionStorage.setItem("active_registration_id", regData.id);
+        safeSessionStorage.setItem("active_registration_data", JSON.stringify(regData));
 
         const trSnap = await getDoc(doc(db, "trainings", regData.trainingId));
         if (trSnap.exists()) {
-          setTraining({ id: trSnap.id, ...(trSnap.data() as Training) });
+          const trData = { id: trSnap.id, ...(trSnap.data() as Training) };
+          setTraining(trData);
+          safeSessionStorage.setItem("active_training_id", trData.id);
+          safeSessionStorage.setItem("active_training_data", JSON.stringify(trData));
         }
 
         // Prepopulate if feedback already exists
@@ -114,10 +147,66 @@ export const FeedbackForm: React.FC = () => {
         feedbackDocId = fbDoc.id;
       }
 
+      const targetRegId = registration?.id || effectiveRegId || safeSessionStorage.getItem("active_registration_id") || "";
       safeSessionStorage.setItem("active_feedback_id", feedbackDocId);
+      safeSessionStorage.setItem("active_registration_id", targetRegId);
+      safeSessionStorage.setItem("active_registration_data", JSON.stringify(registration));
+      safeSessionStorage.setItem("active_training_data", JSON.stringify(training));
 
-      // Route to Page 2: Section B (Action Plan & Learnings)
-      navigate(`/employee/section-b/${registration.id}`);
+      // Route to Page 2: Section B (Action Plan & Learnings) with state explicitly preserved
+      navigate(`/employee/section-b/${targetRegId}`, {
+        state: { registration, training }
+      });
+    } catch (err: any) {
+      console.error("Error saving Section A feedback:", err);
+      alert("Failed to save feedback: " + err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleProceedDirectlyToQuiz = async () => {
+    soundEffects.playNavigate();
+    if (!registration || !training) return;
+
+    setSubmitting(true);
+    try {
+      const fbQuery = query(
+        collection(db, "feedbacks"),
+        where("registrationId", "==", registration.id)
+      );
+      const fbSnap = await getDocs(fbQuery);
+
+      let feedbackDocId = "";
+      if (!fbSnap.empty) {
+        feedbackDocId = fbSnap.docs[0].id;
+        await updateDoc(doc(db, "feedbacks", feedbackDocId), {
+          ratings,
+          updatedAt: new Date().toISOString()
+        });
+      } else {
+        const fbDoc = await addDoc(collection(db, "feedbacks"), {
+          registrationId: registration.id,
+          trainingId: training.id,
+          employeeCode: registration.employeeCode,
+          employeeName: registration.employeeName,
+          department: registration.department,
+          ratings,
+          submittedAt: new Date().toISOString()
+        });
+        feedbackDocId = fbDoc.id;
+      }
+
+      const targetRegId = registration?.id || effectiveRegId || safeSessionStorage.getItem("active_registration_id") || "";
+      safeSessionStorage.setItem("active_feedback_id", feedbackDocId);
+      safeSessionStorage.setItem("active_registration_id", targetRegId);
+      safeSessionStorage.setItem("active_registration_data", JSON.stringify(registration));
+      safeSessionStorage.setItem("active_training_data", JSON.stringify(training));
+
+      // Route directly to Section C (Assessment Quiz) with state explicitly preserved
+      navigate(`/employee/quiz/${targetRegId}`, {
+        state: { registration, training }
+      });
     } catch (err: any) {
       console.error("Error saving Section A feedback:", err);
       alert("Failed to save feedback: " + err.message);
@@ -136,15 +225,29 @@ export const FeedbackForm: React.FC = () => {
   }
 
   if (!registration || !training) {
+    const fallbackTrId = training?.id || safeSessionStorage.getItem("active_training_id");
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4">
-        <p className="text-slate-500 mb-4">Registration record not found.</p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold"
-        >
-          Go Home
-        </button>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4 text-center">
+        <p className="text-slate-600 dark:text-slate-400 mb-4 font-medium text-sm">
+          Registration session record not found. Please complete employee registration first.
+        </p>
+        <div className="flex items-center gap-3">
+          {fallbackTrId ? (
+            <button
+              onClick={() => navigate(`/employee/register/${fallbackTrId}`)}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+            >
+              Fill Registration Form
+            </button>
+          ) : (
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+            >
+              Retry Loading
+            </button>
+          )}
+        </div>
       </div>
     );
   }
@@ -276,9 +379,9 @@ export const FeedbackForm: React.FC = () => {
           </GlassCard>
 
           {/* ========================================================= */}
-          {/* SUBMIT BUTTON -> ROUTE TO SECTION B                       */}
+          {/* SUBMIT BUTTONS -> ROUTE TO SECTION B OR DIRECT TO QUIZ     */}
           {/* ========================================================= */}
-          <div className="pt-2">
+          <div className="pt-2 space-y-3">
             <button
               type="submit"
               disabled={submitting}
@@ -295,6 +398,16 @@ export const FeedbackForm: React.FC = () => {
                   <ArrowRight className="w-4 h-4 text-slate-950" />
                 </>
               )}
+            </button>
+
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={handleProceedDirectlyToQuiz}
+              className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Or Skip to Section C: Assessment Quiz Directly</span>
+              <ArrowRight className="w-3.5 h-3.5 text-blue-500" />
             </button>
           </div>
         </form>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { doc, getDoc, collection, addDoc, getDocs, query, where, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { EmployeeRegistration, Training } from "../types";
@@ -16,16 +16,37 @@ import {
   CheckCircle2,
   BookOpen,
   Calendar,
-  Sparkles
+  Sparkles,
+  AlertCircle,
+  RefreshCw
 } from "lucide-react";
 
 export const SectionBActionPlan: React.FC = () => {
   const { registrationId } = useParams<{ registrationId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const stateData = location.state as { registration?: EmployeeRegistration; training?: Training } | null;
 
-  const [registration, setRegistration] = useState<EmployeeRegistration | null>(null);
-  const [training, setTraining] = useState<Training | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Hydrate registration and training state instantly from router state or safeSessionStorage
+  const [registration, setRegistration] = useState<EmployeeRegistration | null>(() => {
+    if (stateData?.registration) return stateData.registration;
+    try {
+      const stored = safeSessionStorage.getItem("active_registration_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [training, setTraining] = useState<Training | null>(() => {
+    if (stateData?.training) return stateData.training;
+    try {
+      const stored = safeSessionStorage.getItem("active_training_data");
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    return null;
+  });
+
+  const [loading, setLoading] = useState<boolean>(!registration || !training);
   const [submitting, setSubmitting] = useState(false);
 
   // Section - B: Three Interesting Learnings & Timelines
@@ -37,25 +58,58 @@ export const SectionBActionPlan: React.FC = () => {
 
   const timelineOptions = ["In a Week", "In a Month", "In a Quarter", "In a Year"];
 
+  const effectiveRegId =
+    registrationId && registrationId !== "undefined" && registrationId !== ":registrationId"
+      ? registrationId
+      : registration?.id || safeSessionStorage.getItem("active_registration_id") || "";
+
   useEffect(() => {
     // Keep background ambient focus sound playing
     backgroundMusic.start();
-    if (registrationId) {
-      fetchData();
+    if (effectiveRegId) {
+      safeSessionStorage.setItem("active_registration_id", effectiveRegId);
+      fetchData(effectiveRegId);
+    } else if (!registration || !training) {
+      setLoading(false);
     }
-  }, [registrationId]);
+  }, [effectiveRegId]);
 
-  const fetchData = async () => {
+  const fetchData = async (targetId: string) => {
     try {
-      setLoading(true);
-      const regSnap = await getDoc(doc(db, "registrations", registrationId!));
+      if (!registration || !training) {
+        setLoading(true);
+      }
+      const regSnap = await getDoc(doc(db, "registrations", targetId));
       if (regSnap.exists()) {
         const regData = { id: regSnap.id, ...(regSnap.data() as EmployeeRegistration) };
         setRegistration(regData);
+        safeSessionStorage.setItem("active_registration_id", regData.id);
+        safeSessionStorage.setItem("active_registration_data", JSON.stringify(regData));
 
         const trSnap = await getDoc(doc(db, "trainings", regData.trainingId));
         if (trSnap.exists()) {
-          setTraining({ id: trSnap.id, ...(trSnap.data() as Training) });
+          const trData = { id: trSnap.id, ...(trSnap.data() as Training) };
+          setTraining(trData);
+          safeSessionStorage.setItem("active_training_id", trData.id);
+          safeSessionStorage.setItem("active_training_data", JSON.stringify(trData));
+        } else if (!training) {
+          const synth: Training = {
+            id: regData.trainingId || "default-training",
+            title: regData.trainingTitle || "Transformer Technical & Safety Training",
+            department: regData.department || "Technical",
+            trainerName: regData.trainerName || "Technical Lead",
+            trainingDate: regData.trainingDate || new Date().toISOString().split("T")[0],
+            description: "Technical Training Session",
+            passingPercentage: 70,
+            timeLimitMinutes: 15,
+            questions: [],
+            isAnswerKeyComplete: true,
+            createdAt: new Date().toISOString(),
+            createdBy: "System"
+          };
+          setTraining(synth);
+          safeSessionStorage.setItem("active_training_id", synth.id);
+          safeSessionStorage.setItem("active_training_data", JSON.stringify(synth));
         }
 
         // Prepopulate if feedback already has Section B
@@ -150,8 +204,15 @@ export const SectionBActionPlan: React.FC = () => {
         safeSessionStorage.setItem("active_feedback_id", fbDoc.id);
       }
 
-      // Route to Page 3: Section C (Technical Quiz Assessment)
-      navigate(`/employee/quiz/${registration.id}`);
+      const targetRegId = registration.id || effectiveRegId;
+      safeSessionStorage.setItem("active_registration_id", targetRegId);
+      safeSessionStorage.setItem("active_registration_data", JSON.stringify(registration));
+      safeSessionStorage.setItem("active_training_data", JSON.stringify(training));
+
+      // Route to Page 3: Section C (Technical Quiz Assessment) with explicit state passed
+      navigate(`/employee/quiz/${targetRegId}`, {
+        state: { registration, training }
+      });
     } catch (err: any) {
       console.error("Error saving Section B:", err);
       alert("Failed to save action plan: " + err.message);
@@ -170,15 +231,51 @@ export const SectionBActionPlan: React.FC = () => {
   }
 
   if (!registration || !training) {
+    const fallbackTrId = training?.id || safeSessionStorage.getItem("active_training_id");
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4">
-        <p className="text-slate-500 mb-4">Registration record not found.</p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold"
-        >
-          Go Home
-        </button>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center p-4 text-center">
+        <div className="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mb-3">
+          <AlertCircle className="w-6 h-6" />
+        </div>
+        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
+          Registration Record Not Found
+        </h3>
+        <p className="text-xs text-slate-600 dark:text-slate-400 mb-5 max-w-sm">
+          Your active registration session could not be verified. Please complete the initial registration or return to Section A.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {effectiveRegId && (
+            <button
+              onClick={() => {
+                soundEffects.playNavigate();
+                navigate(`/employee/feedback/${effectiveRegId}`, {
+                  state: { registration, training }
+                });
+              }}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to Section A
+            </button>
+          )}
+          {fallbackTrId ? (
+            <button
+              onClick={() => {
+                soundEffects.playNavigate();
+                navigate(`/employee/register/${fallbackTrId}`);
+              }}
+              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+            >
+              Fill Registration Form
+            </button>
+          ) : (
+            <button
+              onClick={() => effectiveRegId ? fetchData(effectiveRegId) : window.location.reload()}
+              className="px-4 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Retry Loading
+            </button>
+          )}
+        </div>
       </div>
     );
   }
@@ -290,7 +387,10 @@ export const SectionBActionPlan: React.FC = () => {
               type="button"
               onClick={() => {
                 soundEffects.playNavigate();
-                navigate(`/employee/feedback/${registration.id}`);
+                const targetRegId = registration?.id || effectiveRegId;
+                navigate(`/employee/feedback/${targetRegId}`, {
+                  state: { registration, training }
+                });
               }}
               className="w-full sm:w-auto px-5 py-3 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 transition-all cursor-pointer"
             >

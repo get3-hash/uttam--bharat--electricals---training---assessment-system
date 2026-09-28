@@ -22,20 +22,20 @@ export async function generateCertificatePdf(
   const width = doc.internal.pageSize.getWidth();
   const height = doc.internal.pageSize.getHeight();
 
-  // Outer Border & Decorative Frame - Deep Slate (#0F172A)
+  // Outer Border & Decorative Frame - Uttam Charcoal (#2B2A28 -> RGB: 43, 42, 40)
   doc.setLineWidth(1.8);
-  doc.setDrawColor(15, 23, 42);
+  doc.setDrawColor(43, 42, 40);
   doc.rect(8, 8, width - 16, height - 16);
 
-  // Inset Accent Frame - Official Uttam Electric Blue (#009FE3 -> RGB: 0, 159, 227)
+  // Inset Accent Frame - Official Uttam Blue (#008DD2 -> RGB: 0, 141, 210)
   doc.setLineWidth(0.8);
-  doc.setDrawColor(0, 159, 227);
+  doc.setDrawColor(0, 141, 210);
   doc.rect(12, 12, width - 24, height - 24);
 
   // Corner Geometric Accents (Matching transformer engineering aesthetic)
   const drawCornerAccent = (x: number, y: number, dx: number, dy: number) => {
     doc.setLineWidth(1.2);
-    doc.setDrawColor(0, 159, 227);
+    doc.setDrawColor(0, 141, 210);
     doc.line(x, y, x + dx * 7, y);
     doc.line(x, y, x, y + dy * 7);
   };
@@ -44,8 +44,8 @@ export async function generateCertificatePdf(
   drawCornerAccent(14, height - 14, 1, -1);
   drawCornerAccent(width - 14, height - 14, -1, -1);
 
-  // Subtle Top Decorative Background Tint
-  doc.setFillColor(240, 249, 255); // Ice blue tint
+  // Subtle Top Decorative Background Tint (Uttam Blue 100 tint)
+  doc.setFillColor(230, 244, 250);
   doc.rect(13, 13, width - 26, 32, "F");
 
   // Embed Official Trademark Logo (UTTAM® POWER AND DISTRIBUTION TRANSFORMERS)
@@ -73,28 +73,28 @@ export async function generateCertificatePdf(
   // ISO Certification and Facility Sub-header
   doc.setFontSize(8.5);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(71, 85, 105);
+  doc.setTextColor(117, 117, 115); // Charcoal 500
   doc.text("UTTAM (BHARAT) ELECTRICALS PVT. LTD.   •   ESTD 1983   •   ISO 9001:2015 CERTIFIED", width / 2, 40, { align: "center" });
 
-  // Main Certificate Title
-  doc.setTextColor(0, 159, 227);
+  // Main Certificate Title (Uttam Blue 500 #008DD2)
+  doc.setTextColor(0, 141, 210);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
   doc.text("CERTIFICATE OF TECHNICAL EXCELLENCE", width / 2, 51, { align: "center" });
 
   // Accent divider line under title
   doc.setLineWidth(0.6);
-  doc.setDrawColor(0, 159, 227);
+  doc.setDrawColor(0, 141, 210);
   doc.line(width / 2 - 45, 54, width / 2 + 45, 54);
 
   // Certification preamble
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(117, 117, 115);
   doc.setFontSize(11);
   doc.setFont("helvetica", "italic");
   doc.text("This is to proudly certify that", width / 2, 64, { align: "center" });
 
-  // Employee Name (Prominent & High Contrast)
-  doc.setTextColor(15, 23, 42);
+  // Employee Name (Prominent & High Contrast Charcoal 900)
+  doc.setTextColor(43, 42, 40);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(23);
   doc.text(registration.employeeName.toUpperCase(), width / 2, 77, { align: "center" });
@@ -102,7 +102,7 @@ export async function generateCertificatePdf(
   // Employee Details (Code, Department, Designation)
   doc.setFontSize(10.5);
   doc.setFont("helvetica", "normal");
-  doc.setTextColor(51, 65, 85);
+  doc.setTextColor(64, 63, 62); // Charcoal 700
   doc.text(
     `Employee Code: ${registration.employeeCode}   •   Department: ${registration.department}   •   Designation: ${registration.designation}`,
     width / 2,
@@ -113,22 +113,22 @@ export async function generateCertificatePdf(
   // Accomplishment text
   doc.setFont("helvetica", "italic");
   doc.setFontSize(11);
-  doc.setTextColor(100, 116, 139);
+  doc.setTextColor(117, 117, 115);
   doc.text("has successfully completed the technical training evaluation and practical assessment in", width / 2, 97, { align: "center" });
 
-  // Training Title Box (Electric Blue Tinted Container)
-  doc.setFillColor(240, 249, 255);
-  doc.setDrawColor(186, 230, 253);
+  // Training Title Box (Uttam Blue Container)
+  doc.setFillColor(230, 244, 250); // Blue 100
+  doc.setDrawColor(204, 232, 246); // Blue 150
   doc.setLineWidth(0.5);
   doc.roundedRect(width / 2 - 95, 103, 190, 16, 3, 3, "FD");
 
-  doc.setTextColor(3, 105, 161);
+  doc.setTextColor(0, 99, 147); // Blue 900
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
   doc.text(training.title, width / 2, 114, { align: "center" });
 
   // Score & Training Date Summary
-  doc.setTextColor(51, 65, 85);
+  doc.setTextColor(64, 63, 62); // Charcoal 700
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   doc.text(

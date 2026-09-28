@@ -69,7 +69,6 @@ export const AnalyticsPage: React.FC = () => {
   const [copiedSessionId, setCopiedSessionId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Real-time Firestore subscriptions for live updates with safe error handlers
     const unsubAttempts = onSnapshot(
       collection(db, "quiz_attempts"),
       (snap) => {
@@ -104,7 +103,6 @@ export const AnalyticsPage: React.FC = () => {
       collection(db, "trainings"),
       (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Training));
-        // Sort newest trainings first
         docs.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
         setTrainings(docs);
         setLoading(false);
@@ -155,9 +153,7 @@ export const AnalyticsPage: React.FC = () => {
     }
   };
 
-  // ==========================================
-  // 1. OVERALL CUMULATIVE CALCULATIONS (Overall Sessions Average)
-  // ==========================================
+  // 1. OVERALL CUMULATIVE CALCULATIONS
   const totalAttempts = attempts.length;
   const overallPassCount = attempts.filter((a) => a.passed).length;
   const overallFailCount = totalAttempts - overallPassCount;
@@ -182,14 +178,14 @@ export const AnalyticsPage: React.FC = () => {
         ).toFixed(2)
       : "5.0";
 
-  // Overall Pass vs Fail Pie Data
+  // Overall Pass vs Fail Pie Data using approved Uttam Brand Colors
   const passPieData = {
     labels: ["Passed", "Failed"],
     datasets: [
       {
         data: [overallPassCount || 0, overallFailCount || 0],
-        backgroundColor: ["#10b981", "#ef4444"],
-        borderColor: ["#059669", "#dc2626"],
+        backgroundColor: ["#008DD2", "#2B2A28"],
+        borderColor: ["#0078B2", "#403F3E"],
         borderWidth: 1
       }
     ]
@@ -222,8 +218,8 @@ export const AnalyticsPage: React.FC = () => {
       {
         label: "Pass Percentage (%)",
         data: deptPassRates,
-        backgroundColor: "rgba(59, 130, 246, 0.7)",
-        borderColor: "#3b82f6",
+        backgroundColor: "#008DD2",
+        borderColor: "#006393",
         borderWidth: 1,
         borderRadius: 8
       }
@@ -263,9 +259,9 @@ export const AnalyticsPage: React.FC = () => {
       {
         label: "Average Rating (Out of 5)",
         data: Object.values(avgRatings),
-        backgroundColor: "rgba(245, 158, 11, 0.2)",
-        borderColor: "#f59e0b",
-        pointBackgroundColor: "#f59e0b",
+        backgroundColor: "rgba(0, 141, 210, 0.2)",
+        borderColor: "#008DD2",
+        pointBackgroundColor: "#006393",
         borderWidth: 2
       }
     ]
@@ -278,8 +274,8 @@ export const AnalyticsPage: React.FC = () => {
       {
         label: "Trainings Conducted",
         data: [4, 6, 8, 5, 9, 12, 10, 14, Math.max(trainings.length, 1)],
-        borderColor: "#a855f7",
-        backgroundColor: "rgba(168, 85, 247, 0.2)",
+        borderColor: "#008DD2",
+        backgroundColor: "rgba(0, 141, 210, 0.15)",
         fill: true,
         tension: 0.4
       }
@@ -301,51 +297,47 @@ export const AnalyticsPage: React.FC = () => {
     return matchesSearch && matchesDept;
   });
 
-  // Unique departments for filter
   const uniqueDepts = Array.from(new Set(trainings.map((t) => t.department).filter(Boolean)));
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8 space-y-8 transition-colors">
+    <div className="min-h-screen bg-[#EAEAEA] text-[#403F3E] p-4 sm:p-6 lg:p-8 space-y-8 transition-colors">
       {/* Top Banner */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-md">
+      <div className="bg-[#FFFFFF] border border-[#D5D4D4] rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 px-2.5 py-1 rounded-md border border-purple-200 dark:border-purple-500/20">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#006393] bg-[#E6F4FA] px-2.5 py-1 rounded-md border border-[#59B5E2]">
             Real-Time Analytics Engine
           </span>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mt-1">
-            <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" /> Executive Analytics & Effectiveness
+          <h1 className="text-2xl font-bold text-[#2B2A28] flex items-center gap-2 mt-1">
+            <TrendingUp className="w-6 h-6 text-[#008DD2]" /> Executive Analytics & Effectiveness
           </h1>
-          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+          <p className="text-xs text-[#757573] mt-1">
             Uttam (Bharat) Electricals Pvt. Ltd. • Cumulative Overall Averages & Dedicated Per-Session Breakdown
           </p>
         </div>
 
-        {/* Global Google Sheets button */}
         {trainings.length > 0 && (
           <button
             onClick={() => exportTrainingReportToGoogleSheets(trainings[0], registrations, feedbacks, attempts)}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg flex items-center gap-2 transition-all self-start md:self-auto"
+            className="px-4 py-2 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] text-xs font-bold rounded-xl shadow-sm flex items-center gap-2 transition-all self-start md:self-auto cursor-pointer"
             title="Export all data formatted for Google Sheets"
           >
-            <FileSpreadsheet className="w-4 h-4" /> Save All to Google Sheets
+            <FileSpreadsheet className="w-4 h-4 text-[#FFFFFF]" /> Save All to Google Sheets
           </button>
         )}
       </div>
 
-      {/* ========================================================= */}
-      {/* SECTION 1: CUMULATIVE OVERALL AVERAGES (Combined Sessions Average) */}
-      {/* ========================================================= */}
+      {/* SECTION 1: CUMULATIVE OVERALL AVERAGES */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Award className="w-5 h-5 text-amber-500" /> Cumulative Overall Averages (Combined Sessions Average)
+            <h2 className="text-lg font-bold text-[#2B2A28] flex items-center gap-2">
+              <Award className="w-5 h-5 text-[#008DD2]" /> Cumulative Overall Averages (Combined Sessions Average)
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[#757573]">
               Aggregated real-time metrics across all {trainings.length} created training sessions
             </p>
           </div>
-          <span className="px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full text-xs font-bold">
+          <span className="px-3 py-1 bg-[#E6F4FA] text-[#006393] border border-[#59B5E2] rounded-full text-xs font-bold">
             Live Synced
           </span>
         </div>
@@ -353,106 +345,106 @@ export const AnalyticsPage: React.FC = () => {
         {/* 4 Cumulative Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Overall Pass Rate */}
-          <GlassCard dark className="p-5 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#D5D4D4] space-y-2 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-[#757573]">
               <span className="font-semibold uppercase tracking-wider">Overall Pass Rate</span>
-              <Award className="w-4 h-4 text-emerald-400" />
+              <Award className="w-4 h-4 text-[#008DD2]" />
             </div>
-            <div className="text-3xl font-black text-emerald-400 flex items-baseline gap-2">
+            <div className="text-3xl font-black text-[#008DD2] flex items-baseline gap-2">
               {overallPassRate}%
-              <span className="text-xs font-normal text-slate-400">
+              <span className="text-xs font-normal text-[#757573]">
                 ({overallPassCount}/{totalAttempts || 0} Passed)
               </span>
             </div>
-            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-[#EAEAEA] h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                className="bg-[#008DD2] h-full rounded-full transition-all duration-500"
                 style={{ width: `${overallPassRate}%` }}
               />
             </div>
-          </GlassCard>
+          </div>
 
           {/* Card 2: Overall Quiz Average Score */}
-          <GlassCard dark className="p-5 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#D5D4D4] space-y-2 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-[#757573]">
               <span className="font-semibold uppercase tracking-wider">Overall Avg Score</span>
-              <Zap className="w-4 h-4 text-blue-400" />
+              <Zap className="w-4 h-4 text-[#008DD2]" />
             </div>
-            <div className="text-3xl font-black text-blue-400 flex items-baseline gap-2">
+            <div className="text-3xl font-black text-[#008DD2] flex items-baseline gap-2">
               {overallAvgScorePct}%
-              <span className="text-xs font-normal text-slate-400">Benchmark: 70%</span>
+              <span className="text-xs font-normal text-[#757573]">Benchmark: 70%</span>
             </div>
-            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-[#EAEAEA] h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-blue-500 h-full rounded-full transition-all duration-500"
+                className="bg-[#008DD2] h-full rounded-full transition-all duration-500"
                 style={{ width: `${Math.min(overallAvgScorePct, 100)}%` }}
               />
             </div>
-          </GlassCard>
+          </div>
 
           {/* Card 3: Overall Average Feedback Rating */}
-          <GlassCard dark className="p-5 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#D5D4D4] space-y-2 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-[#757573]">
               <span className="font-semibold uppercase tracking-wider">Overall Feedback Rating</span>
-              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <Star className="w-4 h-4 text-[#008DD2] fill-[#008DD2]" />
             </div>
-            <div className="text-3xl font-black text-amber-400 flex items-baseline gap-2">
-              {overallAvgFeedback} <span className="text-lg font-bold text-slate-400">/ 5.0</span>
-              <span className="text-xs font-normal text-slate-400">({feedbacks.length} Submissions)</span>
+            <div className="text-3xl font-black text-[#008DD2] flex items-baseline gap-2">
+              {overallAvgFeedback} <span className="text-lg font-bold text-[#757573]">/ 5.0</span>
+              <span className="text-xs font-normal text-[#757573]">({feedbacks.length} Submissions)</span>
             </div>
-            <div className="flex items-center gap-1 text-amber-400 text-xs">
+            <div className="flex items-center gap-1 text-[#008DD2] text-xs">
               {[1, 2, 3, 4, 5].map((s) => (
                 <Star
                   key={s}
                   className={`w-3.5 h-3.5 ${
-                    s <= Math.round(Number(overallAvgFeedback)) ? "fill-amber-400" : "text-slate-600"
+                    s <= Math.round(Number(overallAvgFeedback)) ? "fill-[#008DD2]" : "text-[#D5D4D4]"
                   }`}
                 />
               ))}
             </div>
-          </GlassCard>
+          </div>
 
           {/* Card 4: Total Sessions & Personnel */}
-          <GlassCard dark className="p-5 space-y-2">
-            <div className="flex items-center justify-between text-xs text-slate-400">
+          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#D5D4D4] space-y-2 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-[#757573]">
               <span className="font-semibold uppercase tracking-wider">Total Modules & Personnel</span>
-              <Users className="w-4 h-4 text-purple-400" />
+              <Users className="w-4 h-4 text-[#008DD2]" />
             </div>
-            <div className="text-3xl font-black text-purple-400 flex items-baseline gap-2">
-              {trainings.length} <span className="text-xs font-normal text-slate-400">Modules</span>
+            <div className="text-3xl font-black text-[#2B2A28] flex items-baseline gap-2">
+              {trainings.length} <span className="text-xs font-normal text-[#757573]">Modules</span>
             </div>
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-[#757573]">
               {registrations.length} total registrations across all plants
             </div>
-          </GlassCard>
+          </div>
         </div>
 
         {/* Overall Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Pass vs Fail Overall Distribution */}
-          <GlassCard dark className="p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <PieChart className="w-4 h-4 text-emerald-400" /> Overall Pass vs Fail Assessment Distribution
+          <div className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#D5D4D4] space-y-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-[#D5D4D4]">
+              <h3 className="text-sm font-bold text-[#2B2A28] flex items-center gap-2">
+                <PieChart className="w-4 h-4 text-[#008DD2]" /> Overall Pass vs Fail Assessment Distribution
               </h3>
-              <span className="text-xs text-slate-400">{totalAttempts} Total Attempts</span>
+              <span className="text-xs text-[#757573]">{totalAttempts} Total Attempts</span>
             </div>
             <div className="w-full max-w-xs mx-auto py-2">
               {totalAttempts > 0 ? (
                 <Pie data={passPieData} />
               ) : (
-                <div className="py-12 text-center text-xs text-slate-500">No examination attempts yet.</div>
+                <div className="py-12 text-center text-xs text-[#757573]">No examination attempts yet.</div>
               )}
             </div>
-          </GlassCard>
+          </div>
 
           {/* Department Pass Rate Bar Chart */}
-          <GlassCard dark className="p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-blue-400" /> Department Performance Comparison
+          <div className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#D5D4D4] space-y-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-[#D5D4D4]">
+              <h3 className="text-sm font-bold text-[#2B2A28] flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-[#008DD2]" /> Department-Wise Pass Percentage
               </h3>
-              <span className="text-xs text-blue-400 font-semibold">Pass Rate %</span>
+              <span className="text-xs text-[#757573]">All Plants</span>
             </div>
             <div className="w-full h-64">
               <Bar
@@ -461,23 +453,28 @@ export const AnalyticsPage: React.FC = () => {
                   responsive: true,
                   maintainAspectRatio: false,
                   scales: {
-                    y: { min: 0, max: 100, ticks: { color: "#94a3b8" }, grid: { color: "#1e293b" } },
-                    x: { ticks: { color: "#94a3b8" }, grid: { display: false } }
+                    y: {
+                      beginAtZero: true,
+                      max: 100,
+                      ticks: { color: "#757573" },
+                      grid: { color: "#EAEAEA" }
+                    },
+                    x: { ticks: { color: "#403F3E" }, grid: { display: false } }
                   }
                 }}
               />
             </div>
-          </GlassCard>
+          </div>
 
-          {/* Feedback Criteria Radar Chart */}
-          <GlassCard dark className="p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Star className="w-4 h-4 text-amber-400" /> 5-Criteria Overall Feedback Radar Analysis
+          {/* Radar Chart: 5-Criteria Feedback */}
+          <div className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#D5D4D4] space-y-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-[#D5D4D4]">
+              <h3 className="text-sm font-bold text-[#2B2A28] flex items-center gap-2">
+                <Star className="w-4 h-4 text-[#008DD2]" /> 5 Feedback Parameter Benchmarks (Average / 5)
               </h3>
-              <span className="text-xs text-amber-400 font-semibold">Scale of 1 to 5</span>
+              <span className="text-xs text-[#006393] font-semibold">Trainee Ratings</span>
             </div>
-            <div className="w-full h-72 flex items-center justify-center">
+            <div className="w-full max-w-sm mx-auto h-64">
               <Radar
                 data={feedbackRadarData}
                 options={{
@@ -487,23 +484,24 @@ export const AnalyticsPage: React.FC = () => {
                     r: {
                       min: 0,
                       max: 5,
-                      ticks: { color: "#94a3b8", stepSize: 1 },
-                      grid: { color: "#1e293b" },
-                      pointLabels: { color: "#cbd5e1", font: { size: 10 } }
+                      ticks: { display: false, stepSize: 1 },
+                      angleLines: { color: "#EAEAEA" },
+                      grid: { color: "#D5D4D4" },
+                      pointLabels: { color: "#403F3E", font: { size: 10, weight: "bold" } }
                     }
                   }
                 }}
               />
             </div>
-          </GlassCard>
+          </div>
 
           {/* Monthly Completion Line Chart */}
-          <GlassCard dark className="p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Zap className="w-4 h-4 text-purple-400" /> Training Conduction Trend
+          <div className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#D5D4D4] space-y-4 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-[#D5D4D4]">
+              <h3 className="text-sm font-bold text-[#2B2A28] flex items-center gap-2">
+                <Zap className="w-4 h-4 text-[#008DD2]" /> Training Conduction Trend
               </h3>
-              <span className="text-xs text-purple-400 font-semibold">Modules Conducted</span>
+              <span className="text-xs text-[#006393] font-semibold">Modules Conducted</span>
             </div>
             <div className="w-full h-64">
               <Line
@@ -512,26 +510,24 @@ export const AnalyticsPage: React.FC = () => {
                   responsive: true,
                   maintainAspectRatio: false,
                   scales: {
-                    y: { ticks: { color: "#94a3b8" }, grid: { color: "#1e293b" } },
-                    x: { ticks: { color: "#94a3b8" }, grid: { display: false } }
+                    y: { ticks: { color: "#757573" }, grid: { color: "#EAEAEA" } },
+                    x: { ticks: { color: "#403F3E" }, grid: { display: false } }
                   }
                 }}
               />
             </div>
-          </GlassCard>
+          </div>
         </div>
       </div>
 
-      {/* ========================================================================= */}
-      {/* SECTION 2: INDIVIDUAL SESSIONS BREAKDOWN (Dedicated Per-Session Performance) */}
-      {/* ========================================================================= */}
-      <div className="space-y-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+      {/* SECTION 2: INDIVIDUAL SESSIONS BREAKDOWN */}
+      <div className="space-y-6 pt-4 border-t border-[#D5D4D4]">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Folder className="w-5 h-5 text-amber-500" /> Session-Wise Performance & Dedicated Averages
+            <h2 className="text-lg font-bold text-[#2B2A28] flex items-center gap-2">
+              <Folder className="w-5 h-5 text-[#008DD2]" /> Session-Wise Performance & Dedicated Averages
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[#757573]">
               Dedicated performance breakdown per session. Expanding any session card displays its individual averages, pass rate, and feedback metrics.
             </p>
           </div>
@@ -539,13 +535,13 @@ export const AnalyticsPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={expandAllSessions}
-              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition-all"
+              className="px-3 py-1.5 bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] text-xs font-semibold rounded-lg border border-[#59B5E2] transition-all cursor-pointer"
             >
               Expand All
             </button>
             <button
               onClick={collapseAllSessions}
-              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition-all"
+              className="px-3 py-1.5 bg-[#EAEAEA] hover:bg-[#D5D4D4] text-[#403F3E] text-xs font-semibold rounded-lg border border-[#D5D4D4] transition-all cursor-pointer"
             >
               Collapse All
             </button>
@@ -553,15 +549,15 @@ export const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-[#FFFFFF] p-4 rounded-2xl border border-[#D5D4D4] shadow-sm">
           <div className="relative sm:col-span-2">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+            <Search className="w-4 h-4 text-[#757573] absolute left-3 top-3" />
             <input
               type="text"
               value={sessionSearch}
               onChange={(e) => setSessionSearch(e.target.value)}
               placeholder="Search sessions by topic name, department, trainer, or folder..."
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500"
+              className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl pl-9 pr-4 py-2 text-xs text-[#2B2A28] placeholder-[#757573] focus:outline-none focus:border-[#008DD2] focus:bg-[#E6F4FA]"
             />
           </div>
 
@@ -569,7 +565,7 @@ export const AnalyticsPage: React.FC = () => {
             <select
               value={selectedDeptFilter}
               onChange={(e) => setSelectedDeptFilter(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+              className="w-full bg-[#FFFFFF] border border-[#D5D4D4] rounded-xl px-3 py-2 text-xs text-[#2B2A28] focus:outline-none focus:border-[#008DD2]"
             >
               <option value="all">All Departments ({uniqueDepts.length})</option>
               {uniqueDepts.map((d) => (
@@ -583,30 +579,28 @@ export const AnalyticsPage: React.FC = () => {
 
         {/* Sessions List */}
         {loading ? (
-          <div className="p-12 text-center text-xs text-slate-500 animate-pulse">
+          <div className="p-12 text-center text-xs text-[#757573] animate-pulse">
             Loading individual session records...
           </div>
         ) : filteredTrainings.length === 0 ? (
-          <GlassCard dark className="p-12 text-center">
-            <Folder className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-white">No Matching Training Sessions</h3>
-            <p className="text-xs text-slate-400 mt-1">
+          <div className="p-12 text-center bg-[#FFFFFF] rounded-2xl border border-[#D5D4D4]">
+            <Folder className="w-12 h-12 text-[#757573] mx-auto mb-3" />
+            <h3 className="text-base font-bold text-[#2B2A28]">No Matching Training Sessions</h3>
+            <p className="text-xs text-[#757573] mt-1">
               {trainings.length === 0
                 ? "No training sessions created yet. Create a training to view individual analytics."
                 : "Try adjusting your search query or department filter."}
             </p>
-          </GlassCard>
+          </div>
         ) : (
           <div className="space-y-4">
             {filteredTrainings.map((t) => {
               const isExpanded = expandedSessionIds.has(t.id);
 
-              // Filter specific data for THIS session
               const sAttempts = attempts.filter((a) => a.trainingId === t.id);
               const sFeedbacks = feedbacks.filter((f) => f.trainingId === t.id);
               const sRegs = registrations.filter((r) => r.trainingId === t.id);
 
-              // Calculate session-specific metrics
               const sTotalAttempts = sAttempts.length;
               const sPassedCount = sAttempts.filter((a) => a.passed).length;
               const sFailedCount = sTotalAttempts - sPassedCount;
@@ -630,7 +624,6 @@ export const AnalyticsPage: React.FC = () => {
                     ).toFixed(1)
                   : "N/A";
 
-              // 5 Feedback Criteria calculation for this session
               const calcCrit5 = (
                 primaryKey: "expectationCovered" | "trainingAidsQuality" | "trainerEffectiveness" | "trainerInvolvement" | "trainerAnsweringQuestions",
                 fallbackKey?: keyof TrainingFeedback["ratings"]
@@ -669,74 +662,69 @@ export const AnalyticsPage: React.FC = () => {
               return (
                 <div
                   key={t.id}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all shadow-sm"
+                  className="bg-[#FFFFFF] border border-[#D5D4D4] rounded-2xl overflow-hidden transition-all shadow-sm"
                 >
-                  {/* Session Header Bar (Always Visible) */}
+                  {/* Session Header Bar */}
                   <div
                     onClick={() => toggleSessionExpand(t.id)}
-                    className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                    className="p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 cursor-pointer hover:bg-[#E6F4FA]/40 transition-colors"
                   >
                     <div className="space-y-1.5 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="px-2.5 py-0.5 bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20 rounded-md text-[11px] font-bold flex items-center gap-1">
-                          <Folder className="w-3 h-3" /> {t.folderName || "General Session"}
+                        <span className="px-2.5 py-0.5 bg-[#E6F4FA] text-[#006393] border border-[#59B5E2] rounded-md text-[11px] font-bold flex items-center gap-1">
+                          <Folder className="w-3 h-3 text-[#008DD2]" /> {t.folderName || "General Session"}
                         </span>
-                        <span className="px-2.5 py-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-md text-[11px] font-bold">
+                        <span className="px-2.5 py-0.5 bg-[#EAEAEA] text-[#403F3E] border border-[#D5D4D4] rounded-md text-[11px] font-bold">
                           {t.department || "General"}
                         </span>
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                          <Calendar className="w-3 h-3" /> {t.trainingDate}
+                        <span className="text-[11px] text-[#757573] flex items-center gap-1">
+                          <Calendar className="w-3 h-3 text-[#008DD2]" /> {t.trainingDate}
                         </span>
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                          <UserCheck className="w-3 h-3" /> {t.trainerName}
+                        <span className="text-[11px] text-[#757573] flex items-center gap-1">
+                          <UserCheck className="w-3 h-3 text-[#008DD2]" /> {t.trainerName}
                         </span>
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                      <h3 className="text-base font-bold text-[#2B2A28] hover:text-[#008DD2] transition-colors">
                         {t.title}
                       </h3>
                     </div>
 
                     {/* Quick Metric Pills */}
                     <div className="flex flex-wrap items-center gap-3">
-                      {/* Pass Rate Pill */}
-                      <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Pass Rate</div>
+                      <div className="px-3 py-1.5 bg-[#E6F4FA] rounded-xl border border-[#59B5E2] text-center">
+                        <div className="text-[10px] uppercase font-bold text-[#006393]">Pass Rate</div>
                         <div
                           className={`text-sm font-black ${
-                            sPassRate >= (t.passingPercentage || 70) ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
+                            sPassRate >= (t.passingPercentage || 70) ? "text-[#008DD2]" : "text-[#2B2A28]"
                           }`}
                         >
                           {sPassRate}%
                         </div>
                       </div>
 
-                      {/* Avg Score Pill */}
-                      <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Avg Score</div>
-                        <div className="text-sm font-black text-blue-600 dark:text-blue-400">{sAvgScore}%</div>
+                      <div className="px-3 py-1.5 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] text-center">
+                        <div className="text-[10px] uppercase font-bold text-[#757573]">Avg Score</div>
+                        <div className="text-sm font-black text-[#008DD2]">{sAvgScore}%</div>
                       </div>
 
-                      {/* Avg Feedback Pill */}
-                      <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Feedback</div>
-                        <div className="text-sm font-black text-amber-500 dark:text-amber-400 flex items-center justify-center gap-0.5">
-                          {sAvgRating} <Star className="w-3 h-3 fill-amber-500 text-amber-500 dark:fill-amber-400 dark:text-amber-400" />
+                      <div className="px-3 py-1.5 bg-[#E6F4FA] rounded-xl border border-[#59B5E2] text-center">
+                        <div className="text-[10px] uppercase font-bold text-[#006393]">Feedback</div>
+                        <div className="text-sm font-black text-[#008DD2] flex items-center justify-center gap-0.5">
+                          {sAvgRating} <Star className="w-3 h-3 fill-[#008DD2] text-[#008DD2]" />
                         </div>
                       </div>
 
-                      {/* Attendees Pill */}
-                      <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Attendees</div>
-                        <div className="text-sm font-black text-purple-600 dark:text-purple-400">{sRegs.length}</div>
+                      <div className="px-3 py-1.5 bg-[#EAEAEA] rounded-xl border border-[#D5D4D4] text-center">
+                        <div className="text-[10px] uppercase font-bold text-[#403F3E]">Attendees</div>
+                        <div className="text-sm font-black text-[#2B2A28]">{sRegs.length}</div>
                       </div>
 
-                      {/* Expand Button */}
                       <button
                         type="button"
-                        className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                        className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                           isExpanded
-                            ? "bg-blue-600 text-white shadow-md"
-                            : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                            ? "bg-[#008DD2] text-[#FFFFFF] shadow-sm"
+                            : "bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] border border-[#59B5E2]"
                         }`}
                       >
                         {isExpanded ? (
@@ -752,122 +740,123 @@ export const AnalyticsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* ========================================================= */}
-                  {/* EXPANDED CONTENT: SESSION SPECIFIC AVERAGES & PERFORMANCE  */}
-                  {/* ========================================================= */}
+                  {/* Expanded Session Analytics Panel */}
                   {isExpanded && (
-                    <div className="p-6 bg-slate-50/70 dark:bg-slate-950/80 border-t border-slate-200 dark:border-slate-800 space-y-6">
-                      {/* Top Action Bar for Session */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
-                        <div className="text-xs text-slate-600 dark:text-slate-400">
-                          Viewing dedicated performance averages for <span className="text-slate-900 dark:text-white font-bold">{t.title}</span>
+                    <div className="p-6 bg-[#FFFFFF] border-t border-[#D5D4D4] space-y-6">
+                      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#D5D4D4]">
+                        <div>
+                          <h4 className="text-sm font-bold text-[#2B2A28]">
+                            Session Overview: {t.title}
+                          </h4>
+                          <p className="text-xs text-[#757573]">
+                            Conducted by <strong>{t.trainerName}</strong> • {t.trainingDate} • Dept: {t.department}
+                          </p>
                         </div>
 
                         <div className="flex items-center gap-2">
                           <button
-                            type="button"
-                            onClick={() => exportTrainingReportToGoogleSheets(t, sRegs, sFeedbacks, sAttempts)}
-                            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
-                            title="Download CSV for Google Sheets"
-                          >
-                            <FileSpreadsheet className="w-3.5 h-3.5" /> Save to Google Sheet
-                          </button>
-
-                          <button
-                            type="button"
                             onClick={() => handleCopySessionGoogleSheet(t)}
-                            className="px-3 py-1.5 bg-white hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 transition-all shadow-2xs"
-                            title="Copy TSV for pasting into sheets.new"
+                            className="px-3 py-1.5 bg-[#E6F4FA] hover:bg-[#CCE8F6] text-[#006393] text-xs font-semibold rounded-lg border border-[#59B5E2] flex items-center gap-1.5 transition-all cursor-pointer"
+                            title="Copy session data to clipboard in tabular format for Google Sheets"
                           >
                             {copiedSessionId === t.id ? (
                               <>
-                                <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> Copied for Sheets!
+                                <Check className="w-3.5 h-3.5 text-[#008DD2]" />
+                                Copied to Clipboard!
                               </>
                             ) : (
                               <>
-                                <Copy className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" /> Copy for Google Sheets
+                                <Copy className="w-3.5 h-3.5" />
+                                Copy for Google Sheets
                               </>
                             )}
+                          </button>
+
+                          <button
+                            onClick={() => exportTrainingReportToGoogleSheets(t, sRegs, sFeedbacks, sAttempts)}
+                            className="px-3 py-1.5 bg-[#008DD2] hover:bg-[#0078B2] active:bg-[#006393] text-[#FFFFFF] text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                            title="Export session data as CSV file"
+                          >
+                            <FileSpreadsheet className="w-3.5 h-3.5 text-[#FFFFFF]" />
+                            Download CSV
                           </button>
                         </div>
                       </div>
 
-                      {/* 4 Dedicated Averages Cards for THIS Session */}
+                      {/* 4 Stats Cards for THIS Session */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {/* Session Pass Rate */}
-                        <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
-                            Session Pass Rate
+                        <div className="p-4 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] space-y-1 shadow-xs">
+                          <div className="text-[11px] font-bold text-[#757573] uppercase">
+                            Session Pass Percentage
                           </div>
-                          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                          <div
+                            className={`text-2xl font-black ${
+                              sPassRate >= (t.passingPercentage || 70) ? "text-[#008DD2]" : "text-[#2B2A28]"
+                            }`}
+                          >
                             {sPassRate}%
                           </div>
-                          <div className="text-[11px] text-slate-600 dark:text-slate-500">
-                            {sPassedCount} Passed • {sFailedCount} Failed (Target: {t.passingPercentage || 70}%)
+                          <div className="text-[11px] text-[#757573]">
+                            {sPassedCount} of {sTotalAttempts} passed examination
                           </div>
                         </div>
 
-                        {/* Session Average Score */}
-                        <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
-                            Session Avg Score
+                        <div className="p-4 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] space-y-1 shadow-xs">
+                          <div className="text-[11px] font-bold text-[#757573] uppercase">
+                            Average Quiz Score
                           </div>
-                          <div className="text-2xl font-black text-blue-600 dark:text-blue-400">
+                          <div className="text-2xl font-black text-[#008DD2]">
                             {sAvgScore}%
                           </div>
-                          <div className="text-[11px] text-slate-600 dark:text-slate-500">
-                            Calculated from {sTotalAttempts} completed test attempts
+                          <div className="text-[11px] text-[#757573]">
+                            Benchmark target: {t.passingPercentage || 70}%
                           </div>
                         </div>
 
-                        {/* Session Feedback Rating */}
-                        <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
-                            Session Feedback Rating
+                        <div className="p-4 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] space-y-1 shadow-xs">
+                          <div className="text-[11px] font-bold text-[#757573] uppercase">
+                            Average Trainee Feedback
                           </div>
-                          <div className="text-2xl font-black text-amber-500 dark:text-amber-400 flex items-center gap-1">
-                            {sAvgRating} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ 5.0</span>
+                          <div className="text-2xl font-black text-[#008DD2] flex items-center gap-1">
+                            {sAvgRating} <span className="text-sm font-normal text-[#757573]">/ 5.0</span>
                           </div>
-                          <div className="text-[11px] text-slate-600 dark:text-slate-500">
-                            {sFeedbacks.length} employee evaluations submitted
+                          <div className="text-[11px] text-[#757573]">
+                            From {sFeedbacks.length} feedback submissions
                           </div>
                         </div>
 
-                        {/* Attendance & Completion */}
-                        <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1 shadow-2xs">
-                          <div className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
-                            Completion Ratio
+                        <div className="p-4 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] space-y-1 shadow-xs">
+                          <div className="text-[11px] font-bold text-[#757573] uppercase">
+                            Registered Trainees
                           </div>
-                          <div className="text-2xl font-black text-purple-600 dark:text-purple-400">
-                            {sTotalAttempts} / {sRegs.length}
+                          <div className="text-2xl font-black text-[#2B2A28]">
+                            {sRegs.length}
                           </div>
-                          <div className="text-[11px] text-slate-600 dark:text-slate-500">
-                            {sRegs.length > 0 ? Math.round((sTotalAttempts / sRegs.length) * 100) : 0}% exam completion rate
+                          <div className="text-[11px] text-[#757573]">
+                            {sTotalAttempts} completed examinations
                           </div>
                         </div>
                       </div>
 
-                      {/* Session Detailed Visuals: Criteria Breakdown & Assessment Ratio */}
+                      {/* 5 Feedback Parameters Breakdown */}
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Left: 5-Criteria Average Breakdown */}
-                        <div className="p-5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-2xs">
-                          <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                            <Star className="w-4 h-4 text-amber-500 dark:text-amber-400" /> 5 Feedback Parameters Breakdown (Averages out of 5)
+                        <div className="p-5 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] space-y-3 shadow-xs">
+                          <h4 className="text-xs font-bold text-[#2B2A28] uppercase tracking-wider flex items-center gap-2">
+                            <Star className="w-4 h-4 text-[#008DD2]" /> 5 Feedback Parameters Breakdown (Averages out of 5)
                           </h4>
 
-                          <div className="space-y-2.5 pt-2">
-                            {criteriaBreakdown.map((crit) => {
-                              const num = Number(crit.val);
-                              const pct = (num / 5) * 100;
+                          <div className="space-y-3 pt-2">
+                            {criteriaBreakdown.map((crit, idx) => {
+                              const pct = Math.min((Number(crit.val) / 5) * 100, 100);
                               return (
-                                <div key={crit.label} className="space-y-1">
-                                  <div className="flex justify-between text-xs">
-                                    <span className="text-slate-700 dark:text-slate-300 font-medium">{crit.label}</span>
-                                    <span className="text-amber-600 dark:text-amber-400 font-bold">{crit.val} / 5.0</span>
+                                <div key={idx} className="space-y-1 text-xs">
+                                  <div className="flex justify-between">
+                                    <span className="text-[#403F3E] font-medium">{crit.label}</span>
+                                    <span className="text-[#008DD2] font-bold">{crit.val} / 5.0</span>
                                   </div>
-                                  <div className="w-full bg-slate-100 dark:bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800">
+                                  <div className="w-full bg-[#EAEAEA] h-2 rounded-full overflow-hidden border border-[#D5D4D4]">
                                     <div
-                                      className="bg-amber-500 h-full rounded-full transition-all duration-500"
+                                      className="bg-[#008DD2] h-full rounded-full transition-all duration-500"
                                       style={{ width: `${pct}%` }}
                                     />
                                   </div>
@@ -877,63 +866,63 @@ export const AnalyticsPage: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Right: Pass vs Fail Ratio & Score Distribution */}
-                        <div className="p-5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4 shadow-2xs">
-                          <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                            <PieChart className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Exam Result Breakdown
+                        {/* Exam Result Breakdown */}
+                        <div className="p-5 bg-[#FFFFFF] rounded-xl border border-[#D5D4D4] space-y-4 shadow-xs">
+                          <h4 className="text-xs font-bold text-[#2B2A28] uppercase tracking-wider flex items-center gap-2">
+                            <PieChart className="w-4 h-4 text-[#008DD2]" /> Exam Result Breakdown
                           </h4>
 
                           <div className="grid grid-cols-2 gap-4 text-center py-4">
-                            <div className="p-4 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-xl">
-                              <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mx-auto mb-1" />
-                              <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{sPassedCount}</div>
-                              <div className="text-xs text-slate-700 dark:text-slate-300 font-semibold">Passed Candidates</div>
-                              <div className="text-[10px] text-slate-500">
+                            <div className="p-4 bg-[#E6F4FA] border border-[#59B5E2] rounded-xl">
+                              <CheckCircle2 className="w-8 h-8 text-[#008DD2] mx-auto mb-1" />
+                              <div className="text-2xl font-black text-[#008DD2]">{sPassedCount}</div>
+                              <div className="text-xs text-[#006393] font-semibold">Passed Candidates</div>
+                              <div className="text-[10px] text-[#757573]">
                                 {sTotalAttempts > 0 ? Math.round((sPassedCount / sTotalAttempts) * 100) : 0}% of attempts
                               </div>
                             </div>
 
-                            <div className="p-4 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-xl">
-                              <XCircle className="w-8 h-8 text-rose-600 dark:text-rose-400 mx-auto mb-1" />
-                              <div className="text-2xl font-black text-rose-600 dark:text-rose-400">{sFailedCount}</div>
-                              <div className="text-xs text-slate-700 dark:text-slate-300 font-semibold">Failed Candidates</div>
-                              <div className="text-[10px] text-slate-500">
+                            <div className="p-4 bg-[#EAEAEA] border border-[#D5D4D4] rounded-xl">
+                              <XCircle className="w-8 h-8 text-[#2B2A28] mx-auto mb-1" />
+                              <div className="text-2xl font-black text-[#2B2A28]">{sFailedCount}</div>
+                              <div className="text-xs text-[#403F3E] font-semibold">Failed Candidates</div>
+                              <div className="text-[10px] text-[#757573]">
                                 {sTotalAttempts > 0 ? Math.round((sFailedCount / sTotalAttempts) * 100) : 0}% of attempts
                               </div>
                             </div>
                           </div>
 
-                          <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                          <div className="p-3 bg-[#EAEAEA] rounded-xl border border-[#D5D4D4] text-xs text-[#403F3E] space-y-1">
                             <div className="flex justify-between">
                               <span>Passing Benchmark:</span>
-                              <span className="font-bold text-slate-900 dark:text-white">{t.passingPercentage || 70}%</span>
+                              <span className="font-bold text-[#2B2A28]">{t.passingPercentage || 70}%</span>
                             </div>
                             <div className="flex justify-between">
                               <span>Time Limit:</span>
-                              <span className="font-bold text-slate-900 dark:text-white">{t.timeLimitMinutes || 15} minutes</span>
+                              <span className="font-bold text-[#2B2A28]">{t.timeLimitMinutes || 15} minutes</span>
                             </div>
                             <div className="flex justify-between">
                               <span>Total Questions:</span>
-                              <span className="font-bold text-slate-900 dark:text-white">{t.questions?.length || 0} questions</span>
+                              <span className="font-bold text-[#2B2A28]">{t.questions?.length || 0} questions</span>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Candidate Results Table for THIS Session */}
+                      {/* Candidate Results Table */}
                       <div className="space-y-3">
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                          <Users className="w-4 h-4 text-blue-500" /> Candidate Performance Log ({sRegs.length} Enrolled)
+                        <h4 className="text-xs font-bold text-[#2B2A28] uppercase tracking-wider flex items-center gap-2">
+                          <Users className="w-4 h-4 text-[#008DD2]" /> Candidate Performance Log ({sRegs.length} Enrolled)
                         </h4>
 
                         {sRegs.length === 0 ? (
-                          <div className="p-6 text-center text-xs text-slate-500 bg-slate-100 dark:bg-slate-900 rounded-xl">
+                          <div className="p-6 text-center text-xs text-[#757573] bg-[#EAEAEA] rounded-xl border border-[#D5D4D4]">
                             No employees have registered for this session yet.
                           </div>
                         ) : (
-                          <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xs">
+                          <div className="overflow-x-auto rounded-xl border border-[#D5D4D4] bg-[#FFFFFF] shadow-xs">
                             <table className="w-full text-left text-xs">
-                              <thead className="bg-slate-100 dark:bg-slate-900 text-[11px] uppercase font-bold text-slate-700 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+                              <thead className="bg-[#2B2A28] text-[11px] uppercase font-bold text-[#FFFFFF]">
                                 <tr>
                                   <th className="p-3">Emp Code</th>
                                   <th className="p-3">Employee Name</th>
@@ -945,7 +934,7 @@ export const AnalyticsPage: React.FC = () => {
                                   <th className="p-3">Feedback</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 bg-white dark:bg-slate-950">
+                              <tbody className="divide-y divide-[#EAEAEA] bg-[#FFFFFF]">
                                 {sRegs.map((reg) => {
                                   const att = sAttempts.find(
                                     (a) => a.registrationId === reg.id || a.employeeCode === reg.employeeCode
@@ -964,39 +953,39 @@ export const AnalyticsPage: React.FC = () => {
                                     : null;
 
                                   return (
-                                    <tr key={reg.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
-                                      <td className="p-3 font-mono font-bold text-slate-900 dark:text-slate-300 text-xs">
+                                    <tr key={reg.id} className="hover:bg-[#E6F4FA] transition-colors">
+                                      <td className="p-3 font-mono font-bold text-[#2B2A28] text-xs">
                                         {reg.employeeCode}
                                       </td>
-                                      <td className="p-3 font-bold text-slate-900 dark:text-white text-xs">
+                                      <td className="p-3 font-bold text-[#2B2A28] text-xs">
                                         {reg.employeeName}
                                       </td>
-                                      <td className="p-3 text-slate-800 dark:text-slate-400 font-medium text-xs">
+                                      <td className="p-3 text-[#403F3E] font-medium text-xs">
                                         {reg.department}
                                       </td>
                                       <td className="p-3">
                                         {att ? (
-                                          <span className="font-bold text-slate-900 dark:text-white">
+                                          <span className="font-bold text-[#2B2A28]">
                                             {att.score} / {att.totalQuestions}
                                           </span>
                                         ) : (
-                                          <span className="text-slate-400 dark:text-slate-500">-</span>
+                                          <span className="text-[#757573]">-</span>
                                         )}
                                       </td>
                                       <td className="p-3">
                                         {unanswered !== null ? (
-                                          <span className={unanswered > 0 ? "font-bold text-amber-600 dark:text-amber-400" : "text-slate-700 dark:text-slate-400 font-medium"}>
+                                          <span className={unanswered > 0 ? "font-bold text-[#2B2A28]" : "text-[#757573] font-medium"}>
                                             {unanswered}
                                           </span>
                                         ) : (
-                                          <span className="text-slate-400 dark:text-slate-500">-</span>
+                                          <span className="text-[#757573]">-</span>
                                         )}
                                       </td>
                                       <td className="p-3">
                                         {att ? (
-                                          <span className="font-bold text-slate-900 dark:text-white">{att.percentage}%</span>
+                                          <span className="font-bold text-[#008DD2]">{att.percentage}%</span>
                                         ) : (
-                                          <span className="text-slate-400 dark:text-slate-500">-</span>
+                                          <span className="text-[#757573]">-</span>
                                         )}
                                       </td>
                                       <td className="p-3">
@@ -1004,21 +993,21 @@ export const AnalyticsPage: React.FC = () => {
                                           <span
                                             className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                                               att.passed
-                                                ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40"
-                                                : "bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/40"
+                                                ? "bg-[#008DD2] text-[#FFFFFF]"
+                                                : "bg-[#2B2A28] text-[#FFFFFF]"
                                             }`}
                                           >
                                             {att.passed ? "PASS" : "FAIL"}
                                           </span>
                                         ) : (
-                                          <span className="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-400 rounded-md text-[10px] font-semibold">
+                                          <span className="px-2 py-0.5 bg-[#EAEAEA] text-[#403F3E] border border-[#D5D4D4] rounded-md text-[10px] font-semibold">
                                             Pending Exam
                                           </span>
                                         )}
                                       </td>
                                       <td className="p-3">
                                         {fb ? (
-                                          <span className="text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1">
+                                          <span className="text-[#008DD2] font-bold flex items-center gap-1">
                                             {(
                                               (
                                                 (fb.ratings?.expectationCovered ?? fb.ratings?.objectivesCovered ?? 5) +
@@ -1031,7 +1020,7 @@ export const AnalyticsPage: React.FC = () => {
                                             ★
                                           </span>
                                         ) : (
-                                          <span className="text-slate-400 dark:text-slate-500">Not Submitted</span>
+                                          <span className="text-[#757573]">Not Submitted</span>
                                         )}
                                       </td>
                                     </tr>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, collection, addDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { Training } from "../types";
+import { Training, EmployeeRegistration } from "../types";
 import { HeaderBranding } from "../components/HeaderBranding";
 import { GlassCard } from "../components/GlassCard";
 import { backgroundMusic } from "../lib/backgroundMusic";
@@ -59,6 +59,11 @@ export const EmployeePortal: React.FC = () => {
   const [soundMuted, setSoundMuted] = useState<boolean>(() => backgroundMusic.getStatus().isMuted);
   const [soundVolume, setSoundVolume] = useState<number>(() => backgroundMusic.getVolume());
 
+  const effectiveTrainingId =
+    trainingId && trainingId !== "undefined" && trainingId !== ":trainingId"
+      ? trainingId
+      : safeSessionStorage.getItem("active_training_id") || "";
+
   useEffect(() => {
     // Start continuous background sound as soon as employee registration/fill page opens
     backgroundMusic.start("quiz");
@@ -68,12 +73,15 @@ export const EmployeePortal: React.FC = () => {
       setSoundVolume(st.volume);
     });
 
-    if (trainingId) {
-      fetchTrainingDetails();
+    if (effectiveTrainingId) {
+      safeSessionStorage.setItem("active_training_id", effectiveTrainingId);
+      fetchTrainingDetails(effectiveTrainingId);
+    } else {
+      setLoading(false);
     }
 
     return () => unsub();
-  }, [trainingId]);
+  }, [effectiveTrainingId]);
 
   const handleToggleSound = () => {
     const isNowMuted = backgroundMusic.toggleMute();
@@ -94,14 +102,15 @@ export const EmployeePortal: React.FC = () => {
     backgroundMusic.start("quiz");
   };
 
-  const fetchTrainingDetails = async () => {
+  const fetchTrainingDetails = async (targetTrId: string) => {
     try {
       setLoading(true);
-      const snap = await getDoc(doc(db, "trainings", trainingId!));
+      const snap = await getDoc(doc(db, "trainings", targetTrId));
       if (snap.exists()) {
-        setTraining({ id: snap.id, ...(snap.data() as Training) });
-      } else {
-        alert("Training session not found.");
+        const trData = { id: snap.id, ...(snap.data() as Training) };
+        setTraining(trData);
+        safeSessionStorage.setItem("active_training_id", trData.id);
+        safeSessionStorage.setItem("active_training_data", JSON.stringify(trData));
       }
     } catch (err) {
       console.error("Error fetching training details:", err);
@@ -123,7 +132,7 @@ export const EmployeePortal: React.FC = () => {
 
     setSubmitting(true);
     try {
-      const regDoc = await addDoc(collection(db, "registrations"), {
+      const regPayload = {
         trainingId: training.id,
         employeeName: employeeName.trim(),
         employeeCode: employeeCode.trim(),
@@ -135,15 +144,27 @@ export const EmployeePortal: React.FC = () => {
         trainerName: training.trainerName,
         trainingDate: training.trainingDate,
         registeredAt: new Date().toISOString()
-      });
+      };
 
-      // Save registration ID in safe session storage for continuity
+      const regDoc = await addDoc(collection(db, "registrations"), regPayload);
+
+      const regData: EmployeeRegistration = {
+        id: regDoc.id,
+        ...regPayload
+      };
+
+      // Save registration ID and full state in safe session storage for continuity across reloads
       safeSessionStorage.setItem("active_registration_id", regDoc.id);
-      safeSessionStorage.setItem("active_employee_code", employeeCode);
-      safeSessionStorage.setItem("active_employee_name", employeeName);
+      safeSessionStorage.setItem("active_training_id", training.id);
+      safeSessionStorage.setItem("active_employee_code", employeeCode.trim());
+      safeSessionStorage.setItem("active_employee_name", employeeName.trim());
+      safeSessionStorage.setItem("active_registration_data", JSON.stringify(regData));
+      safeSessionStorage.setItem("active_training_data", JSON.stringify(training));
 
-      // Route to Step 6: Feedback Form
-      navigate(`/employee/feedback/${regDoc.id}`);
+      // Route to Step 6: Feedback Form with explicit state passed
+      navigate(`/employee/feedback/${regDoc.id}`, {
+        state: { registration: regData, training }
+      });
     } catch (err: any) {
       console.error("Error registering employee:", err);
       alert("Failed to submit registration: " + err.message);
@@ -178,12 +199,14 @@ export const EmployeePortal: React.FC = () => {
         <p className="text-xs text-slate-600 dark:text-slate-400 mb-5 text-center max-w-sm">
           This training session is not available or the registration link has expired.
         </p>
-        <button
-          onClick={() => navigate("/")}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
-        >
-          Go to Home
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={() => effectiveTrainingId ? fetchTrainingDetails(effectiveTrainingId) : window.location.reload()}
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer"
+          >
+            Retry Loading
+          </button>
+        </div>
       </div>
     );
   }
